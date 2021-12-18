@@ -1,0 +1,23 @@
+.card-session-container {
+    width: 100%;
+}
+
+.card-session-container > .MuiPaper-rounded {
+    padding: 12px;
+    border: 1px solid var(--dark-gray);
+    background: unset;
+    color: var(--light-gray);
+    transition: all 0.2s ease;
+    text-align: center;
+    position: relative;
+}
+
+.card-session-container > .MuiPaper-rounded:hover {
+    border: 1px solid var(--light-gray);
+}
+
+.card-session-container .MuiPaper-rounded .MuiIconButton-colorSecondary {
+    position: absolute;
+    right: 12px;
+    top: 12px;
+}

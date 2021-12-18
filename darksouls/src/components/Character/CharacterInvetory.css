@@ -1,0 +1,49 @@
+.wrapper-character-inventory {
+    display: flex;
+    height: 100%;
+}
+
+.wrapper-character-inventory .col {
+    flex: 1;
+    max-width: 140px;;
+    margin-right: 12px;
+    align-items: stretch;
+}
+
+.wrapper-character-inventory .col.vertical-aligned {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+
+.wrapper-character-inventory .col:last-child {
+    margin-right: 0;
+}
+
+.wrapper-character-inventory .col.col-stats {
+    flex: 2;
+    max-width: unset;
+}
+
+.wrapper-character-inventory .col.col-stats .MuiPaper-root {
+    width: auto;
+}
+
+.wrapper-character-inventory .col.col-stats .MuiPaper-root .MuiTableCell-root{
+    border-bottom-color: var(--dark-gray);
+    color: var(--light-gray);
+}
+
+.wrapper-character-inventory .col.col-stats .MuiPaper-root .cell-value{
+    border-bottom-color: var(--dark-gray);
+    color: var(--primary-color-dark);
+}
+
+.wrapper-character-inventory .col .MuiPaper-root{
+    min-height: 150px;
+    margin-bottom: 12px;
+}
+
+.wrapper-character-inventory .col.vertical-aligned .MuiPaper-root {
+    width: 100%;
+}

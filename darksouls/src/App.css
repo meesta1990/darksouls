@@ -1,0 +1,55 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+.MuiInputBase-input .notchedOutline {
+  color: var(--light-gray) !important;
+  border-color: var(--light-gray) !important;
+}
+
+/** inputs placeholder **/
+.MuiInputBase-colorSecondary .MuiOutlinedInput-notchedOutline {
+  color: var(--secondary-color) !important;
+}
+
+label.MuiInputLabel-root:not(.Mui-focused) {
+  color: var(--light-gray) !important;
+}
+
+fieldset.MuiOutlinedInput-notchedOutline {
+  border-color: var(--dark-gray);
+  transition: all 0.2s ease;
+}
+:root {
+  --primary-color-dark: #757ce8;
+  --secondary-color: #e16410;
+  --light-gray: #555555;
+  --medium-gray: #343434;
+  --dark-gray: #242424;
+}

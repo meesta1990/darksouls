@@ -1,0 +1,14 @@
+.homepage .button-container {
+    width: 300px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.homepage .button-container button {
+    width: 100%;
+    margin-bottom: 12px;
+}
+
+.homepage .choosed-content {
+    margin-top: 30px;
+}

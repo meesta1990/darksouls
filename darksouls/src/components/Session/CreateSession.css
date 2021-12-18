@@ -1,0 +1,48 @@
+.create-session .card-session-container .MuiPaper-rounded {
+    text-align: left;
+    padding: 22px;
+    flex-direction: row;
+    background: var(--medium-gray);
+}
+
+.create-session .card-session-container .MuiPaper-rounded .MuiTextField-root {
+    flex: 1;
+    box-sizing: border-box;
+    margin-right: 12px;
+}
+
+.create-session .card-session-container .MuiPaper-rounded .MuiTextField-root:last-child {
+    margin-right: 0;
+}
+
+.create-session .card-session-container .MuiPaper-rounded .MuiTextField-root .MuiOutlinedInput-input {
+    color: var(--primary-color-dark);
+}
+
+.create-session .card-session-container .MuiPaper-rounded .section{
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 22px;
+}
+
+.create-session .card-session-container .class-selection-section {
+    display: flex;
+    margin-top: 22px;
+}
+
+.create-session .card-session-container .class-selection-section .wrapper-btn {
+    display: flex;
+    flex-direction: column;
+    width: 100px;
+}
+
+.create-session .card-session-container .class-selection-section .wrapper-btn .MuiButton-root {
+    flex: 1;
+    height: 100px;
+    margin-bottom: 12px;
+}
+
+.create-session .card-session-container .class-selection-section .wrapper-char {
+    flex: 1;
+    margin-left: 52px;
+}
