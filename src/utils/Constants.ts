@@ -1,6 +1,7 @@
-import {createTheme} from "@mui/material/styles";
+import { createTheme } from '@mui/material/styles';
 
 export const TABLE_SESSIONS = 'sessions';
+export const TABLE_CLASSES = 'classes';
 
 export const theme = createTheme({
     palette: {

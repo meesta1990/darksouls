@@ -2,10 +2,18 @@ import { useState } from "react";
 import { Card, TextField, Divider, Button } from '@mui/material';
 import Page from '../Page/Page';
 import './CreateSession.css';
-import CharacterInventory from "../Character/CharacterInventory";
+import CharacterInventory from '../Character/CharacterInventory';
+import { getClass } from '../../services/Character/ServiceCharacter';
+import { Class } from '../../entities/Class';
 
 const CreateSession = () => {
-    const [choosedClass, setChoosedClass] = useState<string>('');
+    const [choosedClass, setChoosedClass] = useState<Class|undefined>();
+
+    const handleClassClick = (choosedClass: string) => {
+        getClass(choosedClass).then((_class) => {
+            setChoosedClass(_class);
+        });
+    }
 
     return (
         <Page className="create-session">
@@ -22,21 +30,21 @@ const CreateSession = () => {
 
                     <div className="section class-selection-section">
                         <div className="wrapper-btn">
-                            <Button variant="outlined" size="large" color={choosedClass === 'knight' ? 'secondary' : 'primary'} onClick={() => setChoosedClass('knight')}>
+                            <Button variant="outlined" size="large" color={choosedClass?.name === 'knight' ? 'secondary' : 'primary'} onClick={() => handleClassClick('knight')}>
                                 Knight
                             </Button>
-                            <Button variant="outlined" size="large" color={choosedClass === 'warrior' ? 'secondary' : 'primary'}  onClick={() => setChoosedClass('warrior')}>
+                            <Button variant="outlined" size="large" color={choosedClass?.name === 'warrior' ? 'secondary' : 'primary'}  onClick={() => handleClassClick('warrior')}>
                                 Warrior
                             </Button>
-                            <Button variant="outlined" size="large" color={choosedClass === 'thief' ? 'secondary' : 'primary'}  onClick={() => setChoosedClass('thief')}>
+                            <Button variant="outlined" size="large" color={choosedClass?.name === 'thief' ? 'secondary' : 'primary'}  onClick={() => handleClassClick('thief')}>
                                 Thief
                             </Button>
-                            <Button variant="outlined" size="large" color={choosedClass === 'herald' ? 'secondary' : 'primary'}  onClick={() => setChoosedClass('herald')}>
+                            <Button variant="outlined" size="large" color={choosedClass?.name === 'herald' ? 'secondary' : 'primary'}  onClick={() => handleClassClick('herald')}>
                                 Herald
                             </Button>
                         </div>
                         <div className="wrapper-char">
-                            <CharacterInventory />
+                            <CharacterInventory choosedClass={choosedClass}/>
                         </div>
                     </div>
                 </Card>

@@ -1,6 +1,6 @@
-import {child, get, ref} from "firebase/database";
-import { TABLE_SESSIONS } from "../../utils/Constants";
-import { database } from "../../utils/Firebase";
+import { child, get, ref } from 'firebase/database';
+import { TABLE_SESSIONS } from '../../utils/Constants';
+import { database } from '../../utils/Firebase';
 
 
 export const getSessions = () => {

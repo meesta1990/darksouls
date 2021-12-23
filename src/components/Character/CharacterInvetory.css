@@ -1,7 +1,14 @@
 .wrapper-character-inventory {
     display: flex;
     height: 100%;
+    opacity: 1;
+    transition: opacity 0.2ms ease;
 }
+
+.wrapper-character-inventory.hide {
+    opacity: 0;
+}
+
 
 .wrapper-character-inventory .col {
     flex: 1;

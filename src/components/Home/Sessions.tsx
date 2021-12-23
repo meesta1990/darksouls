@@ -4,7 +4,7 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 import './Sessions.css';
 import { theme } from '../../utils/Constants';
 import { getSessions } from '../../services/Sessions/ServiceSession';
-import { Session } from '../../entities/Session/Session';
+import { Session } from '../../entities/Session';
 
 const Sessions = () => {
     const [loading, setLoading] = useState<boolean>(false);
