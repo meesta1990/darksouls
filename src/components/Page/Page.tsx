@@ -6,17 +6,23 @@ import logo from '../../assets/images/logo.png';
 import { theme } from '../../utils/Constants';
 
 interface IPage {
-    children: React.ReactNode;
+    children?: React.ReactNode;
     title?: string;
     wrapperClassName?: string;
     className?: string;
+    disableLogo?: boolean;
 }
 
-const Page = ({ children, wrapperClassName = '', className }: IPage) => {
+const Page = ({
+    children = null,
+    wrapperClassName = '',
+    className,
+    disableLogo
+}: IPage) => {
     return (
-        <div className={classNames('page-container', wrapperClassName)} >
+        <div className={classNames('page-container', !disableLogo && 'page-container-with-logo', wrapperClassName)} >
             <ThemeProvider theme={theme}>
-                <img src={logo} className="logo" />
+                {!disableLogo && <img src={logo} className="logo" />}
 
                 <div className={classNames('content', className)}>
                     {children}

@@ -2,6 +2,7 @@ import { createTheme } from '@mui/material/styles';
 
 export const TABLE_SESSIONS = 'sessions';
 export const TABLE_CLASSES = 'classes';
+export const TABLE_BOSSES = 'bosses';
 
 export const theme = createTheme({
     palette: {
@@ -20,4 +21,12 @@ export const theme = createTheme({
     },
 });
 
-export const ROUTER_CREATE_SESSION = 'create-session';
+export const ROUTER_HOME = '/';
+export const ROUTER_SIGNIN = '/signin';
+export const ROUTER_SIGNUP = '/signup';
+export const ROUTER_FORGOT_PASSWORD = '/reset-password';
+export const ROUTER_CREATE_SESSION = '/create-session';
+export const ROUTER_SESSION = '/session';
+
+//game constants:
+export const GAME_CONSTANT_MAX_SPARKS = 6;

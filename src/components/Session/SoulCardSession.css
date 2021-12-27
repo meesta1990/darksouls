@@ -1,0 +1,13 @@
+.boss-page .wrapper-boss-infos .soul-card {
+    margin-right: 20px;
+    background: black;
+    box-shadow: 0px 1px 11px 2px var(--secondary-color);
+}
+
+.boss-page .wrapper-boss-infos .soul-card:last-child {
+    margin-right: 0;
+}
+
+.boss-page .wrapper-boss-infos .soul-card img{
+    width: 120px;
+}

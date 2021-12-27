@@ -12,12 +12,12 @@
     position: relative;
 }
 
-.card-session-container > .MuiPaper-rounded:hover {
-    border: 1px solid var(--light-gray);
-}
-
 .card-session-container .MuiPaper-rounded .MuiIconButton-colorSecondary {
     position: absolute;
     right: 12px;
     top: 12px;
+}
+
+.card-session-container .MuiPaper-rounded .session {
+    cursor: pointer;
 }

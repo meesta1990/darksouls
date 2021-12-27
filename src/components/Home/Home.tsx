@@ -5,6 +5,7 @@ import Page from '../Page/Page';
 import './Home.css'
 import { ROUTER_CREATE_SESSION, theme } from '../../utils/Constants';
 import Sessions from './Sessions';
+import { logout } from "../../services/User/ServiceUser";
 
 
 const Home = () => {
@@ -15,11 +16,14 @@ const Home = () => {
         <Page className="homepage">
             <div className="button-container">
                 <ThemeProvider theme={theme}>
-                    <Button variant="outlined" size="large" color="secondary" onClick={()=>navigate(ROUTER_CREATE_SESSION)}>
+                    <Button variant="outlined" size="large" color="primary" onClick={()=>navigate(ROUTER_CREATE_SESSION)}>
                         Create new session
                     </Button>
-                    <Button variant="outlined" size="large" color="secondary" onClick={() => setChoosedContent('list_sessions')}>
+                    <Button variant="outlined" size="large" color="primary" onClick={() => setChoosedContent('list_sessions')}>
                         Join session
+                    </Button>
+                    <Button variant="outlined" size="large" color="primary" onClick={logout}>
+                        Logout
                     </Button>
                 </ThemeProvider>
             </div>

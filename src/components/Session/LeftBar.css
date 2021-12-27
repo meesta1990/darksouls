@@ -1,0 +1,29 @@
+.left-bar {
+    width: 150px;
+
+    display: flex;
+    flex-direction: column;
+    padding: 12px;
+    flex: 1 1 auto;
+
+    justify-content: center;
+}
+
+
+.left-bar .MuiAvatar-root {
+    width: 130px;
+    height: 130px;
+    margin-bottom: 12px;
+}
+
+.left-bar .MuiAvatar-root img{
+    object-position: top;
+}
+
+.left-bar .MuiAvatar-root {
+    border: 1px solid var(--light-gray);
+}
+
+.left-bar .MuiAvatar-root.my-pg {
+    box-shadow: 0px 1px 15px 0px var(--secondary-color);
+}

@@ -1,0 +1,26 @@
+.content.sign {
+    margin-top: 100px !important;
+}
+
+.sign .card-sign {
+    padding: 22px;
+    flex-direction: column;
+    background: var(--medium-gray);
+    display: flex;
+    width: 350px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.sign .card-sign > * {
+    flex: 1 1 auto;
+    margin-bottom: 12px;
+}
+
+.sign .card-sign{
+    color: var(--light-gray);
+}
+
+.sign .card-sign .lbl-signup {
+    display: block;
+}

@@ -1,0 +1,7 @@
+.session-view {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    box-shadow: inset 0px 0px 15px 2px #000000;
+    background: var(--dark-gray);
+}

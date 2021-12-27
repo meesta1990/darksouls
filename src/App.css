@@ -33,6 +33,10 @@
   border-color: var(--light-gray) !important;
 }
 
+.center {
+  text-align: center;
+}
+
 /** inputs placeholder **/
 .MuiInputBase-colorSecondary .MuiOutlinedInput-notchedOutline {
   color: var(--secondary-color) !important;
@@ -46,7 +50,17 @@ fieldset.MuiOutlinedInput-notchedOutline {
   border-color: var(--dark-gray);
   transition: all 0.2s ease;
 }
+
+a {
+  color: var(--blue);
+}
+
+.error {
+  color: #ad0000;
+}
+
 :root {
+  --blue: #3f50b5;
   --primary-color-dark: #757ce8;
   --secondary-color: #e16410;
   --light-gray: #555555;
