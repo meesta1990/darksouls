@@ -1,0 +1,36 @@
+.chat-container {
+    position: absolute;
+    bottom: 12px;
+    left: 12px;
+    padding: 6px;
+    width: 350px;
+    height: 230px;
+    display: flex;
+    flex-direction: column;
+    color: white;
+
+    background: rgba(255, 255, 255, 0.2) !important;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(9.9px);
+    -webkit-backdrop-filter: blur(9.9px);
+}
+
+.chat-container .chat-body {
+    flex: 1;
+    margin-bottom: 10px;
+    color: var(--text-color);
+    max-height: 200px;
+    overflow-y: scroll;
+}
+.chat-container .MuiOutlinedInput-root {
+    width: 100%;
+}
+
+.chat-container .MuiOutlinedInput-root textarea {
+    color: var(--text-color);
+}
+
+.chat-container .MuiOutlinedInput-root svg {
+    color: var(--text-color);
+    font-size: 18px;
+}

@@ -18,10 +18,11 @@ import { Class } from '../../entities/Class';
 import { GAME_CONSTANT_MAX_SPARKS, ROUTER_HOME } from '../../utils/Constants';
 import { Boss } from "../../entities/Monster";
 import BossSessionPage from './BossSessionPage';
-import { createSession } from "../../services/Sessions/ServiceSession";
+import {createSession, updateSession} from "../../services/Sessions/ServiceSession";
 import { Session } from "../../entities/Session";
 import { useNavigate } from "react-router-dom";
 import { User } from "../../entities/User";
+import {Chat} from "../../entities/Chat";
 
 interface ICreateSession {
     user: User;
@@ -89,7 +90,14 @@ const CreateSession = ({ user }: ICreateSession) => {
         if (choosedMiniBoss) {
             session.mini_boss = choosedMiniBoss;
         }
-        createSession(session);
+
+        createSession(session).then((session: any) => {
+            session.chat = new Chat({
+                sessionID: session.id
+            });
+
+            updateSession(session);
+        })
     }
 
     return (

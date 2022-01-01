@@ -5,9 +5,11 @@ import { useParams } from 'react-router-dom';
 import Page from "../Page/Page";
 import LeftBar from "./LeftBar";
 import './SessionView.css';
+import Chat from "./Chat";
+import { User } from "../../entities/User";
 
 interface ISessionView {
-    user: any;
+    user: User;
 }
 
 const SessionView = ({ user }: ISessionView) => {
@@ -16,16 +18,20 @@ const SessionView = ({ user }: ISessionView) => {
 
     useEffect(() => {
         if (sessionID) {
-            getSession(sessionID).then((session: any)=>{
+            getSession(sessionID, (session: Session) => {
+                console.log(session);
                 setSession(session);
-            })
+            }, () => {
+
+            });
         }
     }, []);
 
-    if (!session) return <div />
+    if (!session) return <Page />
     return (
         <Page className="session-view" disableLogo>
             <LeftBar players={session.players} user={user} />
+            <Chat session={session} user={user} />
         </Page>
     )
 };
