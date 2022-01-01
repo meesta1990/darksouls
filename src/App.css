@@ -66,4 +66,26 @@ a {
   --light-gray: #555555;
   --medium-gray: #343434;
   --dark-gray: #242424;
+  --text-color: #BFBFBFFF;
+}
+
+/** scrollbar **/
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #7D7D7DFF;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: var(--text-color);
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: white;
 }
