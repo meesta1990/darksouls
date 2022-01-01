@@ -21,9 +21,10 @@ import BossSessionPage from './BossSessionPage';
 import { createSession } from "../../services/Sessions/ServiceSession";
 import { Session } from "../../entities/Session";
 import { useNavigate } from "react-router-dom";
+import { User } from "../../entities/User";
 
 interface ICreateSession {
-    user: any;
+    user: User;
 }
 
 const CreateSession = ({ user }: ICreateSession) => {
@@ -65,6 +66,7 @@ const CreateSession = ({ user }: ICreateSession) => {
         session.creation_date = new Date().getTime();
         session.last_update = new Date().getTime();
         session.sparks_left = GAME_CONSTANT_MAX_SPARKS - numberOfPLayers;
+        session.author = user;
 
         if (gameName) {
             session.name = gameName;

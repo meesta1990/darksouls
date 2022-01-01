@@ -12,23 +12,38 @@ import {
     ROUTER_HOME,
     ROUTER_SIGNIN,
     ROUTER_SIGNUP,
-    ROUTER_FORGOT_PASSWORD
+    ROUTER_FORGOT_PASSWORD,
+    ROUTER_LINK_USERNAME
 } from './utils/Constants';
 import SessionView from "./components/Session/SessionView";
 import Signin from "./components/Login/Signin";
 import Signup from "./components/Login/Signup";
 import { auth } from "./utils/Firebase";
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 import Page from "./components/Page/Page";
 import ForgotPassword from "./components/Login/ForgotPassword";
+import LinkUsername from "./components/Login/LinkUsername";
+import { User } from "./entities/User";
+import { getUser } from "./services/User/ServiceUser";
 
 function App() {
-    const [loggedUser, setLoggedUser] = useState<any>(undefined);
+    const [loggedUser, setLoggedUser] = useState<User | undefined>(undefined);
+    const [firebaseUser, setFirebaseUser] = useState<any>();
 
     auth.onAuthStateChanged((user) => {
-        setLoggedUser(user);
+        setFirebaseUser(user);
     });
+
+    useEffect(() => {
+        if (firebaseUser) {
+            getUser(firebaseUser.uid).then((customUser) => {
+                setLoggedUser(customUser as User);
+            })
+        } else {
+            setLoggedUser(undefined);
+        }
+    }, [firebaseUser])
 
     if(loggedUser === undefined) return <Page />
     return (
@@ -61,6 +76,14 @@ function App() {
 
                 <Route path={ROUTER_SIGNIN} element={<Signin />} />
                 <Route path={ROUTER_SIGNUP} element={<Signup />} />
+                <Route
+                    path={ROUTER_LINK_USERNAME}
+                    element={
+                        <ProtectedRoute user={loggedUser}>
+                            <LinkUsername user={loggedUser} />
+                        </ProtectedRoute>
+                    }
+                />
                 <Route path={ROUTER_FORGOT_PASSWORD} element={<ForgotPassword />} />
             </Routes>
         </BrowserRouter>

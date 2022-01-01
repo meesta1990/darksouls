@@ -1,4 +1,6 @@
 import { Session } from "../../entities/Session";
+import { Paper } from "@mui/material";
+import './SessionCreated.css'
 
 interface ISessionCreated {
     session: Session;
@@ -11,7 +13,9 @@ const SessionCreated = ({
 }: ISessionCreated) => {
     return (
         <div className="session" key={session.id} onClick={() => onClick(session.id)}>
-            {session.name}
+            <Paper>
+                {session.name}
+            </Paper>
         </div>
     );
 }

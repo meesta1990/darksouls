@@ -1,5 +1,6 @@
 import { Class } from './Class';
 import { Boss } from './Monster';
+import {User} from "./User";
 
 export interface ISessionPlayers {
     max_players: number;
@@ -9,7 +10,7 @@ export interface ISessionPlayers {
 export interface ISession {
     id: string;
     name: string;
-    author: string;
+    author: User;
     last_update: number;
     creation_date: number;
     start_date: number;
@@ -28,7 +29,7 @@ export interface ISession {
 export class Session implements ISession{
     id: string;
     name: string;
-    author: string;
+    author: User;
     last_update: number;
     creation_date: number;
     start_date: number;

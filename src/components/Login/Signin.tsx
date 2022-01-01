@@ -3,9 +3,15 @@ import { LoadingButton } from "@mui/lab";
 import { useState } from "react";
 import Page from "../Page/Page";
 import './Sign.css';
-import { logout, signIn, signInWithGoogle } from "../../services/User/ServiceUser";
+import {checkLinkedUsername, logout, signIn, signInWithGoogle} from "../../services/User/ServiceUser";
 import { Link, useNavigate } from "react-router-dom";
-import { ROUTER_FORGOT_PASSWORD, ROUTER_HOME, ROUTER_SIGNIN, ROUTER_SIGNUP } from "../../utils/Constants";
+import {
+    ROUTER_FORGOT_PASSWORD,
+    ROUTER_HOME,
+    ROUTER_LINK_USERNAME,
+    ROUTER_SIGNIN,
+    ROUTER_SIGNUP
+} from "../../utils/Constants";
 
 const Signin = () => {
     const navigate = useNavigate();
@@ -17,7 +23,7 @@ const Signin = () => {
     const [error, setError] = useState<string>('');
 
     const handleSignIn = () => {
-        if (email.length === 0) {
+        if (email.trim().length === 0) {
             setEmailError(true);
             return;
         } else {
@@ -51,8 +57,14 @@ const Signin = () => {
         setPasswordError(false);
         setLoading(true);
 
-        signInWithGoogle().then(() => {
-            navigate(ROUTER_HOME);
+        signInWithGoogle().then((googleUser) => {
+            checkLinkedUsername(googleUser).then((status) => {
+                if (status === true) {
+                    navigate(ROUTER_HOME);
+                } else {
+                    navigate(ROUTER_LINK_USERNAME);
+                }
+            })
         }).catch((error) => {
             setError(error);
         }).finally(() => {
@@ -68,6 +80,7 @@ const Signin = () => {
                         label="Email"
                         required
                         type="email"
+                        autoComplete="new-password"
                         error={emailError}
                         variant="outlined"
                         color="secondary"
@@ -77,6 +90,7 @@ const Signin = () => {
                         label="Password"
                         required
                         type="password"
+                        autoComplete="new-password"
                         error={passwordError}
                         variant="outlined"
                         color="secondary"

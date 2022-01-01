@@ -1,0 +1,4 @@
+.session .MuiPaper-root {
+    padding: 32px;
+    background: var(--light-gray);
+}

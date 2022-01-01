@@ -42,6 +42,10 @@
   color: var(--secondary-color) !important;
 }
 
+.MuiInputBase-colorSecondary {
+  color: var(--blue) !important;
+}
+
 label.MuiInputLabel-root:not(.Mui-focused) {
   color: var(--light-gray) !important;
 }
@@ -66,4 +70,5 @@ a {
   --light-gray: #555555;
   --medium-gray: #343434;
   --dark-gray: #242424;
+  --success: #31b100;
 }

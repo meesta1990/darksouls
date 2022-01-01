@@ -1,5 +1,6 @@
 import { createTheme } from '@mui/material/styles';
 
+export const TABLE_USERS = 'users';
 export const TABLE_SESSIONS = 'sessions';
 export const TABLE_CLASSES = 'classes';
 export const TABLE_BOSSES = 'bosses';
@@ -25,6 +26,7 @@ export const ROUTER_HOME = '/';
 export const ROUTER_SIGNIN = '/signin';
 export const ROUTER_SIGNUP = '/signup';
 export const ROUTER_FORGOT_PASSWORD = '/reset-password';
+export const ROUTER_LINK_USERNAME = '/link-username';
 export const ROUTER_CREATE_SESSION = '/create-session';
 export const ROUTER_SESSION = '/session';
 
