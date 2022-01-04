@@ -34,3 +34,16 @@
     color: var(--text-color);
     font-size: 18px;
 }
+
+.chat-container .chat-body .message {
+    position: relative;
+}
+
+.chat-container .chat-body .message .date-message {
+    margin-right: 6px;
+}
+
+.chat-container .chat-body .message .author {
+    margin-right: 6px;
+    color: var(--secondary-color);
+}

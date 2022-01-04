@@ -31,7 +31,7 @@ export const getSessions = () => {
     });
 }
 
-export const getSession = (sessionId: string, successCb: any, errorCb: any) => {
+export const getSession = (sessionId: string, successCb: any, errorCb?: any) => {
     const dbRef = ref(database);
 
     try {

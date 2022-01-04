@@ -45,7 +45,8 @@ export const signIn = (email: string, password: string) => {
                     const userToCreate = new User({
                         email: email,
                         username: null,
-                        uid: user.uid
+                        uid: user.uid,
+                        emailVerified: user.emailVerified
                     });
 
                     if (gettedUser === null) {

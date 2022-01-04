@@ -1,11 +1,14 @@
 import './Chat.css'
-import { ChatMessage, IChat } from "../../entities/Chat";
+import {ChatMessage, IChat, IMessage} from "../../entities/Chat";
 import { Card, IconButton, InputAdornment, OutlinedInput } from "@mui/material";
 import SendIcon from '@mui/icons-material/Send';
 import { useRef, useState } from "react";
 import { User } from "../../entities/User";
 import { sendChatMessage } from "../../services/Sessions/ServiceSession";
 import { Session } from "../../entities/Session";
+import Moment from 'react-moment';
+import 'moment-timezone';
+import { DATE_FORMAT } from "../../utils/Constants";
 
 interface IChatComponent {
     session: Session;
@@ -22,14 +25,13 @@ const Chat = ({
     const sendMessage = () => {
         if (message.trim().length !== 0) {
             const chatMessage = new ChatMessage({
-                author: null, //todo
+                author: user,
                 message: message,
                 sentDate: new Date().getTime()
             });
 
             sendChatMessage(session, chatMessage).then(() => {
                 setMessage('');
-               // messagesEndRef.current.scrollIntoView();
                 messagesEndRef.current.scrollTop = messagesEndRef.current.scrollHeight;
             });
         } else {
@@ -48,8 +50,18 @@ const Chat = ({
     return (
         <Card variant="outlined" className="chat-container">
             <div className="chat-body" ref={messagesEndRef}>
-                {Object.keys(session.chat?.messages).map((item: string, i) => (
-                    <div key={item}>{session.chat?.messages[item].message}</div>
+                {session.chat?.messages && Object.keys(session.chat?.messages).map((key: string) => (
+                    <div className="message" key={key}>
+                        <span className="date-message">
+                            <Moment format={DATE_FORMAT}>{new Date(session.chat?.messages[key].sentDate)}</Moment>
+                        </span>
+                        <span className="author">
+                            {session.chat?.messages[key].author?.username}:
+                        </span>
+                        <span className="text-message">
+                            {session.chat?.messages[key].message}
+                        </span>
+                    </div>
                 ))}
             </div>
 

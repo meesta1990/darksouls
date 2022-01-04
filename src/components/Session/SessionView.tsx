@@ -19,10 +19,7 @@ const SessionView = ({ user }: ISessionView) => {
     useEffect(() => {
         if (sessionID) {
             getSession(sessionID, (session: Session) => {
-                console.log(session);
                 setSession(session);
-            }, () => {
-
             });
         }
     }, []);
