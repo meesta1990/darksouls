@@ -1,5 +1,15 @@
 import { useEffect, useState } from 'react';
-import {Button, Card, CircularProgress, IconButton, TextField, ThemeProvider} from '@mui/material';
+import {
+    Button,
+    Card,
+    CircularProgress,
+    Dialog, DialogActions,
+    DialogContent, DialogContentText,
+    DialogTitle,
+    IconButton,
+    TextField,
+    ThemeProvider
+} from '@mui/material';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import './Sessions.css';
 import {ROUTER_SESSION, theme} from '../../utils/Constants';
@@ -10,7 +20,6 @@ import { useNavigate } from "react-router-dom";
 import Backdrop from "@mui/material/Backdrop";
 import Fade from "@mui/material/Fade";
 import Box from "@mui/material/Box";
-import Modal from "@mui/material/Modal";
 
 const Sessions = () => {
     const [loading, setLoading] = useState<boolean>(false);
@@ -81,36 +90,35 @@ const Sessions = () => {
                 }
             </Card>
 
-            <Modal
+            <Dialog
                 open={modalPasswordOpen}
-                closeAfterTransition
+                className="modal-password"
                 onClose={handleCloseModalPasswordOpen}
-                BackdropComponent={Backdrop}
-                BackdropProps={{
-                    timeout: 500,
-                }}
+                fullWidth={true}
+                maxWidth={'sm'}
             >
-                <Fade in={modalPasswordOpen} className="modal modal-password">
-                    <Box>
-                        <TextField
-                            label="Password"
-                            error={errorPasswordSession !== ''}
-                            variant="outlined"
-                            color="secondary"
-                            onChange={(e: any) => setInsertedPasswordSession(e.target.value)}
-                        />
-
-                        <p className="error">
-                            {errorPasswordSession}
-                        </p>
-
-                        <div className="button-container">
-                            <Button variant="contained" color="primary" onClick={() => setModalPasswordOpen(false)}>Back</Button>
-                            <Button variant="contained" color="primary" onClick={handleCheckPasswordSession}>Enter</Button>
-                        </div>
-                    </Box>
-                </Fade>
-            </Modal>
+                <DialogTitle id="alert-dialog-title">
+                    Enter the password
+                </DialogTitle>
+                <DialogContent>
+                    <TextField
+                        label="Password"
+                        error={errorPasswordSession !== ''}
+                        variant="outlined"
+                        color="secondary"
+                        onChange={(e: any) => setInsertedPasswordSession(e.target.value)}
+                    />
+                    <p className="error">
+                        {errorPasswordSession}
+                    </p>
+                </DialogContent>
+                <DialogActions>
+                    <div className="button-container">
+                        <Button variant="contained" color="primary" onClick={() => setModalPasswordOpen(false)}>Back</Button>
+                        <Button variant="contained" color="primary" onClick={handleCheckPasswordSession}>Enter</Button>
+                    </div>
+                </DialogActions>
+            </Dialog>
         </div>
     );
 };

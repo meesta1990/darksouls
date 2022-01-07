@@ -102,15 +102,11 @@ a {
   pointer-events: none;
 }
 
-.modal {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 400px;
-  background: var(--medium-gray);
-  padding: 22px;
-  box-shadow: 0px 1px 15px 0px var(--secondary-color);
-  border-radius: 6px;
+.MuiDialog-container .MuiPaper-root {
+  background-color: var(--medium-gray) !important;
   color: var(--text-color);
+}
+
+.MuiDialogContent-root {
+  padding-top: 12px !important;
 }

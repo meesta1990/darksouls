@@ -6,24 +6,16 @@
     background: var(--dark-gray);
 }
 
-.modal.modal-chose-new-class {
-    width: 950px;
-}
-
-.modal.modal-chose-new-class .class-selection-section {
+.modal-chose-new-class .class-selection-section {
     text-align: center;
     margin-bottom: 40px;
 }
 
-.modal.modal-chose-new-class .class-selection-section .MuiButton-root {
+.modal-chose-new-class .class-selection-section .MuiButton-root {
     margin-right: 12px;
 }
 
-.modal.modal-chose-new-class .class-selection-section .MuiButton-root:last-child {
-    margin-right: 0;
-}
-
-.modal.modal-chose-new-class .btn-join-game {
+.modal-chose-new-class .btn-join-game {
     margin-top: 22px;
     display: flex;
     margin-left: auto;

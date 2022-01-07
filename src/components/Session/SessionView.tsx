@@ -12,7 +12,7 @@ import { Class } from "../../entities/Class";
 import Backdrop from "@mui/material/Backdrop";
 import Fade from "@mui/material/Fade";
 import Box from "@mui/material/Box";
-import {Button, TextField} from "@mui/material";
+import {Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField} from "@mui/material";
 import Modal from "@mui/material/Modal";
 import CharacterInventory from "../Character/CharacterInventory";
 import ClassButtons from "./ClassButtons";
@@ -64,31 +64,32 @@ const SessionView = ({ user }: ISessionView) => {
     if (!session) return <Page />
     return (
         <Page className="session-view" disableLogo >
-            <Modal
+            <Dialog
                 open={modalChooseClass}
-                closeAfterTransition
-                BackdropComponent={Backdrop}
-                BackdropProps={{
-                    timeout: 500,
-                }}
+                className="modal-chose-new-class"
+                fullWidth={true}
+                maxWidth={'md'}
+                scroll="body"
             >
-                <Fade in={modalChooseClass} className="modal modal-chose-new-class">
-                    <Box>
-                        <ClassButtons onClassChoosed={setNewPlayerChoosedClass} excludedClasses={excludedClasses}/>
-                        <CharacterInventory choosedClass={newPlayerChoosedClass}/>
-
-                        <Button
-                            variant="contained"
-                            size="large"
-                            color="secondary"
-                            className="btn-join-game"
-                            disabled={newPlayerChoosedClass === undefined}
-                        >
-                            Join the game
-                        </Button>
-                    </Box>
-                </Fade>
-            </Modal>
+                <DialogTitle id="alert-dialog-title">
+                    Choose your class
+                </DialogTitle>
+                <DialogContent>
+                    <ClassButtons onClassChoosed={setNewPlayerChoosedClass} excludedClasses={excludedClasses}/>
+                    <CharacterInventory choosedClass={newPlayerChoosedClass}/>
+                </DialogContent>
+                <DialogActions>
+                    <Button
+                        variant="contained"
+                        size="large"
+                        color="secondary"
+                        className="btn-join-game"
+                        disabled={newPlayerChoosedClass === undefined}
+                    >
+                        Join the game
+                    </Button>
+                </DialogActions>
+            </Dialog>
 
             <LeftBar players={session.players} user={user} />
             {choosedClass && <RightBar choosedClass={choosedClass} /> }
