@@ -1,4 +1,28 @@
 .session .MuiPaper-root {
     padding: 32px;
+    background: var(--medium-gray);
+    margin-bottom: 12px;
+    transition: all 0.2s ease;
+    color: var(--text-color);
+    position: relative;
+}
+
+.session .MuiPaper-root:hover {
     background: var(--light-gray);
+}
+
+.session .MuiPaper-root .players-number {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+}
+
+.session.disabled .MuiPaper-root .players-number {
+    color: red;
+}
+
+.session .MuiPaper-root .icon-password-session {
+    position: absolute;
+    bottom: 6px;
+    right: 6px;
 }

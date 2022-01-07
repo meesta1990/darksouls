@@ -26,6 +26,7 @@ export interface ISession {
     mini_boss: Boss;
     main_boss: Boss;
     chat: Chat;
+    password?: string;
 }
 
 export class Session implements ISession{
@@ -46,6 +47,7 @@ export class Session implements ISession{
     mini_boss: Boss;
     main_boss: Boss;
     chat: Chat;
+    password?: string;
 
     constructor(snap?: any) {
         this.id = snap?.id;
@@ -65,5 +67,6 @@ export class Session implements ISession{
         this.mini_boss = snap?.mini_boss;
         this.main_boss = snap?.main_boss;
         this.chat = snap?.chat;
+        this.password = snap?.password;
     }
 }

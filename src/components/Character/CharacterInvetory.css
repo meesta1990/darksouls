@@ -3,6 +3,7 @@
     height: 100%;
     opacity: 1;
     transition: opacity 0.2ms ease;
+    align-items: center;
 }
 
 .wrapper-character-inventory.hide {
@@ -56,6 +57,7 @@
     padding: 5px;
     display: flex;
     align-items: center;
+    background: var(--medium-gray);
 }
 
 .wrapper-character-inventory .col .MuiPaper-root.active {
@@ -70,4 +72,8 @@
 .wrapper-character-inventory img.class-equip {
     width: 100%;
     height: 100%;
+}
+
+.wrapper-character-inventory .wrapper-class-skill {
+    min-height: 120px;
 }

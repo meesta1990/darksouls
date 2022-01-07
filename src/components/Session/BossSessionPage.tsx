@@ -3,6 +3,7 @@ import { Paper, Table, TableBody, TableCell, TableContainer, TableRow } from "@m
 import { Boss } from "../../entities/Monster";
 import './BossSessionPage.css';
 import SoulCardSession from "./SoulCardSession";
+import SkeletonImage from "../SkeletonImage/SkeletonImage";
 
 interface IBossSessionPage {
     boss: Boss;
@@ -14,7 +15,8 @@ const BossSessionPage = ({
     return (
         <div className={classNames('boss-page', boss.name)}>
             <div className="fade" />
-            <img className="preview_img_boss" src={boss.preview_img} />
+            <SkeletonImage className="preview_img_boss" src={boss.preview_img} />
+
 
             <div className="wrapper-boss-infos">
                 <Paper variant="outlined" className="recap-card">

@@ -1,15 +1,23 @@
 import { useEffect, useState } from 'react';
-import { Card, CircularProgress, IconButton, ThemeProvider } from '@mui/material';
+import {Button, Card, CircularProgress, IconButton, TextField, ThemeProvider} from '@mui/material';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import './Sessions.css';
-import {ROUTER_CREATE_SESSION, ROUTER_SESSION, theme} from '../../utils/Constants';
+import {ROUTER_SESSION, theme} from '../../utils/Constants';
 import { getSessions } from '../../services/Sessions/ServiceSession';
 import { Session } from '../../entities/Session';
 import SessionCreated from "./SessionCreated";
 import { useNavigate } from "react-router-dom";
+import Backdrop from "@mui/material/Backdrop";
+import Fade from "@mui/material/Fade";
+import Box from "@mui/material/Box";
+import Modal from "@mui/material/Modal";
 
 const Sessions = () => {
     const [loading, setLoading] = useState<boolean>(false);
+    const [modalPasswordOpen, setModalPasswordOpen] = useState<boolean>(false);
+    const [insertedPasswordSession, setInsertedPasswordSession] = useState<string>('');
+    const [selectedSession, setSelectedSession] = useState<Session | null>();
+    const [errorPasswordSession, setErrorPasswordSession] = useState<string>('');
     const [sessions, setSessions] = useState<[]>([]);
     const navigate = useNavigate();
 
@@ -30,6 +38,24 @@ const Sessions = () => {
         })
     }
 
+    const checkPasswordSession = (session: Session) => {
+        setModalPasswordOpen(true);
+        setSelectedSession(session);
+    }
+
+    const handleCheckPasswordSession = () => {
+        if(selectedSession && selectedSession.password === insertedPasswordSession) {
+            goToSession(selectedSession.id);
+        } else {
+            setErrorPasswordSession('Wrong password')
+        }
+    }
+
+    const handleCloseModalPasswordOpen = () => {
+        setErrorPasswordSession('');
+        setSelectedSession(null);
+    }
+
     const goToSession = (sessionID: string) => {
         navigate(ROUTER_SESSION + '/' + sessionID);
     }
@@ -46,7 +72,7 @@ const Sessions = () => {
                 </ThemeProvider>
 
                 {sessions.length > 0 ? sessions.map((session: Session) =>
-                    <SessionCreated key={session.id} session={session} onClick={goToSession} />
+                    <SessionCreated key={session.id} session={session} onClick={session.password ? () => checkPasswordSession(session) : goToSession} />
                 )
                 :
                     <p>
@@ -54,6 +80,37 @@ const Sessions = () => {
                     </p>
                 }
             </Card>
+
+            <Modal
+                open={modalPasswordOpen}
+                closeAfterTransition
+                onClose={handleCloseModalPasswordOpen}
+                BackdropComponent={Backdrop}
+                BackdropProps={{
+                    timeout: 500,
+                }}
+            >
+                <Fade in={modalPasswordOpen} className="modal modal-password">
+                    <Box>
+                        <TextField
+                            label="Password"
+                            error={errorPasswordSession !== ''}
+                            variant="outlined"
+                            color="secondary"
+                            onChange={(e: any) => setInsertedPasswordSession(e.target.value)}
+                        />
+
+                        <p className="error">
+                            {errorPasswordSession}
+                        </p>
+
+                        <div className="button-container">
+                            <Button variant="contained" color="primary" onClick={() => setModalPasswordOpen(false)}>Back</Button>
+                            <Button variant="contained" color="primary" onClick={handleCheckPasswordSession}>Enter</Button>
+                        </div>
+                    </Box>
+                </Fade>
+            </Modal>
         </div>
     );
 };

@@ -1,6 +1,6 @@
 import { IStats } from './Stats';
 import { IItem, Item } from './Item';
-import { Player } from "./Player";
+import { User } from "./User";
 
 export interface IClassSkill {
     id: number;
@@ -29,7 +29,7 @@ export class Class implements IClass {
     stats: IStats;
     equip: Equip;
     level: number;
-    owner: Player;
+    owner: User;
     class_skill: IClassSkill;
     profile_photo: string;
 

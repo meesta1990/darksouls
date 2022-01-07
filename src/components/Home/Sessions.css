@@ -13,11 +13,36 @@
 }
 
 .card-session-container .MuiPaper-rounded .MuiIconButton-colorSecondary {
-    position: absolute;
-    right: 12px;
-    top: 12px;
+
 }
 
 .card-session-container .MuiPaper-rounded .session {
     cursor: pointer;
+}
+
+.modal-password .MuiTextField-root {
+    margin-bottom: 22px;
+    width: 100%;
+}
+
+.modal-password .button-container {
+    display: flex;
+}
+
+.modal-password .button-container .MuiButton-root{
+    flex: 1 1 auto;
+}
+
+.modal-password .button-container .MuiButton-root:first-child {
+    margin-right: 6px;
+}
+
+.modal-password .button-container .MuiButton-root:last-child {
+    margin-left: 6px;
+}
+
+.modal-password .error {
+    min-height: 21px;
+    margin-top: 12px;
+    margin-bottom: 12px;
 }

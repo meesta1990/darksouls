@@ -58,6 +58,7 @@ const Signin = () => {
         setLoading(true);
 
         signInWithGoogle().then((googleUser) => {
+            console.log(googleUser)
             checkLinkedUsername(googleUser).then((status) => {
                 if (status === true) {
                     navigate(ROUTER_HOME);

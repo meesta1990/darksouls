@@ -28,8 +28,8 @@ import { User } from "./entities/User";
 import { getUser } from "./services/User/ServiceUser";
 
 function App() {
-    const [loggedUser, setLoggedUser] = useState<User | undefined>(undefined);
-    const [firebaseUser, setFirebaseUser] = useState<any>();
+    const [loggedUser, setLoggedUser] = useState<any>(undefined);
+    const [firebaseUser, setFirebaseUser] = useState<any>(undefined);
 
     auth.onAuthStateChanged((user) => {
         setFirebaseUser(user);
@@ -40,8 +40,8 @@ function App() {
             getUser(firebaseUser.uid).then((customUser) => {
                 setLoggedUser(customUser as User);
             })
-        } else {
-            setLoggedUser(undefined);
+        } else if(firebaseUser === null) {
+            setLoggedUser(null);
         }
     }, [firebaseUser])
 

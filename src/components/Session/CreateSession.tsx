@@ -23,6 +23,7 @@ import { Session } from "../../entities/Session";
 import { useNavigate } from "react-router-dom";
 import { User } from "../../entities/User";
 import {Chat} from "../../entities/Chat";
+import ClassButtons from "./ClassButtons";
 
 interface ICreateSession {
     user: User;
@@ -32,16 +33,10 @@ const CreateSession = ({ user }: ICreateSession) => {
     const navigate = useNavigate();
     const [gameName, setGameName] = useState<string>();
     const [numberOfPLayers, setNumberOfPlayers] = useState<number>(1);
+    const [passwordSession, setPasswordSession] = useState<string | null>('');
     const [choosedClass, setChoosedClass] = useState<Class>();
     const [choosedMiniBoss, setChoosedMiniBoss] = useState<Boss>();
     const [choosedMainBoss, setChoosedMainBoss] = useState<Boss>();
-
-
-    const handleClassClick = (choosedClassName: string) => {
-        getClass(choosedClassName).then((_class) => {
-            setChoosedClass(_class);
-        });
-    }
 
     const handleBossClick = (choosedBossName: string, isMiniBoss?: boolean) => {
         getBoss(choosedBossName).then((boss) => {
@@ -57,6 +52,16 @@ const CreateSession = ({ user }: ICreateSession) => {
         setNumberOfPlayers(Number(e.target.value));
     }
 
+    const handlePasswordSessionChange = (e: any) => {
+        const psw = e.target.value;
+
+        if (psw.trim() === ''){
+            setPasswordSession(null);
+        } else {
+            setPasswordSession(psw);
+        }
+    }
+
     const handleGoBackClick = () => {
         navigate(ROUTER_HOME);
     }
@@ -69,14 +74,17 @@ const CreateSession = ({ user }: ICreateSession) => {
         session.sparks_left = GAME_CONSTANT_MAX_SPARKS - numberOfPLayers;
         session.author = user;
 
+        if (passwordSession) {
+            session.password = passwordSession;
+        }
+
         if (gameName) {
             session.name = gameName;
         }
+
         if (choosedClass) {
             const players = new Array(numberOfPLayers);
-            choosedClass.owner = {
-                id: user?.uid
-            };
+            choosedClass.owner = user;
             players[0] = choosedClass;
 
             session.players = {
@@ -128,25 +136,15 @@ const CreateSession = ({ user }: ICreateSession) => {
                             readOnly: true,
                             value: 4
                         }} />
+
+                        <TextField label="Password" variant="outlined" color="secondary" className="half-column" onChange={handlePasswordSessionChange}/>
                     </div>
 
                     <Divider>Pick a class</Divider>
 
                     <div className="section class-selection-section">
-                        <div className="wrapper-btn">
-                            <Button variant="outlined" size="large" color={choosedClass?.name === 'knight' ? 'secondary' : 'primary'} onClick={() => handleClassClick('knight')}>
-                                Knight
-                            </Button>
-                            <Button variant="outlined" size="large" color={choosedClass?.name === 'warrior' ? 'secondary' : 'primary'}  onClick={() => handleClassClick('warrior')}>
-                                Warrior
-                            </Button>
-                            <Button variant="outlined" size="large" color={choosedClass?.name === 'assassin' ? 'secondary' : 'primary'}  onClick={() => handleClassClick('assassin')}>
-                                Assassin
-                            </Button>
-                            <Button variant="outlined" size="large" color={choosedClass?.name === 'herald' ? 'secondary' : 'primary'}  onClick={() => handleClassClick('herald')}>
-                                Herald
-                            </Button>
-                        </div>
+                        <ClassButtons onClassChoosed={setChoosedClass}/>
+
                         <div className="wrapper-char">
                             <CharacterInventory choosedClass={choosedClass}/>
                         </div>
@@ -192,8 +190,13 @@ const CreateSession = ({ user }: ICreateSession) => {
                             Go back
                         </Button>
 
-                        <Button variant="contained" size="large" color="secondary" onClick={handleCreateSessionClick}
-                                disabled={!gameName || !choosedClass || !choosedMiniBoss || !choosedMainBoss}>
+                        <Button
+                            variant="contained"
+                            size="large"
+                            color="secondary"
+                            onClick={handleCreateSessionClick}
+                            disabled={!gameName || !choosedClass || !choosedMiniBoss || !choosedMainBoss}
+                        >
                             Create
                         </Button>
                     </div>

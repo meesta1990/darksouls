@@ -1,12 +1,13 @@
 .left-bar {
     width: 150px;
-
     display: flex;
     flex-direction: column;
     padding: 12px;
     flex: 1 1 auto;
-
     justify-content: center;
+    position: absolute;
+    left: 0;
+    top: 100px;
 }
 
 
@@ -26,4 +27,14 @@
 
 .left-bar .MuiAvatar-root.my-pg {
     box-shadow: 0px 1px 15px 0px var(--secondary-color);
+}
+
+.left-bar .party-player {
+    display: flex;
+    align-items: center;
+    color: var(--text-color);
+}
+
+.left-bar .party-player .party-player-nane {
+    margin-left: 12px;
 }

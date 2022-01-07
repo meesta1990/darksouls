@@ -15,11 +15,15 @@ const LeftBar = ({
         <div className="left-bar">
             {
                 Array.apply(0, Array(players.max_players)).map((x, i) => {
-                    return <Avatar
-                        alt="Remy Sharp"
-                        className={players.players[i]?.owner?.id === user.uid ? 'my-pg' : ''}
-                        src={players.players[i]?.profile_photo}
-                        key={players.players[i]?.name} />
+                    return <span className="party-player" key={'player_' + i} >
+                        <Avatar
+                            alt="Remy Sharp"
+                            className={players.players[i]?.owner?.uid === user.uid ? 'my-pg' : ''}
+                            src={players.players[i]?.profile_photo}/>
+                        <span className="party-player-nane">
+                            {players.players[i]?.owner.username}
+                        </span>
+                    </span>
                 })
             }
         </div>
