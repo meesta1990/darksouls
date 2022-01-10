@@ -30,3 +30,26 @@
     margin-right: auto;
     padding-top: 200px;
 }
+
+.page-container .wrapper-loading-background {
+    position: relative;
+    min-height: 100vh;
+}
+
+.page-container .wrapper-loading-background .MuiCircularProgress-root {
+    position: absolute;
+    top: calc(50% - 40px);
+    left: calc(50% - 40px);
+    z-index: 10;
+}
+
+.page-container .wrapper-loading-background .loading-background {
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 9;
+    opacity: 0.6;
+    position: absolute;
+    background: var(--medium-gray);
+}

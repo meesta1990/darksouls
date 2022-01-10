@@ -2,6 +2,7 @@ import { Class } from './Class';
 import { Boss } from './Monster';
 import { User } from "./User";
 import { Chat } from "./Chat";
+import {Tile} from "./Tile";
 
 export interface ISessionPlayers {
     max_players: number;
@@ -27,6 +28,8 @@ export interface ISession {
     main_boss: Boss;
     chat: Chat;
     password?: string;
+    started: boolean;
+    idTile: number;
 }
 
 export class Session implements ISession{
@@ -48,6 +51,8 @@ export class Session implements ISession{
     main_boss: Boss;
     chat: Chat;
     password?: string;
+    started: boolean;
+    idTile: number;
 
     constructor(snap?: any) {
         this.id = snap?.id;
@@ -67,6 +72,8 @@ export class Session implements ISession{
         this.mini_boss = snap?.mini_boss;
         this.main_boss = snap?.main_boss;
         this.chat = snap?.chat;
-        this.password = snap?.password;
+        this.password = snap?.password
+        this.started = snap?.started;
+        this.idTile = snap?.idTile ? snap?.idTile : 0;
     }
 }

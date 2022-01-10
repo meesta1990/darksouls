@@ -37,6 +37,7 @@ const CreateSession = ({ user }: ICreateSession) => {
     const [choosedClass, setChoosedClass] = useState<Class>();
     const [choosedMiniBoss, setChoosedMiniBoss] = useState<Boss>();
     const [choosedMainBoss, setChoosedMainBoss] = useState<Boss>();
+    const [loading, setLoading] = useState<boolean>(false);
 
     const handleBossClick = (choosedBossName: string, isMiniBoss?: boolean) => {
         getBoss(choosedBossName).then((boss) => {
@@ -73,6 +74,7 @@ const CreateSession = ({ user }: ICreateSession) => {
         session.last_update = new Date().getTime();
         session.sparks_left = GAME_CONSTANT_MAX_SPARKS - numberOfPLayers;
         session.author = user;
+        session.started = false;
 
         if (passwordSession) {
             session.password = passwordSession;
@@ -99,17 +101,20 @@ const CreateSession = ({ user }: ICreateSession) => {
             session.mini_boss = choosedMiniBoss;
         }
 
+        setLoading(true);
         createSession(session).then((session: any) => {
             session.chat = new Chat({
                 sessionID: session.id
             });
 
-            updateSession(session);
+            updateSession(session).finally(() => {
+                setLoading(false);
+            })
         })
     }
 
     return (
-        <Page className="create-session">
+        <Page className="create-session" loading={loading}>
             <div className="card-session-container">
                 <Card variant="outlined" className="card-session">
 

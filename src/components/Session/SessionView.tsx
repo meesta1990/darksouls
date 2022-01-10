@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getSession } from "../../services/Sessions/ServiceSession";
+import { getSession, joinSession } from "../../services/Sessions/ServiceSession";
 import { Session } from "../../entities/Session";
 import { useParams } from 'react-router-dom';
 import Page from "../Page/Page";
@@ -9,13 +9,10 @@ import './SessionView.css';
 import Chat from "./Chat";
 import { User } from "../../entities/User";
 import { Class } from "../../entities/Class";
-import Backdrop from "@mui/material/Backdrop";
-import Fade from "@mui/material/Fade";
-import Box from "@mui/material/Box";
 import {Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField} from "@mui/material";
-import Modal from "@mui/material/Modal";
 import CharacterInventory from "../Character/CharacterInventory";
 import ClassButtons from "./ClassButtons";
+import Game from "./Game";
 
 interface ISessionView {
     user: User;
@@ -29,15 +26,18 @@ const SessionView = ({ user }: ISessionView) => {
     const [modalChooseClass, setModalChooseClass] = useState<boolean>(false);
     const [newPlayerChoosedClass, setNewPlayerChoosedClass] = useState<Class>();
     const [excludedClasses, setExcludedClasses] = useState<string[]>([]);
+    const [loading, setLoading] = useState<boolean>(false);
 
     useEffect(() => {
         if (sessionID) {
+            setLoading(true);
+
             getSession(sessionID, (session: Session) => {
                 setSession(session);
 
                 const tempAvaibleClasses = ['knight', 'warrior', 'assassin', 'herald'];
-                const tempExludedClasses = session?.players?.players.filter(_class => tempAvaibleClasses.includes(_class.name));
-                const tempExludedClassesExtrapolated = tempExludedClasses.map((_class: Class) => {
+                const tempExludedClasses = session?.players?.players?.filter(_class => tempAvaibleClasses.includes(_class.name));
+                const tempExludedClassesExtrapolated = tempExludedClasses?.map((_class: Class) => {
                     return _class.name
                 });
                 setExcludedClasses(tempExludedClassesExtrapolated);
@@ -51,6 +51,8 @@ const SessionView = ({ user }: ISessionView) => {
                 } else {
                     setChoosedClass(null);
                 }
+
+                setLoading(false);
             });
         }
     }, []);
@@ -61,9 +63,21 @@ const SessionView = ({ user }: ISessionView) => {
         }
     }, [choosedClass]);
 
+    const handleJoinGame = () => {
+        if (session && newPlayerChoosedClass) {
+            setLoading(true);
+
+            joinSession(session, user, newPlayerChoosedClass).then(() => {
+                setModalChooseClass(false);
+            }).finally(() => {
+                setLoading(false);
+            })
+        }
+    }
+
     if (!session) return <Page />
     return (
-        <Page className="session-view" disableLogo >
+        <Page className="session-view" disableLogo loading={loading}>
             <Dialog
                 open={modalChooseClass}
                 className="modal-chose-new-class"
@@ -83,6 +97,7 @@ const SessionView = ({ user }: ISessionView) => {
                         variant="contained"
                         size="large"
                         color="secondary"
+                        onClick={handleJoinGame}
                         className="btn-join-game"
                         disabled={newPlayerChoosedClass === undefined}
                     >
@@ -94,6 +109,7 @@ const SessionView = ({ user }: ISessionView) => {
             <LeftBar players={session.players} user={user} />
             {choosedClass && <RightBar choosedClass={choosedClass} /> }
             <Chat session={session} user={user} />
+            <Game session={session} user={user} />
         </Page>
     )
 };

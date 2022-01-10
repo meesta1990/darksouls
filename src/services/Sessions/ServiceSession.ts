@@ -1,9 +1,12 @@
 import { child, get, push, set, ref, update, onValue } from 'firebase/database';
-import { TABLE_SESSIONS } from '../../utils/Constants';
+import {TABLE_SESSIONS, TABLE_TILES} from '../../utils/Constants';
 import { database } from '../../utils/Firebase';
 import { Session } from '../../entities/Session';
 import { cleanUndefinedField } from "../../utils/Functions";
 import {ChatMessage} from "../../entities/Chat";
+import {User} from "../../entities/User";
+import {Class} from "../../entities/Class";
+import {Tile} from "../../entities/Tile";
 
 
 export const getSessions = () => {
@@ -47,6 +50,27 @@ export const getSession = (sessionId: string, successCb: any, errorCb?: any) => 
     } catch (error) {
         errorCb(error);
     }
+}
+
+export const joinSession = (session: Session, user: User, choosedClass: Class) => {
+    return new Promise((resolve, reject) => {
+        try {
+            const playersInTheSession = session?.players;
+
+            if (!playersInTheSession.players || playersInTheSession.players.length === 0) {
+                playersInTheSession.players = [];
+            }
+            if (playersInTheSession && playersInTheSession.players.length < playersInTheSession.max_players) {
+                choosedClass.owner = user;
+
+                playersInTheSession?.players?.push(choosedClass);
+
+                updateSession(session).then(resolve).catch(reject);
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
 }
 
 export const createSession = (session: Session) => {
@@ -110,6 +134,27 @@ export const sendChatMessage = (session: Session, message: ChatMessage) => {
                 reject(error);
             });
 
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+
+export const getTile = (idTile: number) => {
+    return new Promise((resolve, reject) => {
+        const dbRef = ref(database);
+
+        try {
+            get(child(dbRef, TABLE_TILES + "/" + idTile)).then((snapshot) => {
+                if (snapshot.exists()) {
+                    const result = new Tile(snapshot.val());
+                    resolve(result);
+                } else {
+                    resolve(null);
+                }
+            }).catch((error) => {
+                reject(error);
+            });
         } catch (error) {
             reject(error);
         }
