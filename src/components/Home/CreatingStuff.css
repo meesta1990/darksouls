@@ -1,0 +1,37 @@
+.admin {
+    color: var(--text-color);
+}
+
+.admin hr {
+    height: 1px;
+    border: 0;
+    border-bottom: 1px solid white;
+}
+
+.admin .encounter-card {
+    width: 150px;
+    height: 230px;
+    border: 1px solid white;
+    display: inline-block;
+    padding: 12px;
+    color: var(--text-color);
+    margin: 6px;
+}
+
+.admin .encounter-card .mobs {
+    height: 22px;
+}
+
+.admin .encounter-card .encounter-name {
+    color: var(--secondary-color);
+    margin-bottom: 6px;
+}
+
+.admin .encounter-card .encounter-mob {
+    display: inline-block;
+    margin-right: 6px;
+}
+
+.admin .encounter-card hr {
+    width: 100%;
+}

@@ -3,16 +3,18 @@ import { getSession, joinSession } from "../../services/Sessions/ServiceSession"
 import { Session } from "../../entities/Session";
 import { useParams } from 'react-router-dom';
 import Page from "../Page/Page";
-import LeftBar from "./LeftBar";
+import './LeftBar.css'
 import RightBar from "./RightBar";
 import './SessionView.css';
 import Chat from "./Chat";
 import { User } from "../../entities/User";
 import { Class } from "../../entities/Class";
-import {Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField} from "@mui/material";
+import {Avatar, Button, Dialog, DialogActions, DialogContent, DialogTitle} from "@mui/material";
 import CharacterInventory from "../Character/CharacterInventory";
 import ClassButtons from "./ClassButtons";
 import Game from "./Game";
+import InfoPanel from "./InfoPanel/InfoPanel";
+import InfoPanelSouls from "./InfoPanel/InfoPanelSouls";
 
 interface ISessionView {
     user: User;
@@ -27,6 +29,7 @@ const SessionView = ({ user }: ISessionView) => {
     const [newPlayerChoosedClass, setNewPlayerChoosedClass] = useState<Class>();
     const [excludedClasses, setExcludedClasses] = useState<string[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
+    const [focusedElement, setFocusedElement] = useState<string>();
 
     useEffect(() => {
         if (sessionID) {
@@ -75,6 +78,10 @@ const SessionView = ({ user }: ISessionView) => {
         }
     }
 
+    const handleFocus = (who: string) => {
+        setFocusedElement(who);
+    }
+
     if (!session) return <Page />
     return (
         <Page className="session-view" disableLogo loading={loading}>
@@ -106,10 +113,32 @@ const SessionView = ({ user }: ISessionView) => {
                 </DialogActions>
             </Dialog>
 
-            <LeftBar players={session.players} user={user} />
-            {choosedClass && <RightBar choosedClass={choosedClass} /> }
-            <Chat session={session} user={user} />
-            <Game session={session} user={user} />
+            <div className="left-bar">
+                {
+                    session.players && session.players.players && Array.apply(0, Array(session.players.max_players)).map((x, i) => {
+                        return <span className="party-player" key={'player_' + i} >
+                        <Avatar
+                            alt="Remy Sharp"
+                            className={session.players?.players[i]?.owner?.uid === user.uid ? 'my-pg' : ''}
+                            src={session.players?.players[i]?.profile_photo}/>
+                        <span className="party-player-nane">
+                            {session.players?.players[i]?.owner.username}
+                        </span>
+                    </span>
+                    })
+                }
+
+                <Chat session={session} user={user} onFocus={handleFocus} focused={focusedElement === 'chat'}/>
+            </div>
+
+            <Game session={session} user={user} onFocus={handleFocus} focused={focusedElement === 'game'}/>
+
+            <div className="right-space">
+                {choosedClass && <RightBar user={user} session={session} onFocus={handleFocus} focused={focusedElement === 'rightBar'} /> }
+                <InfoPanel session={session} user={user} onFocus={handleFocus} focused={focusedElement === 'infoPanel'}/>
+            </div>
+
+            <InfoPanelSouls souls={session.souls}/>
         </Page>
     )
 };

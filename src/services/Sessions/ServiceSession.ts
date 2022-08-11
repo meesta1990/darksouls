@@ -2,7 +2,7 @@ import { child, get, push, set, ref, update, onValue } from 'firebase/database';
 import {TABLE_SESSIONS, TABLE_TILES} from '../../utils/Constants';
 import { database } from '../../utils/Firebase';
 import { Session } from '../../entities/Session';
-import { cleanUndefinedField } from "../../utils/Functions";
+import {cleanFunctionsField, cleanUndefinedField} from "../../utils/Functions";
 import {ChatMessage} from "../../entities/Chat";
 import {User} from "../../entities/User";
 import {Class} from "../../entities/Class";
@@ -53,6 +53,15 @@ export const getSession = (sessionId: string, successCb: any, errorCb?: any) => 
 }
 
 export const joinSession = (session: Session, user: User, choosedClass: Class) => {
+    if (choosedClass && !choosedClass.choosed_stats) {
+        choosedClass.choosed_stats = {
+            str: 'base',
+            dex: 'base',
+            int: 'base',
+            fth: 'base'
+        };
+    }
+
     return new Promise((resolve, reject) => {
         try {
             const playersInTheSession = session?.players;
@@ -100,7 +109,7 @@ export const createSession = (session: Session) => {
 export const updateSession = (session: Session) => {
     return new Promise((resolve, reject) => {
         const dbRef = ref(database);
-        session = cleanUndefinedField(session);
+        session = cleanFunctionsField(cleanUndefinedField(session));
 
         try {
             update(child(dbRef, TABLE_SESSIONS + '/' + session.id), session).then((snapshot) => {
@@ -148,6 +157,32 @@ export const getTile = (idTile: number) => {
             get(child(dbRef, TABLE_TILES + "/" + idTile)).then((snapshot) => {
                 if (snapshot.exists()) {
                     const result = new Tile(snapshot.val());
+                    resolve(result);
+                } else {
+                    resolve(null);
+                }
+            }).catch((error) => {
+                reject(error);
+            });
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+
+export const getTiles = () => {
+    return new Promise((resolve, reject) => {
+        const dbRef = ref(database);
+
+        try {
+            get(child(dbRef, TABLE_TILES)).then((snapshot) => {
+                if (snapshot.exists()) {
+                    const result: Tile[] = [];
+
+                    snapshot.forEach((childSession: any) => {
+                        result.push(new Tile(childSession.val()));
+                    });
+
                     resolve(result);
                 } else {
                     resolve(null);

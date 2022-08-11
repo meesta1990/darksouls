@@ -1,0 +1,121 @@
+.wrapper-map-tiles {
+    height: 100%;
+    overflow-y: auto;
+    position: relative;
+    padding-top: 22px;
+    text-align: center;
+}
+
+.wrapper-map-tiles .map-tiles-encounter {
+    margin-top: 22px;
+}
+
+.wrapper-map-tiles .slick-arrow {
+    display: none !important;
+}
+
+.wrapper-map-tiles .wrapper-img-soul {
+    display: inline-block;
+}
+
+.wrapper-img-tile .souls-level img {
+    position: absolute;
+    width: 70px;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    box-shadow: 0px 1px 11px 2px var(--secondary-color);
+}
+
+.wrapper-img-tile .souls-level .dragging-placeholder {
+    position: absolute;
+    width: 70px;
+    height: 100px;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    box-shadow: 0px 1px 11px 2px var(--secondary-color);
+    background: var(--secondary-color);
+    opacity: 0.7;
+}
+
+.wrapper-map-tiles .map-tiles-encounter h1 {
+    text-align: center;
+    margin-top: 0;
+    color: var(--secondary-color);
+    text-transform: capitalize;
+}
+
+.wrapper-map-tiles .map-tiles-encounter .map-tiles {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 22px;
+}
+
+.wrapper-map-tiles .map-tiles-encounter .map-tiles .map-tiles-row {
+    display: flex;
+}
+
+.tile-container {
+    padding: 40px;
+    text-align: center;
+    position: relative;
+}
+
+.wrapper-map-tiles .map-tiles-encounter .map-tiles .tile-container {
+    padding: 0;
+    margin: 12px;
+    width: 300px;
+}
+
+.tile-container .nodes {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.tile-container .wrapper-img-tile {
+    display: inline-block;
+    position: relative;
+}
+
+.tile-container .nodes .row-nodes {
+    display: flex;
+    flex: 1;
+}
+
+.tile-container .nodes .row-nodes .wrapper-node {
+    flex: 1;
+    position: relative;
+}
+
+.tile-container .nodes .row-nodes .wrapper-node .node {
+    background-color: var(--secondary-color);
+    box-shadow: 0px 1px 11px 2px var(--secondary-color);
+    width: 10%;
+    height: 10%;
+    border-radius: 50px;
+    display: inline-block;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.tile {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.img-tile {
+    max-width: 100%;
+    max-height: calc(100vh - 44px);
+}

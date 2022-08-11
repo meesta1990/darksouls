@@ -4,6 +4,7 @@
     opacity: 1;
     transition: opacity 0.2ms ease;
     align-items: center;
+    padding: 40px;
 }
 
 .wrapper-character-inventory.hide {
@@ -27,37 +28,13 @@
     margin-right: 0;
 }
 
-.wrapper-character-inventory .col.col-stats {
-    flex: 2;
-    max-width: unset;
-    margin-left: 22px;
-}
-
-.wrapper-character-inventory .col.col-stats .MuiPaper-root {
-    width: auto;
-}
-
-.wrapper-character-inventory .col.col-stats .MuiPaper-root .MuiTableCell-root{
-    border-bottom-color: var(--dark-gray);
-    color: var(--light-gray);
-}
-
-.wrapper-character-inventory .col.col-stats .MuiPaper-root .cell-value{
-    border-bottom-color: var(--dark-gray);
-    color: var(--primary-color-dark);
-}
-
-.wrapper-character-inventory .col.col-stats .MuiPaper-root .no-border-bottom {
-    border: 0;
-}
-
 .wrapper-character-inventory .col .MuiPaper-root{
-    min-height: 210px;
     margin-bottom: 12px;
     padding: 5px;
     display: flex;
     align-items: center;
     background: var(--medium-gray);
+    min-height: 205px;
 }
 
 .wrapper-character-inventory .col .MuiPaper-root.active {

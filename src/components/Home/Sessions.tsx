@@ -12,16 +12,20 @@ import {
 } from '@mui/material';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import './Sessions.css';
-import {ROUTER_SESSION, theme} from '../../utils/Constants';
+import {ROUTER_CREATE_SESSION, ROUTER_SESSION, ROUTER_SESSIONS, theme} from '../../utils/Constants';
 import { getSessions } from '../../services/Sessions/ServiceSession';
 import { Session } from '../../entities/Session';
 import SessionCreated from "./SessionCreated";
 import { useNavigate } from "react-router-dom";
-import Backdrop from "@mui/material/Backdrop";
-import Fade from "@mui/material/Fade";
-import Box from "@mui/material/Box";
+import { User } from "../../entities/User";
+import {logout} from "../../services/User/ServiceUser";
+import Page from "../Page/Page";
 
-const Sessions = () => {
+interface ISessions {
+    user: User;
+}
+
+const Sessions = ({user}: ISessions) => {
     const [loading, setLoading] = useState<boolean>(false);
     const [modalPasswordOpen, setModalPasswordOpen] = useState<boolean>(false);
     const [insertedPasswordSession, setInsertedPasswordSession] = useState<string>('');
@@ -70,56 +74,58 @@ const Sessions = () => {
     }
 
     return (
-        <div className="card-session-container">
-            <Card variant="outlined" className="card-session">
-                <ThemeProvider theme={theme}>
-                    { loading && <CircularProgress color="secondary" />}
+        <Page className="homepage">
+            <div className="card-session-container">
+                <Card variant="outlined" className="card-session">
+                    <ThemeProvider theme={theme}>
+                        { loading && <CircularProgress color="secondary" />}
 
-                    <IconButton aria-label="delete" color="secondary" disabled={loading} onClick={loadSessions}>
-                        <RefreshIcon />
-                    </IconButton>
-                </ThemeProvider>
+                        <IconButton aria-label="delete" color="secondary" disabled={loading} onClick={loadSessions}>
+                            <RefreshIcon />
+                        </IconButton>
+                    </ThemeProvider>
 
-                {sessions.length > 0 ? sessions.map((session: Session) =>
-                    <SessionCreated key={session.id} session={session} onClick={session.password ? () => checkPasswordSession(session) : goToSession} />
-                )
-                :
-                    <p>
-                        No sessions
-                    </p>
-                }
-            </Card>
+                    {sessions.length > 0 ? sessions.map((session: Session) =>
+                            <SessionCreated user={user} key={session.id} session={session} onClick={session.password ? () => checkPasswordSession(session) : goToSession} />
+                        )
+                        :
+                        <p>
+                            No sessions
+                        </p>
+                    }
+                </Card>
 
-            <Dialog
-                open={modalPasswordOpen}
-                className="modal-password"
-                onClose={handleCloseModalPasswordOpen}
-                fullWidth={true}
-                maxWidth={'sm'}
-            >
-                <DialogTitle id="alert-dialog-title">
-                    Enter the password
-                </DialogTitle>
-                <DialogContent>
-                    <TextField
-                        label="Password"
-                        error={errorPasswordSession !== ''}
-                        variant="outlined"
-                        color="secondary"
-                        onChange={(e: any) => setInsertedPasswordSession(e.target.value)}
-                    />
-                    <p className="error">
-                        {errorPasswordSession}
-                    </p>
-                </DialogContent>
-                <DialogActions>
-                    <div className="button-container">
-                        <Button variant="contained" color="primary" onClick={() => setModalPasswordOpen(false)}>Back</Button>
-                        <Button variant="contained" color="primary" onClick={handleCheckPasswordSession}>Enter</Button>
-                    </div>
-                </DialogActions>
-            </Dialog>
-        </div>
+                <Dialog
+                    open={modalPasswordOpen}
+                    className="modal-password"
+                    onClose={handleCloseModalPasswordOpen}
+                    fullWidth={true}
+                    maxWidth={'sm'}
+                >
+                    <DialogTitle id="alert-dialog-title">
+                        Enter the password
+                    </DialogTitle>
+                    <DialogContent>
+                        <TextField
+                            label="Password"
+                            error={errorPasswordSession !== ''}
+                            variant="outlined"
+                            color="secondary"
+                            onChange={(e: any) => setInsertedPasswordSession(e.target.value)}
+                        />
+                        <p className="error">
+                            {errorPasswordSession}
+                        </p>
+                    </DialogContent>
+                    <DialogActions>
+                        <div className="button-container">
+                            <Button variant="contained" color="primary" onClick={() => setModalPasswordOpen(false)}>Back</Button>
+                            <Button variant="contained" color="primary" onClick={handleCheckPasswordSession}>Enter</Button>
+                        </div>
+                    </DialogActions>
+                </Dialog>
+            </div>
+        </Page>
     );
 };
 

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
     Card,
     TextField,
@@ -15,15 +15,18 @@ import './CreateSession.css';
 import CharacterInventory from '../Character/CharacterInventory';
 import { getBoss, getClass } from '../../services/Character/ServiceCharacter';
 import { Class } from '../../entities/Class';
-import { GAME_CONSTANT_MAX_SPARKS, ROUTER_HOME } from '../../utils/Constants';
+import { GAME_CONSTANT_MAX_SPARKS, ROUTER_HOME, ROUTER_SESSION } from '../../utils/Constants';
 import { Boss } from "../../entities/Monster";
 import BossSessionPage from './BossSessionPage';
-import {createSession, updateSession} from "../../services/Sessions/ServiceSession";
+import { createSession, joinSession, updateSession, getTiles } from "../../services/Sessions/ServiceSession";
 import { Session } from "../../entities/Session";
 import { useNavigate } from "react-router-dom";
 import { User } from "../../entities/User";
-import {Chat} from "../../entities/Chat";
+import { Chat } from "../../entities/Chat";
 import ClassButtons from "./ClassButtons";
+import CharacterStats from "../Character/CharacterStats";
+import { ITile } from "../../entities/Tile";
+import ModalTileSouls from "./ModalTileSouls";
 
 interface ICreateSession {
     user: User;
@@ -34,10 +37,19 @@ const CreateSession = ({ user }: ICreateSession) => {
     const [gameName, setGameName] = useState<string>();
     const [numberOfPLayers, setNumberOfPlayers] = useState<number>(1);
     const [passwordSession, setPasswordSession] = useState<string | null>('');
+    const [avaibleTiles, setAvaibleTiles] = useState<ITile[]>([]);
+    const [tilesSession, setTilesSession] = useState<ITile[]>([]);
     const [choosedClass, setChoosedClass] = useState<Class>();
     const [choosedMiniBoss, setChoosedMiniBoss] = useState<Boss>();
     const [choosedMainBoss, setChoosedMainBoss] = useState<Boss>();
     const [loading, setLoading] = useState<boolean>(false);
+    const [modalTileSoulsOpened, setModalTileSoulsOpened] = useState<boolean>(false);
+
+    useEffect(()=> {
+        getTiles().then((result: any) => {
+            setAvaibleTiles(result);
+        })
+    }, [])
 
     const handleBossClick = (choosedBossName: string, isMiniBoss?: boolean) => {
         getBoss(choosedBossName).then((boss) => {
@@ -75,6 +87,8 @@ const CreateSession = ({ user }: ICreateSession) => {
         session.sparks_left = GAME_CONSTANT_MAX_SPARKS - numberOfPLayers;
         session.author = user;
         session.started = false;
+        session.tiles = tilesSession;
+        session.currentTile = tilesSession[0];
 
         if (passwordSession) {
             session.password = passwordSession;
@@ -91,7 +105,7 @@ const CreateSession = ({ user }: ICreateSession) => {
 
             session.players = {
                 max_players: numberOfPLayers,
-                players: players
+                players: []
             };
         }
         if (choosedMainBoss) {
@@ -100,6 +114,7 @@ const CreateSession = ({ user }: ICreateSession) => {
         if (choosedMiniBoss) {
             session.mini_boss = choosedMiniBoss;
         }
+        session.souls = 0;
 
         setLoading(true);
         createSession(session).then((session: any) => {
@@ -107,14 +122,36 @@ const CreateSession = ({ user }: ICreateSession) => {
                 sessionID: session.id
             });
 
-            updateSession(session).finally(() => {
+            updateSession(session).then(() => {
+                joinSession(session, user, choosedClass!).then(()=> {
+                    navigate(ROUTER_SESSION + '/' + session.id);
+                })
+            }).finally(() => {
                 setLoading(false);
             })
         })
     }
 
+    const handleSoulsChoosed = (_t: ITile[]) => {
+        setTilesSession(_t);
+        setModalTileSoulsOpened(false);
+    }
+
     return (
         <Page className="create-session" loading={loading}>
+
+            {
+                choosedMiniBoss && choosedMainBoss &&
+                    <ModalTileSouls
+                        open={modalTileSoulsOpened}
+                        minibossSouls={choosedMiniBoss.soul_cards}
+                        bossSouls={choosedMainBoss.soul_cards}
+                        avaibleTiles={avaibleTiles}
+                        handleClose={()=> setModalTileSoulsOpened(false) }
+                        onSave={handleSoulsChoosed}
+                    />
+            }
+
             <div className="card-session-container">
                 <Card variant="outlined" className="card-session">
 
@@ -152,6 +189,7 @@ const CreateSession = ({ user }: ICreateSession) => {
 
                         <div className="wrapper-char">
                             <CharacterInventory choosedClass={choosedClass}/>
+                            <CharacterStats choosedClass={choosedClass}/>
                         </div>
                     </div>
 
@@ -181,7 +219,12 @@ const CreateSession = ({ user }: ICreateSession) => {
 
                     <div className="section class-selection-section boss">
                         <div className="wrapper-btn-bosses">
-                            <Button variant="outlined" size="large" color={choosedMainBoss?.name === 'dancer_of_the_boreal_valley' ? 'secondary' : 'primary'} onClick={() => handleBossClick('dancer_of_the_boreal_valley')}>
+                            <Button
+                                variant="outlined"
+                                size="large"
+                                color={choosedMainBoss?.name === 'dancer_of_the_boreal_valley' ? 'secondary' : 'primary'}
+                                onClick={() => handleBossClick('dancer_of_the_boreal_valley')}
+                            >
                                 Dancer of the Boreal Valley
                             </Button>
                         </div>
@@ -189,6 +232,23 @@ const CreateSession = ({ user }: ICreateSession) => {
                             {choosedMainBoss && <BossSessionPage boss={choosedMainBoss} />}
                         </div>
                     </div>
+
+                    <Divider>Set tile's level</Divider>
+
+                    <div className="section class-selection-section boss">
+                        <div className="wrapper-btn-bosses">
+                            <Button
+                                variant="outlined"
+                                size="large"
+                                color="secondary"
+                                onClick={() => setModalTileSoulsOpened(true) }
+                                disabled={!choosedMiniBoss || !choosedMainBoss}
+                            >
+                                Set souls
+                            </Button>
+                        </div>
+                    </div>
+
 
                     <div className="footer">
                         <Button className="back-button" variant="contained" size="large" color="primary" onClick={handleGoBackClick}>
@@ -200,7 +260,7 @@ const CreateSession = ({ user }: ICreateSession) => {
                             size="large"
                             color="secondary"
                             onClick={handleCreateSessionClick}
-                            disabled={!gameName || !choosedClass || !choosedMiniBoss || !choosedMainBoss}
+                            disabled={!gameName || !choosedClass || !choosedMiniBoss || !choosedMainBoss || tilesSession.length === 0}
                         >
                             Create
                         </Button>

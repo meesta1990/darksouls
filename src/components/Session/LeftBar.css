@@ -1,5 +1,4 @@
 .left-bar {
-    width: 150px;
     display: flex;
     flex-direction: column;
     padding: 12px;
@@ -8,6 +7,7 @@
     position: absolute;
     left: 0;
     top: 100px;
+    bottom: 0;
 }
 
 
@@ -33,6 +33,7 @@
     display: flex;
     align-items: center;
     color: var(--text-color);
+    width: 150px;
 }
 
 .left-bar .party-player .party-player-nane {

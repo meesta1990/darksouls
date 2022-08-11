@@ -1,0 +1,26 @@
+.info-panel {
+    display: flex;
+    flex-direction: column;
+    color: white;
+}
+
+.info-panel .panel {
+    background: rgba(255, 255, 255, 0.2) !important;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(9.9px);
+    -webkit-backdrop-filter: blur(9.9px);
+    padding: 12px;
+    margin-bottom: 12px;
+    margin-top: 12px;
+}
+
+.info-panel .panel.soul-panel {
+    height: 100px;
+    align-items: center;
+    justify-content: flex-end;
+    display: flex;
+}
+
+.info-panel .panel .img-soul {
+    width: 80px;
+}

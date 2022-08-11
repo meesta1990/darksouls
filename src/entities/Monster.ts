@@ -4,6 +4,10 @@ export interface ISoulsCards {
     tier_3?: number;
 }
 
+export interface IMonster {
+
+}
+
 export interface IBoss {
     name: string;
     hp: number;

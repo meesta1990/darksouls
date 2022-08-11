@@ -1,0 +1,34 @@
+.door {
+    width: 50px;
+    height: 50px;
+    background-color: red;
+    border-radius: 50px;
+    display: inline-block;
+    position: absolute !important;
+}
+
+.door .MuiSvgIcon-root {
+    font-size: 100px;
+    color: var(--secondary-color);
+    opacity: 0.5;
+}
+
+.door.right {
+    top: calc(50% - 25px);
+    right: -25px;
+}
+
+.door.left {
+    top: calc(50% - 25px);
+    left: -25px;
+}
+
+.door.top {
+    top: -25px;
+    left: calc(50% - 25px);
+}
+
+.door.bottom {
+    bottom: -25px;
+    left: calc(50% - 25px);
+}

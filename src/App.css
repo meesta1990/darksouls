@@ -110,3 +110,7 @@ a {
 .MuiDialogContent-root {
   padding-top: 12px !important;
 }
+
+.focused {
+  z-index: 999;
+}

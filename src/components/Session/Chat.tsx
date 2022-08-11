@@ -9,15 +9,20 @@ import { Session } from "../../entities/Session";
 import Moment from 'react-moment';
 import 'moment-timezone';
 import { DATE_FORMAT } from "../../utils/Constants";
+import classNames from "classnames";
 
 interface IChatComponent {
     session: Session;
     user: User;
+    onFocus: any;
+    focused?: boolean;
 }
 
 const Chat = ({
     session,
-    user
+    user,
+    onFocus,
+    focused = false
 }: IChatComponent) => {
     const [message, setMessage] = useState('');
     const messagesEndRef: any = useRef(null);
@@ -47,8 +52,12 @@ const Chat = ({
         }
     }
 
+    const handleChatFocus = () => {
+        onFocus('chat');
+    }
+
     return (
-        <Card variant="outlined" className="chat-container">
+        <Card variant="outlined" className={classNames("chat-container", focused && 'focused')} onClick={handleChatFocus}>
             <div className="chat-body" ref={messagesEndRef}>
                 {session.chat?.messages && Object.keys(session.chat?.messages).map((key: string) => (
                     <div className="message" key={key}>

@@ -1,9 +1,9 @@
 .session-view {
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
     box-shadow: inset 0px 0px 15px 2px #000000;
     background: var(--dark-gray);
+    overflow: hidden;
 }
 
 .modal-chose-new-class .class-selection-section {
@@ -19,4 +19,12 @@
     margin-top: 22px;
     display: flex;
     margin-left: auto;
+}
+
+.right-space {
+    position: absolute;
+    top: 0;
+    right: 12px;
+    width: 350px;
+    bottom: 0;
 }

@@ -34,6 +34,7 @@
 .page-container .wrapper-loading-background {
     position: relative;
     min-height: 100vh;
+    perspective: 2000px;
 }
 
 .page-container .wrapper-loading-background .MuiCircularProgress-root {

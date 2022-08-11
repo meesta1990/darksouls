@@ -2,7 +2,7 @@ import { Class } from './Class';
 import { Boss } from './Monster';
 import { User } from "./User";
 import { Chat } from "./Chat";
-import {Tile} from "./Tile";
+import { ITile } from "./Tile";
 
 export interface ISessionPlayers {
     max_players: number;
@@ -19,17 +19,18 @@ export interface ISession {
     players: ISessionPlayers;
     deck: any[];
     stashed_items?: any[];
-    tiles: any[];
     actions_done?: any[];
     sparks_left: number;
     tomb_stones?: number;
     souls_per_tile?: number;
+    souls: number;
     mini_boss: Boss;
     main_boss: Boss;
     chat: Chat;
     password?: string;
     started: boolean;
-    idTile: number;
+    tiles: ITile[];
+    currentTile: ITile;
 }
 
 export class Session implements ISession{
@@ -42,17 +43,18 @@ export class Session implements ISession{
     players: ISessionPlayers;
     deck: any[];
     stashed_items: any[];
-    tiles: any[];
     actions_done?: any[];
     sparks_left: number;
     tomb_stones: number;
     souls_per_tile?: number;
+    souls: number;
     mini_boss: Boss;
     main_boss: Boss;
     chat: Chat;
     password?: string;
     started: boolean;
-    idTile: number;
+    tiles: ITile[];
+    currentTile: ITile;
 
     constructor(snap?: any) {
         this.id = snap?.id;
@@ -64,16 +66,17 @@ export class Session implements ISession{
         this.players = snap?.players;
         this.deck = snap?.deck;
         this.stashed_items = snap?.stashed_items;
-        this.tiles = snap?.tiles;
         this.actions_done = snap?.actions_done;
         this.sparks_left = snap?.sparks_left;
         this.tomb_stones = snap?.tomb_stones;
         this.souls_per_tile = snap?.souls_per_tile;
+        this.souls = snap?.souls;
         this.mini_boss = snap?.mini_boss;
         this.main_boss = snap?.main_boss;
         this.chat = snap?.chat;
         this.password = snap?.password
         this.started = snap?.started;
-        this.idTile = snap?.idTile ? snap?.idTile : 0;
+        this.tiles = snap?.tiles;
+        this.currentTile = snap?.currentTile;
     }
 }

@@ -2,32 +2,28 @@ import "./Game.css";
 import { useEffect, useState } from "react";
 import { Session } from "../../entities/Session";
 import { User } from "../../entities/User";
-import Tile from "./Tile";
+import Tile from "./Tile/Tile";
 import { ITile } from "../../entities/Tile";
 import { getTile } from "../../services/Sessions/ServiceSession";
-
-interface IGame {
-    session: Session;
-    user: User;
-}
+import CommonSessionInterface from "../../entities/CommonSessionInterface";
 
 const Game = ({
-    session
-}: IGame) => {
+    session,
+    onFocus,
+    user,
+    focused = false
+}: CommonSessionInterface) => {
     const [currentTile, setCurrentTile] = useState<ITile>();
 
+    const handleGameFocus = () => {
+        onFocus('game');
+    }
+
     useEffect(() => {
-        getTile(session?.idTile).then((tile: any) => {
-            console.log(tile)
-            setCurrentTile(tile);
-        })
+        setCurrentTile(session?.currentTile);
     }, []);
 
-    return (
-        <div className="game-board">
-            {currentTile && <Tile tile={currentTile}/>}
-        </div>
-    )
+    return currentTile ? <Tile tile={currentTile} onTileClick={handleGameFocus} focussed={focused}/> : null
 }
 
 export default Game;

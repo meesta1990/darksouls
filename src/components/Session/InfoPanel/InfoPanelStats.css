@@ -1,0 +1,17 @@
+
+.stat{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.stat span{
+    color: var(--text-color);
+    flex: 1;
+}
+
+.stat span.choosed{
+    color: var(--secondary-color);
+    font-weight: 900;
+}

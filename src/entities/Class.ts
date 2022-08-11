@@ -8,9 +8,17 @@ export interface IClassSkill {
     body: string;
 }
 
+interface ChoosedStats {
+    str: string;
+    dex: string;
+    int: string;
+    fth: string;
+}
+
 export interface IClass {
     name: string;
     stats: IStats;
+    choosed_stats: ChoosedStats;
     equip: Equip;
     level: number;
     class_skill: IClassSkill;
@@ -27,6 +35,7 @@ export interface Equip {
 export class Class implements IClass {
     name: string;
     stats: IStats;
+    choosed_stats: ChoosedStats;
     equip: Equip;
     level: number;
     owner: User;
@@ -37,6 +46,12 @@ export class Class implements IClass {
         this.owner = snap?.owner;
         this.name = snap?.name;
         this.stats = snap?.stats;
+        this.choosed_stats = snap?.choosedStats ? snap?.choosedStats : {
+            str: 'base',
+            dex: 'base',
+            int: 'base',
+            fth: 'base'
+        };
 
         let body, weapon_1, weapon_2, weapon_3;
 

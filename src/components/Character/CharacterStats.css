@@ -1,0 +1,27 @@
+.wrapper-character-stats.col.col-stats {
+    flex: 2;
+    max-width: unset;
+    margin-left: 22px;
+}
+
+.wrapper-character-stats.hide {
+    opacity: 0;
+}
+
+.wrapper-character-stats.col.col-stats .MuiPaper-root {
+    width: auto;
+}
+
+.wrapper-character-stats.col.col-stats .MuiPaper-root .MuiTableCell-root{
+    border-bottom-color: var(--dark-gray);
+    color: var(--light-gray);
+}
+
+.wrapper-character-stats.col.col-stats .MuiPaper-root .cell-value{
+    border-bottom-color: var(--dark-gray);
+    color: var(--primary-color-dark);
+}
+
+.wrapper-character-stats.col.col-stats .MuiPaper-root .no-border-bottom {
+    border: 0;
+}

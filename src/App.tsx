@@ -13,7 +13,7 @@ import {
     ROUTER_SIGNIN,
     ROUTER_SIGNUP,
     ROUTER_FORGOT_PASSWORD,
-    ROUTER_LINK_USERNAME
+    ROUTER_LINK_USERNAME, ROUTER_SESSIONS, ROUTER_CREATING_STUFF
 } from './utils/Constants';
 import SessionView from "./components/Session/SessionView";
 import Signin from "./components/Login/Signin";
@@ -26,6 +26,8 @@ import ForgotPassword from "./components/Login/ForgotPassword";
 import LinkUsername from "./components/Login/LinkUsername";
 import { User } from "./entities/User";
 import { getUser } from "./services/User/ServiceUser";
+import Sessions from "./components/Home/Sessions";
+import CreatingStuff from "./components/Home/CreatingStuff";
 
 function App() {
     const [loggedUser, setLoggedUser] = useState<any>(undefined);
@@ -53,7 +55,15 @@ function App() {
                     path={ROUTER_HOME}
                     element={
                         <ProtectedRoute user={loggedUser}>
-                            <Home />
+                            <Home user={loggedUser} />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path={ROUTER_SESSIONS}
+                    element={
+                        <ProtectedRoute user={loggedUser}>
+                            <Sessions user={loggedUser} />
                         </ProtectedRoute>
                     }
                 />
@@ -73,9 +83,6 @@ function App() {
                         </ProtectedRoute>
                     }
                 />
-
-                <Route path={ROUTER_SIGNIN} element={<Signin />} />
-                <Route path={ROUTER_SIGNUP} element={<Signup />} />
                 <Route
                     path={ROUTER_LINK_USERNAME}
                     element={
@@ -84,6 +91,18 @@ function App() {
                         </ProtectedRoute>
                     }
                 />
+
+                <Route
+                    path={ROUTER_CREATING_STUFF}
+                    element={
+                        <ProtectedRoute user={loggedUser}>
+                            <CreatingStuff user={loggedUser} />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route path={ROUTER_SIGNIN} element={<Signin />} />
+                <Route path={ROUTER_SIGNUP} element={<Signup />} />
+
                 <Route path={ROUTER_FORGOT_PASSWORD} element={<ForgotPassword />} />
             </Routes>
         </BrowserRouter>

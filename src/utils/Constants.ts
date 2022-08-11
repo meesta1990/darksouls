@@ -2,6 +2,7 @@ import { createTheme } from '@mui/material/styles';
 
 export const TABLE_USERS = 'users';
 export const TABLE_SESSIONS = 'sessions';
+export const TABLE_ENCOUNTERS = 'cards/encounters';
 export const TABLE_TILES = 'tiles';
 export const TABLE_CLASSES = 'classes';
 export const TABLE_BOSSES = 'bosses';
@@ -24,6 +25,8 @@ export const theme = createTheme({
 });
 
 export const ROUTER_HOME = '/';
+export const ROUTER_SESSIONS = '/sessions';
+export const ROUTER_CREATING_STUFF = '/creating-stuff'; // admin
 export const ROUTER_SIGNIN = '/signin';
 export const ROUTER_SIGNUP = '/signup';
 export const ROUTER_FORGOT_PASSWORD = '/reset-password';
@@ -33,5 +36,5 @@ export const ROUTER_SESSION = '/session';
 
 //game constants:
 export const GAME_CONSTANT_MAX_SPARKS = 6;
-
+export const FOLDER_MODELS = process.env.PUBLIC_URL + '/models'
 export const DATE_FORMAT = "HH:mm:ss";

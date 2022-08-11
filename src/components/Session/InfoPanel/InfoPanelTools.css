@@ -1,0 +1,16 @@
+.info-session-tools-wrapper {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.info-session-tools-wrapper .tool {
+    flex: 1;
+    margin-left: 3px;
+    margin-right: 3px;
+    cursor: pointer;
+}
+
+.info-session-tools-wrapper .tool img {
+    width: 60px;
+}

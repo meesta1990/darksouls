@@ -15,7 +15,7 @@ const BossSessionPage = ({
     return (
         <div className={classNames('boss-page', boss.name)}>
             <div className="fade" />
-            <SkeletonImage className="preview_img_boss" src={boss.preview_img} />
+            <img className="preview_img_boss" src={boss.preview_img} />
 
 
             <div className="wrapper-boss-infos">

@@ -4,7 +4,61 @@
     padding: 12px;
     flex: 1 1 auto;
     position: absolute;
-    right: 0;
-    top: 0;
-    bottom: 0;
+    right: -590px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 600px;
+    transition: right 0.2s ease;
+    z-index: 10;
+    align-items: end;
+    justify-content: center;
+    border-radius: 6px;
+}
+
+.right-bar.opened {
+    right: -12px;
+}
+
+.right-bar.opened .wrapper-character-inventory-container {
+    background: var(--dark-gray);
+    padding: 40px;
+    border-radius: 6px;
+    border: 2px solid var(--medium-gray);
+    border-right: 0;
+}
+
+.wrapper-character-inventory-container .Mui-disabled {
+    color: var(--light-gray) !important;
+}
+
+.right-bar.opened .wrapper-character-inventory-container .wrapper-character-inventory {
+    background: unset;
+    padding: 0;
+    border-radius: 0;
+    border: 0;
+}
+
+.right-bar .handler-open {
+    background-color: var(--light-gray);
+    height: 70px;
+    width: 20px;
+    right: 580px;
+    position: absolute;
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+    cursor: pointer;
+    transition: right 0.2s ease;
+    display: flex;
+    align-items: center;
+}
+
+.right-bar.opened .handler-open {
+    right: 535px;
+}
+
+.session-view .wrapper-character-inventory {
+    height: unset;
+    border-radius: 6px;
+    border: 2px solid var(--medium-gray);
+    border-right: 0;
 }

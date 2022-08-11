@@ -1,0 +1,41 @@
+.wrapper-map-tiles .map-tiles-encounter .first-column {
+    display: inline-block;
+    width: 30%;
+    vertical-align: top;
+}
+
+.wrapper-map-tiles .map-tiles-encounter .first-column .description {
+    margin-top: 72px;
+    color: var(--text-color);
+}
+
+.wrapper-map-tiles .map-tiles-encounter .first-column .btn-reset {
+    margin-top: 22px;
+}
+
+.wrapper-map-tiles .map-tiles-encounter .first-column .btn-save {
+    margin-top: 12px;
+}
+
+.wrapper-map-tiles .map-tiles-encounter .second-column {
+    display: inline-block;
+    width: 70%;
+}
+
+.wrapper-map-tiles .wrapper-img-soul .MuiPaper-root {
+    background: unset;
+    display: inline;
+}
+
+.wrapper-map-tiles .wrapper-img-soul .MuiPaper-root img {
+    width: 100px;
+    margin-right: 6px;
+    cursor: pointer;
+}
+
+.first-column button {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 12px;
+}

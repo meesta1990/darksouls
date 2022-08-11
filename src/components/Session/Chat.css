@@ -1,10 +1,10 @@
 .chat-container {
-    position: absolute;
     bottom: 12px;
-    left: 12px;
+    right: 6px;
+    left: 0;
     padding: 6px;
-    width: 350px;
     height: 230px;
+    width: 300px;
     display: flex;
     flex-direction: column;
     color: white;
@@ -13,6 +13,7 @@
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
     backdrop-filter: blur(9.9px);
     -webkit-backdrop-filter: blur(9.9px);
+    margin-top: auto;
 }
 
 .chat-container .chat-body {

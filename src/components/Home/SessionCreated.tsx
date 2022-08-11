@@ -3,17 +3,21 @@ import { Paper } from "@mui/material";
 import LockIcon from '@mui/icons-material/Lock';
 import './SessionCreated.css'
 import classNames from "classnames";
+import {User} from "../../entities/User";
 
 interface ISessionCreated {
     session: Session;
+    user: User;
     onClick: (sessionID: string) => void
 };
 
 const SessionCreated = ({
     session,
+    user,
     onClick
 }: ISessionCreated) => {
-    const isGameFull = session.players?.max_players === session.players?.players?.length;
+    const isGameFull = (session.players?.max_players === session.players?.players?.length) &&
+        !session.players?.players?.find((_player) => _player.owner.uid === user.uid)
 
     return (
         <div

@@ -1,5 +1,6 @@
 import { createUserWithEmailAndPassword,
-    signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider ,signOut, sendEmailVerification } from "firebase/auth";
+    signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider ,signOut, sendEmailVerification,
+    sendPasswordResetEmail } from "firebase/auth";
 import { auth, database } from "../../utils/Firebase";
 import { child, get, push, ref, set } from "firebase/database";
 import {TABLE_SESSIONS, TABLE_USERS} from "../../utils/Constants";
@@ -186,6 +187,20 @@ export const checkUsernameAvaibility = (username: string) => {
             });
         } catch (error) {
             reject(error);
+        }
+    });
+}
+
+export const resetPassword = (email: string) => {
+    return new Promise((resolve, reject) => {
+        try {
+            sendPasswordResetEmail(auth, email).then(() => {
+                resolve('OK');
+            }).catch((error) => {
+                reject(error);
+            });
+        } catch (error) {
+            reject('error');
         }
     });
 }
