@@ -4,7 +4,7 @@ import { Session } from "../../entities/Session";
 import { User } from "../../entities/User";
 import Tile from "./Tile/Tile";
 import { ITile } from "../../entities/Tile";
-import { getTile } from "../../services/Sessions/ServiceSession";
+import {getTile, shuffleEncounters} from "../../services/Sessions/ServiceSession";
 import CommonSessionInterface from "../../entities/CommonSessionInterface";
 
 const Game = ({

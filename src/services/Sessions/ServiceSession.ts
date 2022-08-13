@@ -7,6 +7,8 @@ import {ChatMessage} from "../../entities/Chat";
 import {User} from "../../entities/User";
 import {Class} from "../../entities/Class";
 import {Tile} from "../../entities/Tile";
+import {getEncounters} from "../Encounters/ServiceEncounter";
+import {IEncounters} from "../../entities/Encounter";
 
 
 export const getSessions = () => {
@@ -194,4 +196,24 @@ export const getTiles = () => {
             reject(error);
         }
     });
+}
+
+export const shuffleEncounters = (session: Session) => {
+    return getEncounters().then((encounters: any) => {
+        const encounterShuffled = []; // todo
+
+        for (let i=3;i<session.tiles.length;i++) {
+            const tile = session.tiles[i];
+
+            const indexEncounterMiniboss = Math.floor(Math.random() * (encounters['tier_' + tile.minibossSoulsLevel?.soulsLevel].length -1));
+            const indexEncounterBoss = Math.floor(Math.random() * (encounters['tier_' + tile.bossSoulsLevel?.soulsLevel].length -1));
+            const encounterMiniBoss = encounters['tier_' + tile.minibossSoulsLevel?.soulsLevel][indexEncounterMiniboss];
+            const encounterBoss = encounters['tier_' + tile.bossSoulsLevel?.soulsLevel][indexEncounterBoss];
+
+            if (tile.minibossSoulsLevel && tile.bossSoulsLevel) {
+                tile.minibossSoulsLevel.encounter = encounterMiniBoss;
+                tile.bossSoulsLevel.encounter = encounterBoss;
+            }
+        }
+    })
 }
