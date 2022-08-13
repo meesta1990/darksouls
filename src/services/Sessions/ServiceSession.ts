@@ -87,7 +87,7 @@ export const joinSession = (session: Session, user: User, choosedClass: Class) =
 export const createSession = (session: Session) => {
     return new Promise((resolve, reject) => {
         const dbRef = ref(database);
-        session = cleanUndefinedField(session);
+        session = cleanUndefinedField(session); // todo check 
 
         try {
             push(child(dbRef, TABLE_SESSIONS), session).then((snapshot) => {

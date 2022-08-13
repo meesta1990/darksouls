@@ -31,8 +31,9 @@ import { User } from "../../entities/User";
 import { Chat } from "../../entities/Chat";
 import ClassButtons from "./ClassButtons";
 import CharacterStats from "../Character/CharacterStats";
-import { ITile } from "../../entities/Tile";
+import { ITile, Tile } from "../../entities/Tile";
 import ModalTileSouls from "./ModalTileSouls";
+import {deepCopy} from "../../utils/Functions";
 
 interface ICreateSession {
     user: User;
@@ -93,6 +94,38 @@ const CreateSession = ({ user }: ICreateSession) => {
         session.sparks_left = GAME_CONSTANT_MAX_SPARKS - numberOfPLayers;
         session.author = user;
         session.started = false;
+
+        //set the correct path:
+        if(tilesSession){
+            const bonfire = tilesSession.find((t: ITile) => t.id === 0);
+            const tile_3 = tilesSession.find((t: ITile) => t.id === 3);
+            const tile_6 = tilesSession.find((t: ITile) => t.id === 6);
+            const tile_7 = tilesSession.find((t: ITile) => t.id === 7);
+            const tile_8 = tilesSession.find((t: ITile) => t.id === 8);
+
+            if(bonfire?.doors){
+                bonfire.doors[0].idNextTile = 3;
+                bonfire.doors[1].idNextTile = 6;
+            }
+            if(tile_3?.doors){
+                tile_3.doors[0].idNextTile = 0;
+                tile_3.doors[1].idNextTile = 7;
+            }
+            if(tile_6?.doors){
+                tile_6.doors[0].idNextTile = 0;
+                tile_6.doors[1].idNextTile = 7;
+            }
+            if(tile_7?.doors){
+                tile_7.doors[0].idNextTile = 3;
+                tile_7.doors[1].idNextTile = 6;
+                tile_7.doors[2].idNextTile = 8;
+            }
+            if(tile_8?.doors){
+                tile_8.doors[0].idNextTile = 1;
+                tile_8.doors[1].idNextTile = 7;
+            }
+        }
+
         session.tiles = tilesSession;
         session.currentTile = tilesSession[0];
 

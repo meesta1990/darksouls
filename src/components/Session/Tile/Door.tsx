@@ -10,9 +10,11 @@ import classNames from "classnames";
 
 interface IDoor {
     position: IDoorPosition;
+    onDoorClick?(position: IDoorPosition): void;
 }
 
-const Door = ({ position }: IDoor) => {
+const Door = ({ position, onDoorClick }: IDoor) => {
+    console.log(position)
     const getDoor = (position: string): ReactNode => {
         switch(position) {
             case 'right':
@@ -26,8 +28,14 @@ const Door = ({ position }: IDoor) => {
         }
     }
 
+    const handleOnDoorClick = () => {
+        if(onDoorClick){
+            onDoorClick(position);
+        }
+    }
+
     return <>
-        <IconButton aria-label="delete" className={classNames(position.position, 'door')}>
+        <IconButton aria-label="delete" className={classNames(position.position, 'door')} onClick={handleOnDoorClick} >
             { getDoor(position.position) }
         </IconButton>
     </>

@@ -1,9 +1,10 @@
 import { Node } from "./Node";
 import { IMonster } from "./Monster";
-import {Encounter} from "./Encounter";
+import { Encounter } from "./Encounter";
 
 export interface IDoorPosition {
-    position: 'left' | 'right' | 'top' | 'bottom'
+    position: 'left' | 'right' | 'top' | 'bottom';
+    idNextTile?: number;
 }
 
 export interface IEncounterSoulsLevel {

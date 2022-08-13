@@ -1,4 +1,4 @@
-import { ITile } from "../../../entities/Tile";
+import { IDoorPosition, ITile } from "../../../entities/Tile";
 import "./Tile.css";
 import {useEffect, useRef, useState} from "react";
 import classNames from "classnames";
@@ -15,7 +15,9 @@ interface ITileComponent {
     showNodes?: boolean;
     disableSoulsLevel?: boolean;
     isDragging?: boolean;
+    onDoorClick?(position: IDoorPosition): void;
     encounter?: 'boss' | 'miniboss'
+    animationClass?: string;
 }
 
 const Tile = ({
@@ -23,10 +25,12 @@ const Tile = ({
     onTileClick,
     onDrop,
     focussed,
-    showNodes = false,
+    showNodes = true,
     disableSoulsLevel = false,
     isDragging = false,
-    encounter
+    onDoorClick,
+    encounter,
+    animationClass
 }: ITileComponent) => {
     const tileImgRef = useRef(null);
     const [soulsLevelBack, setSoulsLevelBack] = useState<string | null>(null);
@@ -111,7 +115,7 @@ const Tile = ({
 
     return (
         <div className="tile-container">
-            <span className="wrapper-img-tile">
+            <span className={classNames("wrapper-img-tile", animationClass)}>
                 <img
                     className={classNames("img-tile", focussed && 'focused')}
                     src={require("../../../assets/images/tiles/" + tile.id + ".jpg")}
@@ -120,6 +124,16 @@ const Tile = ({
                     onDrop={handleDrop}
                     onDragOver={handleAllowDrop}
                 />
+
+                {tile.id !== 0 && showNodes &&
+                    <span className="nodes">
+                    {[...Array(5)].map((x, i) =>
+                        <span key={i} className={"row-nodes row-" + (i+1)}>
+                            {setNodes(i+1)}
+                        </span>
+                    )}
+                </span>
+                }
 
 
                 {isDragging &&
@@ -139,19 +153,11 @@ const Tile = ({
                 }
 
                 {tile && tile?.doors && tile?.doors?.length > 0 &&
-                    tile?.doors.map((door) => <Door key={door.position} position={door} />)
+                    tile?.doors.map((door) => <Door key={door.position} position={door} onDoorClick={onDoorClick} />)
                 }
             </span>
 
-            {tile.id !== 0 && showNodes &&
-                <span className="nodes">
-                    {[...Array(5)].map((x, i) =>
-                        <span key={i} className={"row-nodes row-" + (i+1)}>
-                            {setNodes(i+1)}
-                        </span>
-                    )}
-                </span>
-            }
+            <h3 style={{color: 'red'}}>{tile.name}</h3>
         </div>
     )
 };

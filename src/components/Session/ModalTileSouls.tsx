@@ -112,13 +112,13 @@ const ModalTileSouls = ({
                 <div className="map-tiles">
                     <div className="map-tiles-row">
                         <Tile encounter={encounter} tile={internalAvaibleTiles[0]} disableSoulsLevel onDrop={handleDrop} />
-                        <Tile encounter={encounter} tile={internalAvaibleTiles[3]} isDragging={isDragging} onDrop={handleDrop} />
+                        <Tile encounter={encounter} tile={internalAvaibleTiles[3]} isDragging={isDragging} onDrop={handleDrop} showNodes={false} />
                         <div className="tile-container"/>
                     </div>
                     <div className="map-tiles-row">
-                        <Tile encounter={encounter} tile={internalAvaibleTiles[6]} isDragging={isDragging} onDrop={handleDrop} />
-                        <Tile encounter={encounter} tile={internalAvaibleTiles[7]} isDragging={isDragging} onDrop={handleDrop} />
-                        <Tile encounter={encounter} tile={internalAvaibleTiles[8]} isDragging={isDragging} onDrop={handleDrop} />
+                        <Tile encounter={encounter} tile={internalAvaibleTiles[6]} isDragging={isDragging} onDrop={handleDrop} showNodes={false} />
+                        <Tile encounter={encounter} tile={internalAvaibleTiles[7]} isDragging={isDragging} onDrop={handleDrop} showNodes={false} />
+                        <Tile encounter={encounter} tile={internalAvaibleTiles[8]} isDragging={isDragging} onDrop={handleDrop} showNodes={false} />
                     </div>
                 </div>
             </div>

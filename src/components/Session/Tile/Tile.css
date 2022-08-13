@@ -49,7 +49,7 @@
 .wrapper-map-tiles .map-tiles-encounter .map-tiles {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    /*align-items: center;*/
     justify-content: center;
     padding: 22px;
 }
@@ -71,6 +71,7 @@
 }
 
 .tile-container .nodes {
+    padding: 50px;
     position: absolute;
     top: 0;
     left: 0;
@@ -83,6 +84,15 @@
 .tile-container .wrapper-img-tile {
     display: inline-block;
     position: relative;
+    transition: opacity 200ms ease-in;
+}
+
+.tile-container .wrapper-img-tile.fade-out {
+    opacity: 0;
+}
+
+.tile-container .wrapper-img-tile.fade-in {
+    opacity: 1;
 }
 
 .tile-container .nodes .row-nodes {
