@@ -10,6 +10,7 @@ export interface IEncounter {
     node_3?: IEncounterMob[];
     node_4?: IEncounterMob[];
     traps?: boolean;
+    src: string;
 }
 
 export class Encounter implements IEncounter {
@@ -20,6 +21,7 @@ export class Encounter implements IEncounter {
     node_3: IEncounterMob[];
     node_4: IEncounterMob[];
     traps: boolean;
+    src: string;
 
     constructor(snap: any) {
         this.id = snap?.id;
@@ -29,5 +31,6 @@ export class Encounter implements IEncounter {
         this.node_3 = snap?.node_3;
         this.node_4 = snap?.node_4;
         this.traps = snap?.traps;
+        this.src = snap?.src;
     }
 }
