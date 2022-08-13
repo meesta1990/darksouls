@@ -1,3 +1,9 @@
+export interface IEncounters {
+    tier_1?: IEncounter[],
+    tier_2?: IEncounter[]
+    tier_3?: IEncounter[]
+}
+
 interface IEncounterMob {
     id_mob: number;
 }

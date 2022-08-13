@@ -1,5 +1,6 @@
 import { Node } from "./Node";
 import { IMonster } from "./Monster";
+import {Encounter} from "./Encounter";
 
 export interface IDoorPosition {
     position: 'left' | 'right' | 'top' | 'bottom'
@@ -7,6 +8,7 @@ export interface IDoorPosition {
 
 export interface IEncounterSoulsLevel {
     soulsLevel: number;
+    encounter?: Encounter;
     monster?: IMonster;
 }
 

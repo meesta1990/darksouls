@@ -18,7 +18,13 @@ import { Class } from '../../entities/Class';
 import { GAME_CONSTANT_MAX_SPARKS, ROUTER_HOME, ROUTER_SESSION } from '../../utils/Constants';
 import { Boss } from "../../entities/Monster";
 import BossSessionPage from './BossSessionPage';
-import { createSession, joinSession, updateSession, getTiles } from "../../services/Sessions/ServiceSession";
+import {
+    createSession,
+    joinSession,
+    updateSession,
+    getTiles,
+    shuffleEncounters
+} from "../../services/Sessions/ServiceSession";
 import { Session } from "../../entities/Session";
 import { useNavigate } from "react-router-dom";
 import { User } from "../../entities/User";
@@ -116,20 +122,23 @@ const CreateSession = ({ user }: ICreateSession) => {
         }
         session.souls = 0;
 
-        setLoading(true);
-        createSession(session).then((session: any) => {
-            session.chat = new Chat({
-                sessionID: session.id
-            });
+        //shuffle encounters:
+        shuffleEncounters(session).then(()=> {
+            setLoading(true);
+            createSession(session).then((session: any) => {
+                session.chat = new Chat({
+                    sessionID: session.id
+                });
 
-            updateSession(session).then(() => {
-                joinSession(session, user, choosedClass!).then(()=> {
-                    navigate(ROUTER_SESSION + '/' + session.id);
+                updateSession(session).then(() => {
+                    joinSession(session, user, choosedClass!).then(()=> {
+                        navigate(ROUTER_SESSION + '/' + session.id);
+                    })
+                }).finally(() => {
+                    setLoading(false);
                 })
-            }).finally(() => {
-                setLoading(false);
             })
-        })
+        });
     }
 
     const handleSoulsChoosed = (_t: ITile[]) => {
