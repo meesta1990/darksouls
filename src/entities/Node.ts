@@ -1,17 +1,17 @@
 interface INode {
-    id: number;
-    name: string;
-    creatures: any[]
+    id: 'red_sword' | 'red_cross' | 'purple_star' | 'purple_tree';
+    creatures: any[];
+    position: number;
 }
 
 export class Node implements INode{
-    id: number;
-    name: string;
+    id: 'red_sword' | 'red_cross' | 'purple_star' | 'purple_tree';
     creatures: any[];
+    position: number;
 
     constructor(snap?: any) {
         this.id = snap?.id;
-        this.name = snap?.name;
         this.creatures = snap?.creatures;
+        this.position = snap?.position;
     }
 }

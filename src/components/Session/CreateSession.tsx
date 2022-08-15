@@ -128,6 +128,7 @@ const CreateSession = ({ user }: ICreateSession) => {
 
         session.tiles = tilesSession;
         session.currentTile = tilesSession[0];
+        session.miniboss_defeated = false;
 
         if (passwordSession) {
             session.password = passwordSession;

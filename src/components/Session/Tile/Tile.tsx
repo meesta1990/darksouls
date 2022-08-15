@@ -6,11 +6,15 @@ import Door from "./Door";
 import encounter_soul_lvl_1 from '../../../assets/images/souls_cards/tier_1_back.jpg';
 import encounter_soul_lvl_2 from '../../../assets/images/souls_cards/tier_2_back.jpg';
 import encounter_soul_lvl_3 from '../../../assets/images/souls_cards/tier_3_back.jpg';
+import {Session} from "../../../entities/Session";
+import {Encounter} from "../../../entities/Encounter";
+import {Mob} from "../../../entities/Monster";
 
 interface ITileComponent {
     tile: ITile;
     onTileClick?: () => void;
     onDrop?: (soulsLevelID: string, tile: ITile) => void;
+    mobs?: Mob[];
     focussed?: boolean;
     showNodes?: boolean;
     disableSoulsLevel?: boolean;
@@ -18,19 +22,22 @@ interface ITileComponent {
     onDoorClick?(position: IDoorPosition): void;
     encounter?: 'boss' | 'miniboss'
     animationClass?: string;
+    session?: Session;
 }
 
 const Tile = ({
     tile,
     onTileClick,
     onDrop,
+    mobs,
     focussed,
     showNodes = true,
     disableSoulsLevel = false,
     isDragging = false,
     onDoorClick,
     encounter,
-    animationClass
+    animationClass,
+    session
 }: ITileComponent) => {
     const tileImgRef = useRef(null);
     const [soulsLevelBack, setSoulsLevelBack] = useState<string | null>(null);
@@ -85,6 +92,18 @@ const Tile = ({
     let count_draw_node = 0;
     const setNodes = (row: number) => {
         const nodes = [];
+        let mobSelector = null;
+        let mobsInTheTile = null;
+        const positionRedSword = tile.special_nodes.find((sp) => sp.id === 'red_sword')
+        const positionRedCross = tile.special_nodes.find((sp) => sp.id === 'red_cross')
+        const positionPurpleStar = tile.special_nodes.find((sp) => sp.id === 'purple_star')
+        const positionPurpleTree = tile.special_nodes.find((sp) => sp.id === 'purple_tree')
+
+
+        if (session) {
+            mobSelector = session?.miniboss_defeated ? 'bossSoulsLevel' : 'minibossSoulsLevel';
+            mobsInTheTile = tile[mobSelector];
+        }
 
         for (let i=0;i<5;i++) {
             const drawNode = (row % 2 !== 0 && i % 2 === 0) || (row % 2 === 0 && i % 2 !== 0);
@@ -95,7 +114,37 @@ const Tile = ({
                 nodeOptionalParams.id = 'node_' + count_draw_node;
                 nodeOptionalParams.className = 'node';
                 nodeOptionalParams.onClick = handleNodeClick;
+
+                if (count_draw_node-1 === positionRedSword?.position) {
+                    nodeOptionalParams.special_nodes = positionRedSword.id;
+                    nodeOptionalParams.creatures = mobsInTheTile.encounter[positionRedSword.id]
+                }
+                if (count_draw_node-1 === positionRedCross?.position) {
+                    nodeOptionalParams.special_nodes = positionRedCross.id;
+                    nodeOptionalParams.creatures = mobsInTheTile.encounter[positionRedCross.id]
+                }
+                if (count_draw_node-1 === positionPurpleStar?.position) {
+                    nodeOptionalParams.special_nodes = positionPurpleStar.id;
+                    nodeOptionalParams.creatures = mobsInTheTile.encounter[positionPurpleStar.id]
+                }
+                if (count_draw_node-1 === positionPurpleTree?.position) {
+                    nodeOptionalParams.special_nodes = positionPurpleTree.id;
+                    nodeOptionalParams.creatures = mobsInTheTile.encounter[positionPurpleTree.id]
+                }
             }
+
+            if (nodeOptionalParams.creatures) {
+                for (let i=0;i<nodeOptionalParams.creatures.length;i++) {
+                    const mob = mobs?.find((_m)=>_m.id == nodeOptionalParams.creatures[i].id_mob);
+
+                    if(mob){
+                        nodeOptionalParams.creatures[i] = mob;
+                    }
+                }
+            }
+
+            console.log(mobs, nodeOptionalParams.creatures);
+
 
             nodes.push(
                 <span
@@ -104,7 +153,13 @@ const Tile = ({
                 >
                     <span
                         {...nodeOptionalParams}
+                        creatureAsd={JSON.stringify(nodeOptionalParams.creatures)}
                     >
+                        {nodeOptionalParams.creatures?.map((_creature: any)=>
+                            <span className="creature-icon" key={'creature_' + row + '_' +i + '_' + _creature.id}>
+                                <img src={_creature.src_icon} />
+                            </span>
+                        )}
                         &nbsp;
                     </span>
                 </span>
@@ -134,7 +189,6 @@ const Tile = ({
                     )}
                 </span>
                 }
-
 
                 {isDragging &&
                     <span

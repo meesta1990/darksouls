@@ -111,11 +111,23 @@
     width: 10%;
     height: 10%;
     border-radius: 50px;
-    display: inline-block;
+    /*display: inline-block;*/
     position: absolute;
-    left: 50%;
+    /*left: 50%;*/
+    display: flex;;
+    flex-direction: column;
+    flex-wrap: wrap;
     top: 50%;
     transform: translate(-50%, -50%);
+}
+
+
+.tile-container .nodes .row-nodes .wrapper-node .node .creature-icon {
+    flex: 1 0 50%; /* explanation below */
+}
+
+.tile-container .nodes .row-nodes .wrapper-node .node .creature-icon img {
+    width: 40px;
 }
 
 .tile {

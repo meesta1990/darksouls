@@ -3,6 +3,7 @@ import { createTheme } from '@mui/material/styles';
 export const TABLE_USERS = 'users';
 export const TABLE_SESSIONS = 'sessions';
 export const TABLE_ENCOUNTERS = 'cards/encounters';
+export const TABLE_MOBS = 'cards/mobs';
 export const TABLE_TILES = 'tiles';
 export const TABLE_CLASSES = 'classes';
 export const TABLE_BOSSES = 'bosses';

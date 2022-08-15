@@ -30,6 +30,7 @@ export interface ISession {
     password?: string;
     started: boolean;
     tiles: ITile[];
+    miniboss_defeated: boolean;
     currentTile: ITile;
 }
 
@@ -54,6 +55,7 @@ export class Session implements ISession{
     password?: string;
     started: boolean;
     tiles: ITile[];
+    miniboss_defeated: boolean;
     currentTile: ITile;
 
     constructor(snap?: any) {
@@ -77,6 +79,7 @@ export class Session implements ISession{
         this.password = snap?.password
         this.started = snap?.started;
         this.tiles = snap?.tiles;
+        this.miniboss_defeated = snap?.miniboss_defeated;
         this.currentTile = snap?.currentTile;
     }
 }

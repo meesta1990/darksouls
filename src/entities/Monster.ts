@@ -4,8 +4,67 @@ export interface ISoulsCards {
     tier_3?: number;
 }
 
-export interface IMonster {
+export interface IMob {
+    id: number;
+    name: string;
+    hp: number;
+    activation_order: ['mov', 'atk'];
+    def: {
+        physical_def: number;
+        magic_def: number;
+    };
+    atk: {
+        atk_range: number;
+        dodge_difficulty: number;
+        matk?: number;
+        patk?: number;
+        to: 'aggro' | 'nearest'
+    },
+    mov: {
+        range: number;
+        target: 'aggro' | 'nearest';
+    },
+    src: string;
+    src_back: string;
+    src_icon: string;
+}
 
+export class Mob implements IMob {
+    id: number;
+    name: string;
+    hp: number;
+    activation_order: ['mov', 'atk'];
+    def: {
+        physical_def: number;
+        magic_def: number;
+    };
+    atk: {
+        atk_range: number;
+        dodge_difficulty: number;
+        matk?: number;
+        patk?: number;
+        to: 'aggro' | 'nearest'
+    };
+    mov: {
+        range: number;
+        target: 'aggro' | 'nearest';
+    };
+    src: string;
+    src_back: string;
+    src_icon: string;
+
+    constructor(snap: any) {
+        this.id = snap?.id;
+        this.name = snap?.name;
+        this.hp = snap?.hp;
+        this.activation_order = snap?.activation_order;
+        this.def = snap?.def;
+        this.atk = snap?.atk;
+        this.mov = snap?.mov;
+        this.src = snap?.src;
+        this.src_back = snap?.src_back;
+        this.src_icon = snap?.src_icon;
+    }
 }
 
 export interface IBoss {

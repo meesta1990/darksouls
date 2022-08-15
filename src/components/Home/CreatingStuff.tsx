@@ -107,9 +107,9 @@ const CreatingStuff = ({ user }: IHome) => {
                         <div>node 1:</div>
                         <div className="mobs">
                             {
-                                encounter.node_1?.map((node, index) =>
+                                encounter.red_sword?.map((node, index) =>
                                     <span className="encounter-mob" key={encounter.name + '_' + index}>
-                                        {node.id_mob}
+                                        {node.id}
                                     </span>
                                 )
                             }
@@ -118,9 +118,9 @@ const CreatingStuff = ({ user }: IHome) => {
                         <div>node 2:</div>
                         <div className="mobs">
                             {
-                                encounter.node_2?.map((node, index) =>
+                                encounter.red_cross?.map((node, index) =>
                                     <span className="encounter-mob" key={encounter.name + '_' + index}>
-                                        {node.id_mob}
+                                        {node.id}
                                     </span>
                                 )
                             }
@@ -129,7 +129,7 @@ const CreatingStuff = ({ user }: IHome) => {
                         <div>node 3:</div>
                         <div className="mobs">
                             {
-                                encounter.node_3?.map((node: any, index: number) =>
+                                encounter.purple_star?.map((node: any, index: number) =>
                                     <span className="encounter-mob" key={encounter.name + '_' + index}>
                                         {node.id_mob}
                                     </span>
@@ -140,9 +140,9 @@ const CreatingStuff = ({ user }: IHome) => {
                         <div>node 4:</div>
                         <div className="mobs">
                             {
-                                encounter.node_4?.map((node, index) =>
+                                encounter.purple_tree?.map((node, index) =>
                                     <span className="encounter-mob" key={encounter.name + '_' + index}>
-                                        {node.id_mob}
+                                        {node.id}
                                     </span>
                                 )
                             }

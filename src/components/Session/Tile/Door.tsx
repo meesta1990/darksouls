@@ -14,7 +14,6 @@ interface IDoor {
 }
 
 const Door = ({ position, onDoorClick }: IDoor) => {
-    console.log(position)
     const getDoor = (position: string): ReactNode => {
         switch(position) {
             case 'right':

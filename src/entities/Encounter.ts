@@ -1,20 +1,18 @@
+import { IMob } from "./Monster";
+
 export interface IEncounters {
     tier_1?: IEncounter[],
     tier_2?: IEncounter[]
     tier_3?: IEncounter[]
 }
 
-interface IEncounterMob {
-    id_mob: number;
-}
-
 export interface IEncounter {
     id?: string;
     name: string;
-    node_1?: IEncounterMob[];
-    node_2?: IEncounterMob[];
-    node_3?: IEncounterMob[];
-    node_4?: IEncounterMob[];
+    red_sword?: IMob[];
+    red_cross?: IMob[];
+    purple_star?: IMob[];
+    purple_tree?: IMob[];
     traps?: boolean;
     src: string;
 }
@@ -22,20 +20,20 @@ export interface IEncounter {
 export class Encounter implements IEncounter {
     id?: string;
     name: string;
-    node_1: IEncounterMob[];
-    node_2: IEncounterMob[];
-    node_3: IEncounterMob[];
-    node_4: IEncounterMob[];
+    red_sword: IMob[];
+    red_cross: IMob[];
+    purple_star: IMob[];
+    purple_tree: IMob[];
     traps: boolean;
     src: string;
 
     constructor(snap: any) {
         this.id = snap?.id;
         this.name = snap?.name;
-        this.node_1 = snap?.node_1;
-        this.node_2 = snap?.node_2;
-        this.node_3 = snap?.node_3;
-        this.node_4 = snap?.node_4;
+        this.red_sword = snap?.red_sword;
+        this.red_cross = snap?.red_cross;
+        this.purple_star = snap?.purple_star;
+        this.purple_tree = snap?.purple_tree;
         this.traps = snap?.traps;
         this.src = snap?.src;
     }
