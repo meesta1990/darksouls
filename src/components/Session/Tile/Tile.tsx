@@ -9,6 +9,7 @@ import encounter_soul_lvl_3 from '../../../assets/images/souls_cards/tier_3_back
 import {Session} from "../../../entities/Session";
 import {Encounter} from "../../../entities/Encounter";
 import {Mob} from "../../../entities/Monster";
+import Loader from "../../Common/Loader";
 
 interface ITileComponent {
     tile: ITile;
@@ -23,6 +24,7 @@ interface ITileComponent {
     encounter?: 'boss' | 'miniboss'
     animationClass?: string;
     session?: Session;
+    loading?: boolean;
 }
 
 const Tile = ({
@@ -37,7 +39,8 @@ const Tile = ({
     onDoorClick,
     encounter,
     animationClass,
-    session
+    session,
+    loading = false
 }: ITileComponent) => {
     const tileImgRef = useRef(null);
     const [soulsLevelBack, setSoulsLevelBack] = useState<string | null>(null);
@@ -143,9 +146,6 @@ const Tile = ({
                 }
             }
 
-            console.log(mobs, nodeOptionalParams.creatures);
-
-
             nodes.push(
                 <span
                     key={'node_' + row + '_' +i}
@@ -153,10 +153,9 @@ const Tile = ({
                 >
                     <span
                         {...nodeOptionalParams}
-                        creatureAsd={JSON.stringify(nodeOptionalParams.creatures)}
                     >
-                        {nodeOptionalParams.creatures?.map((_creature: any)=>
-                            <span className="creature-icon" key={'creature_' + row + '_' +i + '_' + _creature.id}>
+                        {nodeOptionalParams.creatures?.map((_creature: any, index: number)=>
+                            <span className="creature-icon" key={'creature_' + row + '_' +i + '_' + _creature.id + index}>
                                 <img src={_creature.src_icon} />
                             </span>
                         )}
@@ -171,6 +170,8 @@ const Tile = ({
     return (
         <div className="tile-container">
             <span className={classNames("wrapper-img-tile", animationClass)}>
+                <Loader loading={loading} />
+
                 <img
                     className={classNames("img-tile", focussed && 'focused')}
                     src={require("../../../assets/images/tiles/" + tile.id + ".jpg")}

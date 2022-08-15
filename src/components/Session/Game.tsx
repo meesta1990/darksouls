@@ -29,7 +29,6 @@ const Game = ({
 
         Promise.all(promises).then((values) => {
             setIsLoading(false);
-            console.log('loaded')
         });
 
         setCurrentTile(session?.currentTile);
@@ -54,6 +53,7 @@ const Game = ({
         <Tile
             session={session}
             mobs={mobs}
+            loading={isLoading}
             tile={currentTile}
             animationClass={animationClass}
             onTileClick={handleGameFocus}
