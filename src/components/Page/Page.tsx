@@ -32,10 +32,7 @@ const Page = ({
 
 
                     <div className="wrapper-loading-background">
-                        {loading && <>
-                            <div className="loading-background" />
-                            <CircularProgress color="secondary" />
-                        </>}
+                        {loading && <Loader>}
                         {children}
                     </div>
 

@@ -9,9 +9,11 @@ import encounter_soul_lvl_3 from '../../../assets/images/souls_cards/tier_3_back
 import {Session} from "../../../entities/Session";
 import {Encounter} from "../../../entities/Encounter";
 import {Mob} from "../../../entities/Monster";
+import {User} from "../../../entities/User";
 
 interface ITileComponent {
     tile: ITile;
+    user?: User;
     onTileClick?: () => void;
     onDrop?: (soulsLevelID: string, tile: ITile) => void;
     mobs?: Mob[];
@@ -37,7 +39,8 @@ const Tile = ({
     onDoorClick,
     encounter,
     animationClass,
-    session
+    session,
+    user
 }: ITileComponent) => {
     const tileImgRef = useRef(null);
     const [soulsLevelBack, setSoulsLevelBack] = useState<string | null>(null);
@@ -50,8 +53,8 @@ const Tile = ({
         }
     }, [tile.minibossSoulsLevel?.soulsLevel, tile.bossSoulsLevel?.soulsLevel]);
 
-    const handleNodeClick = (el: any) => {
-        console.log('asd', el);
+    const handleNodeClick = () => {
+
     }
 
     const decodeSoulsLevelBack = (soulsLevel: number) => {
@@ -143,20 +146,11 @@ const Tile = ({
                 }
             }
 
-            console.log(mobs, nodeOptionalParams.creatures);
-
-
             nodes.push(
-                <span
-                    key={'node_' + row + '_' +i}
-                    className="wrapper-node"
-                >
-                    <span
-                        {...nodeOptionalParams}
-                        creatureAsd={JSON.stringify(nodeOptionalParams.creatures)}
-                    >
+                <span key={'node_' + row + '_' +i} className="wrapper-node">
+                    <span {...nodeOptionalParams}>
                         {nodeOptionalParams.creatures?.map((_creature: any)=>
-                            <span className="creature-icon" key={'creature_' + row + '_' +i + '_' + _creature.id}>
+                            <span className="creature-icon" key={'creature_' + row + '_' + i + '_' + _creature.id}>
                                 <img src={_creature.src_icon} />
                             </span>
                         )}
@@ -170,6 +164,8 @@ const Tile = ({
 
     return (
         <div className="tile-container">
+            <h3 style={{color: 'red'}}>{tile.name}</h3>
+
             <span className={classNames("wrapper-img-tile", animationClass)}>
                 <img
                     className={classNames("img-tile", focussed && 'focused')}
@@ -180,6 +176,7 @@ const Tile = ({
                     onDragOver={handleAllowDrop}
                 />
 
+                {console.log(tile.id)}
                 {tile.id !== 0 && showNodes &&
                     <span className="nodes">
                     {[...Array(5)].map((x, i) =>
@@ -206,12 +203,10 @@ const Tile = ({
                     </span>
                 }
 
-                {tile && tile?.doors && tile?.doors?.length > 0 &&
+                {tile && tile?.doors && tile?.doors?.length > 0 && session?.author.uid === user?.uid &&
                     tile?.doors.map((door) => <Door key={door.position} position={door} onDoorClick={onDoorClick} />)
                 }
             </span>
-
-            <h3 style={{color: 'red'}}>{tile.name}</h3>
         </div>
     )
 };

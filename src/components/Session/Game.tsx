@@ -50,10 +50,12 @@ const Game = ({
         }, 200);
     }
 
+    console.log('game')
     return currentTile ?
         <Tile
             session={session}
             mobs={mobs}
+            user={user}
             tile={currentTile}
             animationClass={animationClass}
             onTileClick={handleGameFocus}

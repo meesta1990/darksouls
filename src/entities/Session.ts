@@ -32,6 +32,7 @@ export interface ISession {
     tiles: ITile[];
     miniboss_defeated: boolean;
     currentTile: ITile;
+    openDoorRequest?: ITile;
 }
 
 export class Session implements ISession{
@@ -57,6 +58,7 @@ export class Session implements ISession{
     tiles: ITile[];
     miniboss_defeated: boolean;
     currentTile: ITile;
+    openDoorRequest?: ITile;
 
     constructor(snap?: any) {
         this.id = snap?.id;
@@ -81,5 +83,6 @@ export class Session implements ISession{
         this.tiles = snap?.tiles;
         this.miniboss_defeated = snap?.miniboss_defeated;
         this.currentTile = snap?.currentTile;
+        this.openDoorRequest = snap?.openDoorRequest;
     }
 }
