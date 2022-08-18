@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import './Page.css';
 import logo from '../../assets/images/logo.png';
 import { theme } from '../../utils/Constants';
+import Loader from "../Common/Loader";
 
 interface IPage {
     children?: React.ReactNode;
@@ -26,13 +27,9 @@ const Page = ({
             <ThemeProvider theme={theme}>
                 {!disableLogo && <img src={logo} className="logo" />}
 
-
-
                 <div className={classNames('content', className)}>
-
-
                     <div className="wrapper-loading-background">
-                        {loading && <Loader>}
+                        {loading && <Loader loading={loading} />}
                         {children}
                     </div>
 

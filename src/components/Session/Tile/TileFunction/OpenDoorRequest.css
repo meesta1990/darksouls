@@ -1,0 +1,20 @@
+.open-door-request {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--dark-gray);
+    opacity: 0.8;
+    z-index: 20;
+}
+
+.countdown {
+    position: absolute;
+    color: var(--secondary-color);
+    left: 0;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 21;
+}

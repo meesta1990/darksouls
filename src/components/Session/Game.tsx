@@ -8,6 +8,7 @@ import {getTile, shuffleEncounters} from "../../services/Sessions/ServiceSession
 import CommonSessionInterface from "../../entities/CommonSessionInterface";
 import { Mob } from "../../entities/Monster";
 import {getMobs} from "../../services/Mobs/ServiceMobs";
+import {updateSession} from "../../services/Sessions/ServiceSession";
 
 const Game = ({
     session,
@@ -15,11 +16,8 @@ const Game = ({
     user,
     focused = false
 }: CommonSessionInterface) => {
-    const [currentTile, setCurrentTile] = useState<ITile>();
-    const [animationClass, setAnimationClass] = useState('');
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [mobs, setMobs] = useState<Mob[]>();
-    let timeoutAnimation: any;
 
     useEffect(() => {
         const promises = [];
@@ -29,38 +27,22 @@ const Game = ({
 
         Promise.all(promises).then((values) => {
             setIsLoading(false);
-            console.log('loaded')
         });
-
-        setCurrentTile(session?.currentTile);
     }, []);
 
     const handleGameFocus = () => {
         onFocus('game');
     }
 
-    const handleDoorClick = (position: IDoorPosition) => {
-        const nextTile = session.tiles.find((t)=>t.id === position.idNextTile);
-        setAnimationClass('fade-out');
-
-        timeoutAnimation?.clearTimeout();
-        timeoutAnimation = setTimeout(()=> {
-            setCurrentTile(nextTile);
-            setAnimationClass('fade-in');
-        }, 200);
-    }
-
-    console.log('game')
-    return currentTile ?
+    return session?.currentTile ?
         <Tile
             session={session}
             mobs={mobs}
             user={user}
-            tile={currentTile}
-            animationClass={animationClass}
+            loading={isLoading}
+            tile={session?.currentTile}
             onTileClick={handleGameFocus}
             focussed={focused}
-            onDoorClick={handleDoorClick}
         /> : null
 }
 

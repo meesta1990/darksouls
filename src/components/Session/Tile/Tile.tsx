@@ -1,6 +1,6 @@
 import { IDoorPosition, ITile } from "../../../entities/Tile";
 import "./Tile.css";
-import {useEffect, useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import classNames from "classnames";
 import Door from "./Door";
 import encounter_soul_lvl_1 from '../../../assets/images/souls_cards/tier_1_back.jpg';
@@ -10,6 +10,9 @@ import {Session} from "../../../entities/Session";
 import {Encounter} from "../../../entities/Encounter";
 import {Mob} from "../../../entities/Monster";
 import {User} from "../../../entities/User";
+import Nodes from "./TileFunction/Nodes";
+import OpenDoorRequest from "./TileFunction/OpenDoorRequest";
+import {updateSession} from "../../../services/Sessions/ServiceSession";
 
 interface ITileComponent {
     tile: ITile;
@@ -21,10 +24,10 @@ interface ITileComponent {
     showNodes?: boolean;
     disableSoulsLevel?: boolean;
     isDragging?: boolean;
-    onDoorClick?(position: IDoorPosition): void;
     encounter?: 'boss' | 'miniboss'
     animationClass?: string;
     session?: Session;
+    loading?: boolean;
 }
 
 const Tile = ({
@@ -36,14 +39,15 @@ const Tile = ({
     showNodes = true,
     disableSoulsLevel = false,
     isDragging = false,
-    onDoorClick,
     encounter,
-    animationClass,
     session,
     user
 }: ITileComponent) => {
     const tileImgRef = useRef(null);
     const [soulsLevelBack, setSoulsLevelBack] = useState<string | null>(null);
+    const [animationClass, setAnimationClass] = useState('');
+    const [clickedDoor, setClickedDoor] = useState<IDoorPosition>();
+    let timeoutAnimation: any;
 
     useEffect(() => {
         if (encounter === 'miniboss') {
@@ -92,74 +96,38 @@ const Tile = ({
         e.preventDefault();
     }
 
-    let count_draw_node = 0;
-    const setNodes = (row: number) => {
-        const nodes = [];
-        let mobSelector = null;
-        let mobsInTheTile = null;
-        const positionRedSword = tile.special_nodes.find((sp) => sp.id === 'red_sword')
-        const positionRedCross = tile.special_nodes.find((sp) => sp.id === 'red_cross')
-        const positionPurpleStar = tile.special_nodes.find((sp) => sp.id === 'purple_star')
-        const positionPurpleTree = tile.special_nodes.find((sp) => sp.id === 'purple_tree')
-
-
+    const handleTimeUpDoorRequest = () => {
         if (session) {
-            mobSelector = session?.miniboss_defeated ? 'bossSoulsLevel' : 'minibossSoulsLevel';
-            mobsInTheTile = tile[mobSelector];
+            session.openDoorRequest = undefined;
+            updateSession(session).then(() => {
+                handleChangeTile();
+            });
         }
+    }
 
-        for (let i=0;i<5;i++) {
-            const drawNode = (row % 2 !== 0 && i % 2 === 0) || (row % 2 === 0 && i % 2 !== 0);
-            const nodeOptionalParams: any = {};
+    const handleDoorClick = (position: IDoorPosition) => {
+        setClickedDoor(position);
+        const nextTile = session?.tiles.find((t)=>t.id === position?.idNextTile);
 
-            if(drawNode) {
-                count_draw_node++;
-                nodeOptionalParams.id = 'node_' + count_draw_node;
-                nodeOptionalParams.className = 'node';
-                nodeOptionalParams.onClick = handleNodeClick;
-
-                if (count_draw_node-1 === positionRedSword?.position) {
-                    nodeOptionalParams.special_nodes = positionRedSword.id;
-                    nodeOptionalParams.creatures = mobsInTheTile.encounter[positionRedSword.id]
-                }
-                if (count_draw_node-1 === positionRedCross?.position) {
-                    nodeOptionalParams.special_nodes = positionRedCross.id;
-                    nodeOptionalParams.creatures = mobsInTheTile.encounter[positionRedCross.id]
-                }
-                if (count_draw_node-1 === positionPurpleStar?.position) {
-                    nodeOptionalParams.special_nodes = positionPurpleStar.id;
-                    nodeOptionalParams.creatures = mobsInTheTile.encounter[positionPurpleStar.id]
-                }
-                if (count_draw_node-1 === positionPurpleTree?.position) {
-                    nodeOptionalParams.special_nodes = positionPurpleTree.id;
-                    nodeOptionalParams.creatures = mobsInTheTile.encounter[positionPurpleTree.id]
-                }
-            }
-
-            if (nodeOptionalParams.creatures) {
-                for (let i=0;i<nodeOptionalParams.creatures.length;i++) {
-                    const mob = mobs?.find((_m)=>_m.id == nodeOptionalParams.creatures[i].id_mob);
-
-                    if(mob){
-                        nodeOptionalParams.creatures[i] = mob;
-                    }
-                }
-            }
-
-            nodes.push(
-                <span key={'node_' + row + '_' +i} className="wrapper-node">
-                    <span {...nodeOptionalParams}>
-                        {nodeOptionalParams.creatures?.map((_creature: any)=>
-                            <span className="creature-icon" key={'creature_' + row + '_' + i + '_' + _creature.id}>
-                                <img src={_creature.src_icon} />
-                            </span>
-                        )}
-                        &nbsp;
-                    </span>
-                </span>
-            )
+        if(nextTile && session) {
+            session.openDoorRequest = nextTile;
+            updateSession(session);
         }
-        return nodes
+    }
+
+    const handleChangeTile = () => {
+        const nextTile = session?.tiles.find((t)=>t.id === clickedDoor?.idNextTile);
+
+        if (nextTile && session) {
+            setAnimationClass('fade-out');
+            timeoutAnimation?.clearTimeout();
+            timeoutAnimation = setTimeout(()=> {
+                session.currentTile = nextTile;
+                updateSession(session).then(() => {
+                    setAnimationClass('fade-in');
+                });
+            }, 200);
+        }
     }
 
     return (
@@ -167,6 +135,8 @@ const Tile = ({
             <h3 style={{color: 'red'}}>{tile.name}</h3>
 
             <span className={classNames("wrapper-img-tile", animationClass)}>
+                <OpenDoorRequest show={session?.openDoorRequest !== undefined} onTimeUp={handleTimeUpDoorRequest}/>
+
                 <img
                     className={classNames("img-tile", focussed && 'focused')}
                     src={require("../../../assets/images/tiles/" + tile.id + ".jpg")}
@@ -176,15 +146,10 @@ const Tile = ({
                     onDragOver={handleAllowDrop}
                 />
 
-                {console.log(tile.id)}
                 {tile.id !== 0 && showNodes &&
                     <span className="nodes">
-                    {[...Array(5)].map((x, i) =>
-                        <span key={i} className={"row-nodes row-" + (i+1)}>
-                            {setNodes(i+1)}
-                        </span>
-                    )}
-                </span>
+                        <Nodes tile={tile} onNodeClick={handleNodeClick} session={session} mobs={mobs} />
+                    </span>
                 }
 
                 {isDragging &&
@@ -204,7 +169,7 @@ const Tile = ({
                 }
 
                 {tile && tile?.doors && tile?.doors?.length > 0 && session?.author.uid === user?.uid &&
-                    tile?.doors.map((door) => <Door key={door.position} position={door} onDoorClick={onDoorClick} />)
+                    tile?.doors.map((door) => <Door key={door.position} position={door} onDoorClick={handleDoorClick} />)
                 }
             </span>
         </div>
