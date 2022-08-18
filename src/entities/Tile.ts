@@ -21,6 +21,7 @@ export interface ITile {
     doors?: IDoorPosition[];
     minibossSoulsLevel?: IEncounterSoulsLevel;
     bossSoulsLevel?: IEncounterSoulsLevel;
+    soundtrack?: string;
 }
 
 export class Tile implements ITile {
@@ -31,6 +32,7 @@ export class Tile implements ITile {
     doors: IDoorPosition[];
     minibossSoulsLevel?: IEncounterSoulsLevel;
     bossSoulsLevel?: IEncounterSoulsLevel;
+    soundtrack?: string;
 
     constructor(snap: any) {
         this.id = snap?.id;
@@ -40,5 +42,6 @@ export class Tile implements ITile {
         this.doors = snap?.doors;
         this.minibossSoulsLevel = snap?.minibossSoulsLevel;
         this.bossSoulsLevel = snap?.bossSoulsLevel;
+        this.soundtrack = snap?.soundtrack;
     }
 }

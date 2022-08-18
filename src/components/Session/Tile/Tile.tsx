@@ -13,6 +13,7 @@ import {User} from "../../../entities/User";
 import Nodes from "./TileFunction/Nodes";
 import OpenDoorRequest from "./TileFunction/OpenDoorRequest";
 import {updateSession} from "../../../services/Sessions/ServiceSession";
+import {SOUND_NEW_AREA} from "../../../utils/Constants";
 
 interface ITileComponent {
     tile: ITile;
@@ -125,6 +126,9 @@ const Tile = ({
                 session.currentTile = nextTile;
                 updateSession(session).then(() => {
                     setAnimationClass('fade-in');
+                    const audio = new Audio(SOUND_NEW_AREA);
+                    audio.volume = 0.3;
+                    audio.play();
                 });
             }, 200);
         }

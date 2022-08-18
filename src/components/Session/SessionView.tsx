@@ -15,6 +15,7 @@ import ClassButtons from "./ClassButtons";
 import Game from "./Game";
 import InfoPanel from "./InfoPanel/InfoPanel";
 import InfoPanelSouls from "./InfoPanel/InfoPanelSouls";
+import ReactAudioPlayer from "react-audio-player";
 
 interface ISessionView {
     user: User;
@@ -65,6 +66,10 @@ const SessionView = ({ user }: ISessionView) => {
             setModalChooseClass(true);
         }
     }, [choosedClass]);
+
+    useEffect(() => {
+
+    }, [session?.currentTile]);
 
     const handleJoinGame = () => {
         if (session && newPlayerChoosedClass) {
@@ -131,7 +136,7 @@ const SessionView = ({ user }: ISessionView) => {
                 <Chat session={session} user={user} onFocus={handleFocus} focused={focusedElement === 'chat'}/>
             </div>
 
-            <Game session={session} user={user} onFocus={handleFocus} focused={focusedElement === 'game'}/>
+            <Game session={session} user={user} onFocus={handleFocus} focused={focusedElement === 'game'} />
 
             <div className="right-space">
                 {choosedClass && <RightBar user={user} session={session} onFocus={handleFocus} focused={focusedElement === 'rightBar'} /> }
@@ -139,6 +144,14 @@ const SessionView = ({ user }: ISessionView) => {
             </div>
 
             <InfoPanelSouls souls={session.souls}/>
+
+            <ReactAudioPlayer
+                src={session.currentTile.soundtrack}
+                autoPlay={true}
+                volume={0.2}
+                controls
+                loop
+            />
         </Page>
     )
 };

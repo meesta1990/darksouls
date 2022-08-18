@@ -39,3 +39,8 @@ export const ROUTER_SESSION = '/session';
 export const GAME_CONSTANT_MAX_SPARKS = 6;
 export const FOLDER_MODELS = process.env.PUBLIC_URL + '/models'
 export const DATE_FORMAT = "HH:mm:ss";
+
+
+//sounds:
+
+export const SOUND_NEW_AREA = 'https://firebasestorage.googleapis.com/v0/b/darksouls-a4088.appspot.com/o/sounds%2Feffects%2Fnew_area.mp3?alt=media&token=377e22fd-57fa-452d-9646-cd4c71ae68b6';

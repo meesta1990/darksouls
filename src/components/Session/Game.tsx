@@ -9,13 +9,14 @@ import CommonSessionInterface from "../../entities/CommonSessionInterface";
 import { Mob } from "../../entities/Monster";
 import {getMobs} from "../../services/Mobs/ServiceMobs";
 import {updateSession} from "../../services/Sessions/ServiceSession";
+import commonSessionInterface from "../../entities/CommonSessionInterface";
 
 const Game = ({
     session,
     onFocus,
     user,
-    focused = false
-}: CommonSessionInterface) => {
+    focused = false,
+}: commonSessionInterface) => {
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [mobs, setMobs] = useState<Mob[]>();
 

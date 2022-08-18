@@ -24,6 +24,10 @@
   color: white;
 }
 
+.react-audio-player {
+  display: none;
+}
+
 .App-link {
   color: #61dafb;
 }
