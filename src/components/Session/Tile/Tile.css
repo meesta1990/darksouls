@@ -70,17 +70,6 @@
     width: 300px;
 }
 
-.tile-container .nodes {
-    padding: 50px;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    display: flex;
-    flex-direction: column;
-}
-
 .tile-container .wrapper-img-tile {
     display: inline-block;
     position: relative;
@@ -93,41 +82,6 @@
 
 .tile-container .wrapper-img-tile.fade-in {
     opacity: 1;
-}
-
-.tile-container .nodes .row-nodes {
-    display: flex;
-    flex: 1;
-}
-
-.tile-container .nodes .row-nodes .wrapper-node {
-    flex: 1;
-    position: relative;
-}
-
-.tile-container .nodes .row-nodes .wrapper-node .node {
-    background-color: var(--secondary-color);
-    box-shadow: 0px 1px 11px 2px var(--secondary-color);
-    width: 10%;
-    height: 10%;
-    border-radius: 50px;
-    /*display: inline-block;*/
-    position: absolute;
-    left: 50%;
-    display: flex;;
-    flex-direction: column;
-    flex-wrap: wrap;
-    top: 50%;
-    transform: translate(-50%, -50%);
-}
-
-
-.tile-container .nodes .row-nodes .wrapper-node .node .creature-icon {
-    flex: 1 0 50%; /* explanation below */
-}
-
-.tile-container .nodes .row-nodes .wrapper-node .node .creature-icon img {
-    width: 40px;
 }
 
 .tile {

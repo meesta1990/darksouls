@@ -2,6 +2,7 @@ import {Session} from "../../../../entities/Session";
 import {ITile} from "../../../../entities/Tile";
 import {Mob} from "../../../../entities/Monster";
 import React, {useState} from "react";
+import "./Nodes.css"
 
 interface INodes {
     session?: Session;
@@ -18,8 +19,9 @@ const Nodes = ({
 }: INodes) => {
     let drawNodes = 0;
 
-    const getNodes = (row: number) => {
+    const getNodes = () => {
         const nodes = [];
+        const nodesObj = [];
         let mobSelector = null;
         let mobsInTheTile = null;
         const positionRedSword = tile.special_nodes.find((sp) => sp.id === 'red_sword')
@@ -32,14 +34,27 @@ const Nodes = ({
             mobsInTheTile = tile[mobSelector];
         }
 
-        for (let i=0;i<5;i++) {
-            const drawNode = (row % 2 !== 0 && i % 2 === 0) || (row % 2 === 0 && i % 2 !== 0);
-            const nodeOptionalParams: any = {};
+        for(let j=0;j<5;j++){
+            for (let i=0;i<3;i++) {
+                if(j%2 !== 0 && i===2) break;
+                const nodeOptionalParams: any = {};
+                let className = 'node ';
 
-            if (drawNode) {
+                if(j % 2 === 0) {
+                    className += 'type1 ';
+                } else {
+                    className += 'type2 ';
+                }
+
+                if(i === 0) {
+                    className += 'left';
+                } else if((i === 2 && j % 2 === 0) || (i === 1 && j % 2 !== 0)) {
+                    className += 'right';
+                }
+
                 drawNodes++;
                 nodeOptionalParams.id = 'node_' + drawNodes;
-                nodeOptionalParams.className = 'node';
+                nodeOptionalParams.className = className;
                 nodeOptionalParams.onClick = onNodeClick;
 
                 if (drawNodes - 1 === positionRedSword?.position) {
@@ -58,42 +73,47 @@ const Nodes = ({
                     nodeOptionalParams.special_nodes = positionPurpleTree.id;
                     nodeOptionalParams.creatures = mobsInTheTile.encounter[positionPurpleTree.id]
                 }
-            }
 
-            if (nodeOptionalParams.creatures) {
-                for (let i = 0; i < nodeOptionalParams.creatures.length; i++) {
-                    const mob = mobs?.find((_m) => _m.id == nodeOptionalParams.creatures[i].id_mob);
+                if (nodeOptionalParams.creatures) {
+                    for (let c = 0; c < nodeOptionalParams.creatures.length; c++) {
+                        const mob = mobs?.find((_m) => _m.id == nodeOptionalParams.creatures[c].id_mob);
 
-                    if (mob) {
-                        nodeOptionalParams.creatures[i] = mob;
+                        if (mob) {
+                            nodeOptionalParams.creatures[c] = mob;
+                        }
                     }
                 }
-            }
 
-            nodes.push(
-                <span key={'node_' + row + '_' +i} className="wrapper-node">
-                    <span {...nodeOptionalParams}>
-                        {nodeOptionalParams.creatures?.map((_creature: any, index: number)=>
-                            <span className="creature-icon" key={'creature_' + row + '_' + drawNodes + '_' + _creature.id + index}>
-                                <img src={_creature.src_icon} />
-                            </span>
-                        )}
+                nodesObj.push(nodeOptionalParams);
+                nodes.push(
+                    <span key={'node_' + j + '_' +i} {...nodeOptionalParams}>
+                        {nodeOptionalParams.creatures &&
+                            <div className="wrapper-creatures">
+                                {nodeOptionalParams.creatures.map((_creature: any, index: number)=>
+                                        <span className="creature-icon" key={'creature_' + j + '_' + drawNodes + '_' + _creature.id + index}>
+                                            <img src={_creature.src_icon} />
+                                        </span>
+                                )}
+                            </div>
+                        }
+
                         &nbsp;
                     </span>
-                </span>
-            )
+                )
+            }
         }
 
         return nodes;
     };
 
+    //connections of the node
+    const mapNode = (node: any, index: number) => {
+
+    }
+
     return (
         <>
-            {[...Array(5)].map((x, i) =>
-                <span key={'row-nodes-row-' + i} className={"row-nodes row-" + (i+1)}>
-                    {getNodes(i+1)}
-                </span>
-            )}
+            {getNodes()}
         </>
     )
 }
