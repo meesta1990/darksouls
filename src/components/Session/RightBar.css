@@ -5,8 +5,7 @@
     flex: 1 1 auto;
     position: absolute;
     right: -590px;
-    top: 50%;
-    transform: translateY(-50%);
+    top: 90px;
     width: 600px;
     transition: right 0.2s ease;
     z-index: 10;

@@ -102,7 +102,7 @@ const Nodes = ({
                 )
             }
         }
-
+        console.log(nodesObj)
         return nodes;
     };
 
