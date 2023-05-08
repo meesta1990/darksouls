@@ -2,8 +2,10 @@ import { Node } from "./Node";
 import { IMob } from "./Monster";
 import { Encounter } from "./Encounter";
 
-export interface IDoorPosition {
-    position: 'left' | 'right' | 'top' | 'bottom';
+export type IDoorPosition = 'left' | 'right' | 'top' | 'bottom';
+
+export interface IDoor {
+    position: IDoorPosition;
     idNextTile?: number;
 }
 
@@ -18,7 +20,8 @@ export interface ITile {
     name: string;
     src: string;
     special_nodes: Node[];
-    doors?: IDoorPosition[];
+    doors?: IDoor[];
+    lastDoor? :IDoor; //the door I came from
     minibossSoulsLevel?: IEncounterSoulsLevel;
     bossSoulsLevel?: IEncounterSoulsLevel;
     soundtrack?: string;
@@ -29,7 +32,8 @@ export class Tile implements ITile {
     name: string;
     src: string;
     special_nodes: Node[];
-    doors: IDoorPosition[];
+    doors: IDoor[];
+    lastDoor: IDoor;
     minibossSoulsLevel?: IEncounterSoulsLevel;
     bossSoulsLevel?: IEncounterSoulsLevel;
     soundtrack?: string;
@@ -40,6 +44,7 @@ export class Tile implements ITile {
         this.src = snap?.src;
         this.special_nodes = snap?.special_nodes;
         this.doors = snap?.doors;
+        this.lastDoor = snap?.lastDoor;
         this.minibossSoulsLevel = snap?.minibossSoulsLevel;
         this.bossSoulsLevel = snap?.bossSoulsLevel;
         this.soundtrack = snap?.soundtrack;

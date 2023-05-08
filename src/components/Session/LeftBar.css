@@ -1,13 +1,14 @@
 .left-bar {
-    display: flex;
     flex-direction: column;
     padding: 12px;
+    display: flex;
     flex: 1 1 auto;
     justify-content: center;
     position: absolute;
     left: 0;
-    top: 100px;
+    top: 0;
     bottom: 0;
+    z-index: 10;
 }
 
 

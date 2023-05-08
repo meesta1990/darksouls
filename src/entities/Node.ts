@@ -1,11 +1,23 @@
+
+export interface IPosition {
+    x: number;
+    z: number;
+    y: number;
+}
+
+export type VectorizedPosition = [number, number, number];
+
+const sn = ['red_sword', 'red_cross', 'purple_star', 'purple_tree'] as const;
+export type SpecialNodes = (typeof sn)[number];
+
 interface INode {
-    id: 'red_sword' | 'red_cross' | 'purple_star' | 'purple_tree';
+    id: SpecialNodes;
     creatures: any[];
     position: number;
 }
 
 export class Node implements INode{
-    id: 'red_sword' | 'red_cross' | 'purple_star' | 'purple_tree';
+    id: SpecialNodes;
     creatures: any[];
     position: number;
 

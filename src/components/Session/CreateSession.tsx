@@ -98,11 +98,16 @@ const CreateSession = ({ user }: ICreateSession) => {
         //set the correct path:
         if(tilesSession){
             const bonfire = tilesSession.find((t: ITile) => t.id === 0);
+            const tile_miniboss = tilesSession.find((t: ITile) => t.id === 1);
+            const tile_boss = tilesSession.find((t: ITile) => t.id === 2);
             const tile_3 = tilesSession.find((t: ITile) => t.id === 3);
             const tile_6 = tilesSession.find((t: ITile) => t.id === 6);
             const tile_7 = tilesSession.find((t: ITile) => t.id === 7);
             const tile_8 = tilesSession.find((t: ITile) => t.id === 8);
 
+            if(tile_miniboss?.doors){
+                tile_miniboss.doors[0].idNextTile = 8;
+            }
             if(bonfire?.doors){
                 bonfire.doors[0].idNextTile = 3;
                 bonfire.doors[1].idNextTile = 6;

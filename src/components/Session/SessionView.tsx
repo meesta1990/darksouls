@@ -144,14 +144,6 @@ const SessionView = ({ user }: ISessionView) => {
             </div>
 
             <InfoPanelSouls souls={session.souls}/>
-
-            <ReactAudioPlayer
-                src={session.currentTile.soundtrack}
-                autoPlay={true}
-                volume={0.2}
-                controls
-                loop
-            />
         </Page>
     )
 };

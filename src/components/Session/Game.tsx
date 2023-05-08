@@ -1,15 +1,16 @@
 import "./Game.css";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Session } from "../../entities/Session";
 import { User } from "../../entities/User";
 import Tile from "./Tile/Tile";
-import { IDoorPosition, ITile } from "../../entities/Tile";
 import {getTile, shuffleEncounters} from "../../services/Sessions/ServiceSession";
 import CommonSessionInterface from "../../entities/CommonSessionInterface";
 import { Mob } from "../../entities/Monster";
 import {getMobs} from "../../services/Mobs/ServiceMobs";
 import {updateSession} from "../../services/Sessions/ServiceSession";
 import commonSessionInterface from "../../entities/CommonSessionInterface";
+import Board from "./Board/Board";
+import {SOUND_NEW_AREA} from "../../utils/Constants";
 
 const Game = ({
     session,
@@ -36,11 +37,10 @@ const Game = ({
     }
 
     return session?.currentTile ?
-        <Tile
+        <Board
             session={session}
             mobs={mobs}
             user={user}
-            loading={isLoading}
             tile={session?.currentTile}
             onTileClick={handleGameFocus}
             focussed={focused}

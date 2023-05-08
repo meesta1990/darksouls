@@ -20,14 +20,14 @@ const Nodes = ({
     let drawNodes = 0;
 
     const getNodes = () => {
-        const nodes = [];
+        /* const nodes = [];
         const nodesObj = [];
         let mobSelector = null;
         let mobsInTheTile = null;
-        const positionRedSword = tile.special_nodes.find((sp) => sp.id === 'red_sword')
-        const positionRedCross = tile.special_nodes.find((sp) => sp.id === 'red_cross')
-        const positionPurpleStar = tile.special_nodes.find((sp) => sp.id === 'purple_star')
-        const positionPurpleTree = tile.special_nodes.find((sp) => sp.id === 'purple_tree')
+        const positionRedSword = tile.special_nodes?.find((sp) => sp.id === 'red_sword')
+        const positionRedCross = tile.special_nodes?.find((sp) => sp.id === 'red_cross')
+        const positionPurpleStar = tile.special_nodes?.find((sp) => sp.id === 'purple_star')
+        const positionPurpleTree = tile.special_nodes?.find((sp) => sp.id === 'purple_tree')
 
         if (session) {
             mobSelector = session?.miniboss_defeated ? 'bossSoulsLevel' : 'minibossSoulsLevel';
@@ -102,8 +102,8 @@ const Nodes = ({
                 )
             }
         }
-        console.log(nodesObj)
         return nodes;
+        */
     };
 
     //connections of the node

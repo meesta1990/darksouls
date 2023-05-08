@@ -1,6 +1,6 @@
-import { IDoorPosition, ITile } from "../../../entities/Tile";
+import { ITile } from "../../../entities/Tile";
 import "./Tile.css";
-import React, {useEffect, useRef, useState} from "react";
+import React, { useEffect, useRef, useState } from "react";
 import classNames from "classnames";
 import Door from "./Door";
 import encounter_soul_lvl_1 from '../../../assets/images/souls_cards/tier_1_back.jpg';
@@ -11,9 +11,6 @@ import {Encounter} from "../../../entities/Encounter";
 import {Mob} from "../../../entities/Monster";
 import {User} from "../../../entities/User";
 import Nodes from "./TileFunction/Nodes";
-import OpenDoorRequest from "./TileFunction/OpenDoorRequest";
-import {updateSession} from "../../../services/Sessions/ServiceSession";
-import {SOUND_NEW_AREA} from "../../../utils/Constants";
 
 interface ITileComponent {
     tile: ITile;
@@ -46,9 +43,6 @@ const Tile = ({
 }: ITileComponent) => {
     const tileImgRef = useRef(null);
     const [soulsLevelBack, setSoulsLevelBack] = useState<string | null>(null);
-    const [animationClass, setAnimationClass] = useState('');
-    const [clickedDoor, setClickedDoor] = useState<IDoorPosition>();
-    let timeoutAnimation: any;
 
     useEffect(() => {
         if (encounter === 'miniboss') {
@@ -97,50 +91,11 @@ const Tile = ({
         e.preventDefault();
     }
 
-    const handleTimeUpDoorRequest = () => {
-        if (session) {
-            session.openDoorRequest = undefined;
-            updateSession(session).then(() => {
-                handleChangeTile();
-            });
-        }
-    }
-
-    const handleDoorClick = (position: IDoorPosition) => {
-        setClickedDoor(position);
-        const nextTile = session?.tiles.find((t)=>t.id === position?.idNextTile);
-
-        if(nextTile && session) {
-            session.openDoorRequest = nextTile;
-            updateSession(session);
-        }
-    }
-
-    const handleChangeTile = () => {
-        const nextTile = session?.tiles.find((t)=>t.id === clickedDoor?.idNextTile);
-
-        if (nextTile && session) {
-            setAnimationClass('fade-out');
-            timeoutAnimation?.clearTimeout();
-            timeoutAnimation = setTimeout(()=> {
-                session.currentTile = nextTile;
-                updateSession(session).then(() => {
-                    setAnimationClass('fade-in');
-                    const audio = new Audio(SOUND_NEW_AREA);
-                    audio.volume = 0.3;
-                    audio.play();
-                });
-            }, 200);
-        }
-    }
-
     return (
         <div className="tile-container">
             <h3 style={{color: 'red'}}>{tile.name}</h3>
 
-            <span className={classNames("wrapper-img-tile", animationClass)}>
-                <OpenDoorRequest show={session?.openDoorRequest !== undefined} onTimeUp={handleTimeUpDoorRequest}/>
-
+            <span className="wrapper-img-tile">
                 <img
                     className={classNames("img-tile", focussed && 'focused')}
                     src={require("../../../assets/images/tiles/" + tile.id + ".jpg")}
@@ -173,7 +128,7 @@ const Tile = ({
                 }
 
                 {tile && tile?.doors && tile?.doors?.length > 0 && session?.author.uid === user?.uid &&
-                    tile?.doors.map((door) => <Door key={door.position} position={door} onDoorClick={handleDoorClick} />)
+                    tile?.doors.map((door) => <Door key={door.position} position={door} />)
                 }
             </span>
         </div>
