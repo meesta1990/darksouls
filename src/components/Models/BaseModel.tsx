@@ -35,7 +35,6 @@ const BaseModel = ({
 
     useEffect(() => {
         document.body.style.cursor = hovered ? 'pointer' : 'auto';
-        console.log(meshRef.current.position)
     }, [hovered]);
 
     if(format === 'gltf') {
@@ -56,7 +55,6 @@ const BaseModel = ({
             child.material = material;
         }
     });
-    console.log(rotateToTarget)
 
     useFrame((state, delta) => {
         if(rotateToTarget){

@@ -1,6 +1,7 @@
 // Generated using webpack-cli https://github.com/webpack/webpack-cli
 
 const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const isProduction = process.env.NODE_ENV == 'production';
 
@@ -11,13 +12,15 @@ const stylesHandler = 'style-loader';
 
 const config = {
     entry: './src/Index.tsx',
-    devtool: '#eval-source-map',
+    devtool: 'eval-source-map',
     output: {
         path: path.resolve(__dirname, 'dist'),
     },
     plugins: [
-        // Add your plugins here
-        // Learn more about plugins from https://webpack.js.org/configuration/plugins/
+        new HtmlWebpackPlugin({
+            template: './public/index.html',
+            filename: 'index.html',
+        }),
     ],
     module: {
         rules: [
@@ -35,7 +38,7 @@ const config = {
                 use: [stylesHandler, 'css-loader', 'less-loader'],
             },
             {
-                test: /\.(eot|svg|ttf|woff|woff2|png|jpg|gif)$/i,
+                test: /\.(eot|svg|ttf|woff|woff2|png|jpg|gif|obj|hdr)$/i,
                 type: 'asset',
             },
 

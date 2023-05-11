@@ -37,7 +37,6 @@ export const ROUTER_SESSION = '/session';
 
 //game constants:
 export const GAME_CONSTANT_MAX_SPARKS = 6;
-export const FOLDER_MODELS = process.env.PUBLIC_URL + '/models'
 export const DATE_FORMAT = "HH:mm:ss";
 
 

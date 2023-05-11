@@ -15,6 +15,7 @@ import BoardBonefire from "./BoardBonefire";
 import NormalEnemiesBoard from "./NormalEnemiesBoard";
 import ReactAudioPlayer from "react-audio-player";
 import FireParticles from "../../Models/FireParticles";
+import {nodeMap} from "./MapNodeGraph";
 
 interface IBoard {
     tile: ITile;
@@ -81,8 +82,8 @@ const BoardInternal = ({
             <React.Fragment key={rowIndex}>
               {cols.map((cell, cellIndex) => (
                 <Cell
-                  key={rowIndex.toString() + cellIndex.toString()}
-                  position={{ x: rowIndex, y: -cellIndex }}
+                    key={rowIndex.toString() + cellIndex.toString()}
+                    position={{ x: rowIndex, y: -cellIndex }}
                 />
               ))}
             </React.Fragment>
@@ -101,12 +102,13 @@ const BoardInternal = ({
 
 const Board = (props: IBoard) => {
     const sceneRef = useRef<any>();
+    const testing = false; //todo:test
 
     return (
         <div className="board-container">
             <ReactAudioPlayer
                 src={props.session.currentTile.soundtrack}
-                autoPlay={false /*todo*/}
+                autoPlay={testing}
                 volume={0.2}
                 controls
                 loop
@@ -116,7 +118,7 @@ const Board = (props: IBoard) => {
                 <Canvas camera={{ fov: 90, position: [4, 4, -0.5] }} ref={sceneRef}>
                     <pointLight position={[10, 10, 10]} />
                     <OrbitControls enablePan={false} minDistance={4} maxDistance={10}/>
-                    <Environment files={require("../../../assets/images/wallpaper.hdr")} background />
+                    <Environment files={require("../../../assets/images/wallpaper_50.hdr")} background />
                     <BoardInternal {...props} sceneRef={sceneRef} />
                 </Canvas>
             </Suspense>

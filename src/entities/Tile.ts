@@ -1,4 +1,4 @@
-import { Node } from "./Node";
+import {Node, NodeGraph} from "./Node";
 import { IMob } from "./Monster";
 import { Encounter } from "./Encounter";
 
@@ -20,6 +20,7 @@ export interface ITile {
     name: string;
     src: string;
     special_nodes: Node[];
+    nodes: NodeGraph[];
     doors?: IDoor[];
     lastDoor? :IDoor; //the door I came from
     minibossSoulsLevel?: IEncounterSoulsLevel;
@@ -32,6 +33,7 @@ export class Tile implements ITile {
     name: string;
     src: string;
     special_nodes: Node[];
+    nodes: NodeGraph[];
     doors: IDoor[];
     lastDoor: IDoor;
     minibossSoulsLevel?: IEncounterSoulsLevel;
@@ -43,6 +45,7 @@ export class Tile implements ITile {
         this.name = snap?.name;
         this.src = snap?.src;
         this.special_nodes = snap?.special_nodes;
+        this.nodes = snap?.nodes;
         this.doors = snap?.doors;
         this.lastDoor = snap?.lastDoor;
         this.minibossSoulsLevel = snap?.minibossSoulsLevel;

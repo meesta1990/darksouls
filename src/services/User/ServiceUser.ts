@@ -57,7 +57,7 @@ export const signIn = (email: string, password: string) => {
                             reject(error);
                         })
                     } else {
-                        resolve(gettedUser);
+                        resolve({...gettedUser , ...{emailVerified: user.emailVerified}});
                     }
                 })
             })

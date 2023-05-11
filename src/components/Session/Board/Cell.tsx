@@ -17,7 +17,6 @@ const Cell: FC<CellPropsType> = ({
         <meshStandardMaterial roughness={0.1} metalness={0.7} color={'black'} />
         <boxGeometry />
       </mesh>
-      
     </>
   )
 }

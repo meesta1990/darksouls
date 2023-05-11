@@ -93,8 +93,6 @@ const Tile = ({
 
     return (
         <div className="tile-container">
-            <h3 style={{color: 'red'}}>{tile.name}</h3>
-
             <span className="wrapper-img-tile">
                 <img
                     className={classNames("img-tile", focussed && 'focused')}
