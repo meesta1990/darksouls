@@ -2,19 +2,26 @@ import React, {ReactElement, useEffect, useState} from 'react'
 import Door from "../../Models/Door";
 import { ITileBoard } from "../../../entities/TileBoard";
 import {getDoorPosition, getNodePosition, getStrOppositeDoor} from "../../../utils/Functions";
-import {IMob} from "../../../entities/Monster";
-import EnemiesInTheTile from "./EnemiesInTheTile";
+import {Mob} from "../../../entities/Monster";
+import EncountersInTheTile from "./EncountersInTheTile";
 import PlayerPosition from "./PlayerPosition";
 
 interface INormalEnemiesBoard extends ITileBoard {
-    mobs?: IMob[];
+    mobs?: Mob[];
 }
 const NormalEnemiesBoard = ({
     tile,
     session,
     onDoorClicked,
-    mobs
+    mobs,
+    classes,
+    user,
+    dynamicContainerDivRef
 }: INormalEnemiesBoard) => {
+    useEffect(() => {
+    }, [mobs])
+
+
     return (
         <>
             {onDoorClicked && tile.doors?.map((door) =>
@@ -25,11 +32,11 @@ const NormalEnemiesBoard = ({
                     key={door.position}
                     scale={[0.2, 0.15, 0.1]}
                     {...getDoorPosition(door.position)}
-                    onDoorClicked={() => onDoorClicked(door, session.tiles.find((_t) => _t.id === door.idNextTile))}
+                    onDoorClicked={() => !session.started ? onDoorClicked(door, session.tiles.find((_t) => _t.id === door.idNextTile)): null}
                 />
             )}
-            <EnemiesInTheTile tile={tile} session={session} mobs={mobs} />
-            <PlayerPosition tile={tile} session={session} />
+            <EncountersInTheTile classes={classes} tile={tile} session={session} mobs={mobs} />
+            <PlayerPosition tile={tile} session={session} user={user} dynamicContainerDivRef={dynamicContainerDivRef} />
         </>
     );
 }

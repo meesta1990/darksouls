@@ -1,0 +1,8 @@
+#dynamicContainer .button-start-container {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    color: white;
+    z-index: 1;
+    padding: 20px;
+}

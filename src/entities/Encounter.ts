@@ -1,4 +1,4 @@
-import { IMob } from "./Monster";
+import { Mob } from "./Monster";
 
 export interface IEncounters {
     tier_1?: IEncounter[],
@@ -9,21 +9,23 @@ export interface IEncounters {
 export interface IEncounter {
     id?: string;
     name: string;
-    red_sword?: IMob[];
-    red_cross?: IMob[];
-    purple_star?: IMob[];
-    purple_tree?: IMob[];
+    red_sword?: Mob[];
+    red_cross?: Mob[];
+    purple_star?: Mob[];
+    purple_tree?: Mob[];
     traps?: boolean;
     src: string;
 }
 
+// the name "Encounter" is ambiguos. In here is referring to the card that says which monsters has to be placed.
+// In some other places it could be referred to either a monster or a player
 export class Encounter implements IEncounter {
     id?: string;
     name: string;
-    red_sword: IMob[];
-    red_cross: IMob[];
-    purple_star: IMob[];
-    purple_tree: IMob[];
+    red_sword: Mob[];
+    red_cross: Mob[];
+    purple_star: Mob[];
+    purple_tree: Mob[];
     traps: boolean;
     src: string;
 

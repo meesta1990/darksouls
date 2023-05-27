@@ -1,5 +1,8 @@
 import {IDoorPosition} from "../entities/Tile";
-import {SpecialNodes, VectorizedPosition} from "../entities/Node";
+import {NodeGraph, SpecialNodes, VectorizedPosition} from "../entities/Node";
+import {NodeMap} from "../components/Session/Board/MapNodeGraph";
+import {Scene} from "three";
+import PriorityQueue from "./PriorityQueue";
 
 export const cleanUndefinedField = (obj: any) => {
     if (obj) {
@@ -137,21 +140,118 @@ export const getDoorPosition = (relativePosition: IDoorPosition, invert?: boolea
     return null;
 }
 
-export const getNodePosition = (position: number, offsetX: number = 0, offsetY: number = 0): [number, number, number] | undefined => {
-    switch (position){
-        case 0: return [1+offsetX, 0.12, -5+offsetY];
-        case 1: return [3+offsetX, 0.12, -5+offsetY];
-        case 2: return [5+offsetX, 0.12, -5+offsetY];
-        case 3: return [2+offsetX, 0.12, -4+offsetY];
-        case 4: return [4+offsetX, 0.12, -4+offsetY];
-        case 5: return [0+offsetX, 0.12, -3+offsetY];
-        case 6: return [3+offsetX, 0.12, -3+offsetY];
-        case 7: return [5+offsetX, 0.12, -3+offsetY];
-        case 8: return [2+offsetX, 0.12, -2+offsetY];
-        case 9: return [4+offsetX, 0.12, -2+offsetY];
-        case 10: return [1+offsetX, 0.12, -1+offsetY];
-        case 11: return [3+offsetX, 0.12, -1+offsetY];
-        case 12: return [5+offsetX, 0.12, -1+offsetY];
+export const getNodePosition = (position: number, offsetX: number = 0, offsetY: number = 0): VectorizedPosition | undefined => {
+    const nodeMap = new NodeMap().getNodeMap();
+    const node = nodeMap.find((np) => np.id === position);
+    if(node && node.coordinates) {
+        return [node.coordinates[0] + offsetX, 0.12, node.coordinates[2] + offsetY]
     }
     return undefined;
+}
+
+export const compareVectorizedPosition = (pos1?: VectorizedPosition, pos2?: VectorizedPosition) => {
+    if(pos1 && pos2) {
+        return pos1[0] === pos2[0] && pos1[1] === pos2[1] && pos1[2] === pos2[2]
+    } else {
+        return pos1 === pos2;
+    }
+}
+
+function calcolaDistanza(coordinata1: VectorizedPosition, coordinata2: VectorizedPosition): number {
+    const distanzaX = coordinata1[0] - coordinata2[0];
+    const distanzaY = coordinata1[1] - coordinata2[1];
+    const distanzaZ = coordinata1[2] - coordinata2[2];
+
+    return Math.sqrt(distanzaX ** 2 + distanzaY ** 2 + distanzaZ ** 2);
+}
+export const findNearestCoords = (coordinataDaCercare: VectorizedPosition, coordinate: VectorizedPosition[], howMany?: number): VectorizedPosition[] => {
+    const distanze = coordinate.map((coordinata) => calcolaDistanza(coordinata, coordinataDaCercare));
+
+    const coordinateSimili: VectorizedPosition[] = [];
+
+    for (let i = 0; i < (howMany ?? 1); i++) {
+        const minimaDistanzaIndex = distanze.indexOf(Math.min(...distanze));
+
+        if (minimaDistanzaIndex !== -1) {
+            coordinateSimili.push(coordinate[minimaDistanzaIndex]);
+            distanze[minimaDistanzaIndex] = Infinity;
+        } else {
+            break; // Se non ci sono più coordinate disponibili, interrompi il ciclo
+        }
+    }
+
+    return coordinateSimili;
+};
+
+export const findMeshById = (id: string, scene: Scene) => {
+    if(scene) {
+        return scene.getObjectByProperty('userData.id', id);
+
+    }
+    return null;
+};
+
+export const hashCode = (str: string) => {
+    let hash = 0;
+    if (str.length === 0) {
+        return hash;
+    }
+    for (let i = 0; i < str.length; i++) {
+        const char = str.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash = hash & hash;
+    }
+    return Math.abs(hash);
+}
+
+export const calculatePath = (startNodeId: number, endNodeId: number, nodes: NodeGraph[]) => {
+    const distances: { [key: number]: number } = {};
+    const visited: { [key: number]: boolean } = {};
+    const predecessors: { [key: number]: number | null } = {};
+    const priorityQueue = new PriorityQueue<number>();
+
+    for (const node of nodes) {
+        distances[node.id] = Infinity;
+        visited[node.id] = false;
+        predecessors[node.id] = null;
+    }
+
+    distances[startNodeId] = 0;
+    priorityQueue.enqueue(startNodeId, 0);
+
+    while (!priorityQueue.isEmpty()) {
+        const currentNodeId = priorityQueue.dequeue();
+
+        if (currentNodeId === endNodeId) {
+            const path: number[] = [];
+            let nodeId: number | null = endNodeId;
+
+            while (nodeId !== null) {
+                path.unshift(nodeId);
+                nodeId = predecessors[nodeId];
+            }
+
+            return path;
+        }
+
+        if (currentNodeId && !visited[currentNodeId]) {
+            visited[currentNodeId] = true;
+            const currentNode = nodes.find((node) => node.id === currentNodeId);
+
+            if(currentNode) {
+                for (const [direction, adjacentNodeId] of Object.entries(currentNode.adjacentNodes)) {
+                    const cost = 1; // Costo del percorso tra nodi adiacenti (può essere personalizzato)
+                    const tentativeDistance = distances[currentNodeId] + cost;
+
+                    if (tentativeDistance < distances[adjacentNodeId]) {
+                        distances[adjacentNodeId] = tentativeDistance;
+                        predecessors[adjacentNodeId] = currentNodeId;
+                        priorityQueue.enqueue(adjacentNodeId, tentativeDistance);
+                    }
+                }
+            }
+        }
+    }
+
+    return []; // Nessun percorso trovato
 }

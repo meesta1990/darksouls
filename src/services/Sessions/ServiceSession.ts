@@ -112,6 +112,7 @@ export const updateSession = (session: Session) => {
     return new Promise((resolve, reject) => {
         const dbRef = ref(database);
         session = cleanFunctionsField(cleanUndefinedField(session));
+        // session = JSON.parse( JSON.stringify(session ) );
 
         try {
             update(child(dbRef, TABLE_SESSIONS + '/' + session.id), session).then((snapshot) => {

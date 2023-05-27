@@ -1,3 +1,11 @@
 .board-container {
     height: 100vh;
+    position: relative;
+}
+
+.board-container .btn-start-tile {
+    position: fixed;
+    top: 0;
+    transform: translateY(-300px);
+    color: red !important;
 }

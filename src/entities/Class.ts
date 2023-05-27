@@ -34,6 +34,7 @@ export interface Equip {
 
 export class Class implements IClass {
     name: string;
+    id: number; // it's the hascode of the classname
     stats: IStats;
     choosed_stats: ChoosedStats;
     equip: Equip;
@@ -45,6 +46,7 @@ export class Class implements IClass {
     constructor(snap: any) {
         this.owner = snap?.owner;
         this.name = snap?.name;
+        this.id = snap?.id;
         this.stats = snap?.stats;
         this.choosed_stats = snap?.choosedStats ? snap?.choosedStats : {
             str: 'base',

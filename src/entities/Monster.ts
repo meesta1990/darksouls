@@ -4,33 +4,9 @@ export interface ISoulsCards {
     tier_3?: number;
 }
 
-export interface IMob {
+export class Mob {
     id: number;
-    name: string;
-    hp: number;
-    activation_order: ['mov', 'atk'];
-    def: {
-        physical_def: number;
-        magic_def: number;
-    };
-    atk: {
-        atk_range: number;
-        dodge_difficulty: number;
-        matk?: number;
-        patk?: number;
-        to: 'aggro' | 'nearest'
-    },
-    mov: {
-        range: number;
-        target: 'aggro' | 'nearest';
-    },
-    src: string;
-    src_back: string;
-    src_icon: string;
-}
-
-export class Mob implements IMob {
-    id: number;
+    unique_id: string;
     name: string;
     hp: number;
     activation_order: ['mov', 'atk'];
@@ -52,9 +28,12 @@ export class Mob implements IMob {
     src: string;
     src_back: string;
     src_icon: string;
+    level: number;
+    type: 'Monster' | 'Player';
 
     constructor(snap: any) {
         this.id = snap?.id;
+        this.unique_id = snap?.unique_id;
         this.name = snap?.name;
         this.hp = snap?.hp;
         this.activation_order = snap?.activation_order;
@@ -64,6 +43,8 @@ export class Mob implements IMob {
         this.src = snap?.src;
         this.src_back = snap?.src_back;
         this.src_icon = snap?.src_icon;
+        this.level = snap?.level;
+        this.type = snap?.type;
     }
 }
 

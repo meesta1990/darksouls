@@ -33,7 +33,7 @@ import ClassButtons from "./ClassButtons";
 import CharacterStats from "../Character/CharacterStats";
 import { ITile, Tile } from "../../entities/Tile";
 import ModalTileSouls from "./ModalTileSouls";
-import {deepCopy} from "../../utils/Functions";
+import {deepCopy, hashCode} from "../../utils/Functions";
 
 interface ICreateSession {
     user: User;
@@ -146,6 +146,7 @@ const CreateSession = ({ user }: ICreateSession) => {
         if (choosedClass) {
             const players = new Array(numberOfPLayers);
             choosedClass.owner = user;
+            choosedClass.id = hashCode(choosedClass.name);
             players[0] = choosedClass;
 
             session.players = {

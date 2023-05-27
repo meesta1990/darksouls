@@ -1,5 +1,5 @@
 import {Node, NodeGraph} from "./Node";
-import { IMob } from "./Monster";
+import { Mob } from "./Monster";
 import { Encounter } from "./Encounter";
 
 export type IDoorPosition = 'left' | 'right' | 'top' | 'bottom';
@@ -12,7 +12,7 @@ export interface IDoor {
 export interface IEncounterSoulsLevel {
     soulsLevel: number;
     encounter?: Encounter;
-    monster?: IMob;
+    monster?: Mob;
 }
 
 export interface ITile {
@@ -26,6 +26,7 @@ export interface ITile {
     minibossSoulsLevel?: IEncounterSoulsLevel;
     bossSoulsLevel?: IEncounterSoulsLevel;
     soundtrack?: string;
+    init: boolean; //if the mobs as been placed in the special nodes the first time
 }
 
 export class Tile implements ITile {
@@ -39,6 +40,7 @@ export class Tile implements ITile {
     minibossSoulsLevel?: IEncounterSoulsLevel;
     bossSoulsLevel?: IEncounterSoulsLevel;
     soundtrack?: string;
+    init: boolean;
 
     constructor(snap: any) {
         this.id = snap?.id;
@@ -51,5 +53,6 @@ export class Tile implements ITile {
         this.minibossSoulsLevel = snap?.minibossSoulsLevel;
         this.bossSoulsLevel = snap?.bossSoulsLevel;
         this.soundtrack = snap?.soundtrack;
+        this.init = snap?.init;
     }
 }

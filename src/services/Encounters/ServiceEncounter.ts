@@ -1,7 +1,11 @@
 import { child, get, push, set, ref, update, onValue } from 'firebase/database';
-import { TABLE_ENCOUNTERS } from '../../utils/Constants';
+import {TABLE_ENCOUNTERS, TABLE_SESSIONS} from '../../utils/Constants';
 import { database } from '../../utils/Firebase';
 import { Encounter, IEncounters } from "../../entities/Encounter";
+import {Session} from "../../entities/Session";
+import {ITile} from "../../entities/Tile";
+import {NodeGraph} from "../../entities/Node";
+import {updateSession} from "../Sessions/ServiceSession";
 
 export const getEncounters = () => {
     return new Promise((resolve, reject) => {
@@ -28,6 +32,19 @@ export const getEncounters = () => {
             }).catch((error) => {
                 reject(error);
             });
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+export const setEncountersInTheNode = (session: Session, tile: ITile, nodeMap: NodeGraph[]) => {
+    return new Promise((resolve, reject) => {
+        const dbRef = ref(database);
+        console.log(session,tile, nodeMap)
+        try {
+            tile.nodes = nodeMap;
+            session.currentTile = tile;
+            updateSession(session).then(resolve)
         } catch (error) {
             reject(error);
         }

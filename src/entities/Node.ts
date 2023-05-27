@@ -1,3 +1,5 @@
+import {Mob} from "./Monster";
+import {Class} from "./Class";
 
 export interface IPosition {
     x: number;
@@ -32,15 +34,15 @@ export class Node implements INode{
 export interface NodeGraph {
     id: idNodeGraph;
     adjacentNodes: {
-        top?: NodeGraph;
-        bottom?: NodeGraph;
-        left?: NodeGraph;
-        right?: NodeGraph;
-        topRight?: NodeGraph;
-        topLeft?: NodeGraph;
-        bottomRight?: NodeGraph;
-        bottomLeft?: NodeGraph;
+        top?: idNodeGraph;
+        bottom?: idNodeGraph;
+        left?: idNodeGraph;
+        right?: idNodeGraph;
+        topRight?: idNodeGraph;
+        topLeft?: idNodeGraph;
+        bottomRight?: idNodeGraph;
+        bottomLeft?: idNodeGraph;
     }
-    coordinates?: VectorizedPosition;
-    entitiesInTheNode?: any[];
+    coordinates: VectorizedPosition;
+    entitiesInTheNode?: (Mob | Class)[];
 }
