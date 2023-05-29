@@ -27,6 +27,7 @@ export interface ITile {
     bossSoulsLevel?: IEncounterSoulsLevel;
     soundtrack?: string;
     init: boolean; //if the mobs as been placed in the special nodes the first time
+    turn: 'Monster' | 'Player';
 }
 
 export class Tile implements ITile {
@@ -41,6 +42,7 @@ export class Tile implements ITile {
     bossSoulsLevel?: IEncounterSoulsLevel;
     soundtrack?: string;
     init: boolean;
+    turn: 'Monster' | 'Player';
 
     constructor(snap: any) {
         this.id = snap?.id;
@@ -54,5 +56,6 @@ export class Tile implements ITile {
         this.bossSoulsLevel = snap?.bossSoulsLevel;
         this.soundtrack = snap?.soundtrack;
         this.init = snap?.init;
+        this.turn = snap?.turn;
     }
 }

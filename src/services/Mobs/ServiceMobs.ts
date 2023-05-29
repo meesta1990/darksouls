@@ -4,6 +4,7 @@ import { database } from '../../utils/Firebase';
 import {Mob} from "../../entities/Monster";
 import {Session} from "../../entities/Session";
 import {Encounter} from "../../entities/Encounter";
+import {ITile, Tile} from "../../entities/Tile";
 
 export const getMobs = () => {
     return new Promise((resolve, reject) => {
@@ -31,11 +32,11 @@ export const getMobs = () => {
     });
 }
 
-export const getMobsInTheTile = (session: Session): Mob[] => {
+export const getMobsInTheTile = (tile: ITile): Mob[] => {
     const mobs: Mob[] = [];
 
-    if(session.currentTile && session.currentTile.nodes) {
-        session.currentTile.nodes.map((node)=> {
+    if(tile && tile.nodes) {
+        tile.nodes.map((node)=> {
             if(node.entitiesInTheNode) {
                 node.entitiesInTheNode.map((entity) => {
                     if((entity as Mob).type === 'Monster' && entity.level > 0){

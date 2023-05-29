@@ -20,7 +20,7 @@ import Knight from "../../Models/Knight";
 import Herald from "../../Models/Herald";
 import Warrior from "../../Models/Warrior";
 import Assassin from "../../Models/Assassin";
-import {getMobsInTheTile} from "../../../services/Mobs/ServiceMobs";
+import { getMobsInTheTile } from "../../../services/Mobs/ServiceMobs";
 
 interface IEnemiesInTheTile {
     tile: ITile;
@@ -35,6 +35,7 @@ const EncountersInTheTile = ({
     classes
 }: IEnemiesInTheTile) => {
     const [encountersInTheTile, setEncountersInTheTile] = useState<ReactElement[]>([]);
+    const [queueMonsters, setQueueMonsters] = useState<Mob[]>([]);
 
     const initFirstEncounters = () => {
         const sessionTile = session.tiles.find((_tile) => _tile.id === tile.id);
@@ -61,7 +62,8 @@ const EncountersInTheTile = ({
                 }
             }
             sessionTile.init = true;
-            setEncountersInTheNode(session, tile, nodeMap);
+            sessionTile.turn = 'Monster';
+            setEncountersInTheNode(session, sessionTile, nodeMap);
         }
     }
 
@@ -69,7 +71,7 @@ const EncountersInTheTile = ({
         initFirstEncounters();
     }, []);
 
-    useEffect(()=> {
+    useEffect(() => {
         const entities: ReactElement[] = [];
         const nodeMap = tile.nodes;
 
@@ -113,9 +115,37 @@ const EncountersInTheTile = ({
                 }
             });
         }
-
         setEncountersInTheTile(entities);
     }, [tile]);
+
+    useEffect(()=> {
+        if(session.started && tile.turn === 'Monster') {
+            // find the node of the first monster
+            const mobsInTheTile = getMobsInTheTile(session.currentTile);
+            if (mobsInTheTile) {
+                mobsInTheTile.sort((a, b) => {
+                    const x = a.level;
+                    const y = b.level;
+                    return ((x > y) ? -1 : ((x < y) ? 1 : 0));
+                });
+                setQueueMonsters(mobsInTheTile);
+            }
+
+            const mob_test = mobsInTheTile[0];
+            if(mob_test) {
+                const test = tile.nodes.find((node)=>{
+                    return node.entitiesInTheNode?.find((entity)=> {
+                        let encounter: Mob|Class|undefined = mobs?.find((mob) => mob.id === entity.id);
+                        if(encounter && (encounter as Mob).unique_id === mob_test.unique_id) {
+                            return true;
+                        }
+                    });
+                })
+                console.log(test)
+            }
+
+        }
+    }, [session.started, tile.turn]);
 
     return (
         <>

@@ -39,8 +39,7 @@ export const getEncounters = () => {
 }
 export const setEncountersInTheNode = (session: Session, tile: ITile, nodeMap: NodeGraph[]) => {
     return new Promise((resolve, reject) => {
-        const dbRef = ref(database);
-        console.log(session,tile, nodeMap)
+
         try {
             tile.nodes = nodeMap;
             session.currentTile = tile;

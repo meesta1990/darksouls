@@ -102,7 +102,7 @@ const PlayerPosition = ({
                 })
             });
 
-            if(count === session.players.max_players && !session.started){
+            if(count === session.players.max_players && !session.started && user?.uid === session.author.uid){
                 if (dynamicContainerDivRef.current) {
                     ReactDOM.render(
                         <div className="button-start-container">
