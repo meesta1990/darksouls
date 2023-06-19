@@ -17,7 +17,6 @@ import {NodeMap} from "./MapNodeGraph";
 import {Class} from "../../../entities/Class";
 
 interface IBoard {
-    tile: ITile;
     user?: User;
     mobs?: Mob[];
     classes?: Class[];
@@ -31,7 +30,6 @@ interface IBoardInternal extends IBoard{
     dynamicContainerDivRef: any;
 }
 const BoardInternal = ({
-    tile,
     session,
     mobs,
     sceneRef,
@@ -40,6 +38,7 @@ const BoardInternal = ({
     dynamicContainerDivRef
 }: IBoardInternal) => {
     const offset = 2; //margins
+    const tile = session.currentTile;
     const texture = useLoader(TextureLoader, require("../../../assets/images/tiles/" + tile.id + ".jpg"));
     const { gl } = useThree();
     const nodeMap = tile.nodes ? tile.nodes : new NodeMap().getNodeMap();
@@ -70,7 +69,6 @@ const BoardInternal = ({
             return <BoardBonefire
                 classes={classes}
                 session={session}
-                tile={tile}
                 onDoorClicked={handleDoorClick}
                 sceneRef={sceneRef}
                 dynamicContainerDivRef={dynamicContainerDivRef}
@@ -81,7 +79,6 @@ const BoardInternal = ({
                 classes={classes}
                 mobs={mobs}
                 session={session}
-                tile={tile}
                 dynamicContainerDivRef={dynamicContainerDivRef}
                 onDoorClicked={handleDoorClick}
                 sceneRef={sceneRef}
@@ -110,7 +107,7 @@ const BoardInternal = ({
 const Board = (props: IBoard) => {
     const sceneRef = useRef<any>();
     const dynamicContainerDivRef = useRef<any>();
-    const testing = false; //todo:test
+    const testing = true; //todo:test
 
     return (
         <div className="board-container">

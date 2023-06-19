@@ -1,3 +1,5 @@
+import {NodeGraph} from "./Node";
+
 export interface ISoulsCards {
     tier_1?: number;
     tier_2?: number;

@@ -204,7 +204,38 @@ export const hashCode = (str: string) => {
     return Math.abs(hash);
 }
 
-export const calculatePath = (startNodeId: number, endNodeId: number, nodes: NodeGraph[]) => {
+export const calculatePaths = (startNodeId: number, endNodeId: number, nodes: NodeGraph[]) => {
+    const shortestDistance = calculateShortestDistance(startNodeId, endNodeId, nodes);
+
+    const paths: number[][] = [];
+    const queue: { nodeId: number; path: number[] }[] = [];
+
+    queue.push({ nodeId: startNodeId, path: [startNodeId] });
+
+    while (queue.length > 0) {
+        const { nodeId, path } = queue.shift()!;
+
+        if (nodeId === endNodeId && path.length - 1 === shortestDistance) {
+            paths.push(path);
+        }
+
+        const currentNode = nodes.find((node) => node.id === nodeId);
+
+        if (currentNode) {
+            for (const [direction, adjacentNodeId] of Object.entries(currentNode.adjacentNodes)) {
+                const newPath = [...path, adjacentNodeId];
+
+                if (!path.includes(adjacentNodeId)) {
+                    queue.push({ nodeId: adjacentNodeId, path: newPath });
+                }
+            }
+        }
+    }
+
+    return paths;
+};
+
+const calculateShortestDistance = (startNodeId: number, endNodeId: number, nodes: NodeGraph[]) => {
     const distances: { [key: number]: number } = {};
     const visited: { [key: number]: boolean } = {};
     const predecessors: { [key: number]: number | null } = {};
@@ -223,22 +254,14 @@ export const calculatePath = (startNodeId: number, endNodeId: number, nodes: Nod
         const currentNodeId = priorityQueue.dequeue();
 
         if (currentNodeId === endNodeId) {
-            const path: number[] = [];
-            let nodeId: number | null = endNodeId;
-
-            while (nodeId !== null) {
-                path.unshift(nodeId);
-                nodeId = predecessors[nodeId];
-            }
-
-            return path;
+            return distances[currentNodeId];
         }
 
         if (currentNodeId && !visited[currentNodeId]) {
             visited[currentNodeId] = true;
             const currentNode = nodes.find((node) => node.id === currentNodeId);
 
-            if(currentNode) {
+            if (currentNode) {
                 for (const [direction, adjacentNodeId] of Object.entries(currentNode.adjacentNodes)) {
                     const cost = 1; // Costo del percorso tra nodi adiacenti (può essere personalizzato)
                     const tentativeDistance = distances[currentNodeId] + cost;
@@ -253,5 +276,5 @@ export const calculatePath = (startNodeId: number, endNodeId: number, nodes: Nod
         }
     }
 
-    return []; // Nessun percorso trovato
-}
+    return Infinity; // Nessun percorso trovato
+};

@@ -4,19 +4,13 @@ import BaseModel, {IBaseModel} from "./BaseModel";
 interface IFireKeeper extends IBaseModel {
 
 }
-const FireKeeper = ({
-    rotation,
-    scale,
-    position
-}: IFireKeeper) => {
+const FireKeeper = (props: IFireKeeper) => {
     const model = require("../../assets/models/firekeeper.obj");
 
     return (
         <BaseModel
             model={model}
-            rotation={rotation}
-            scale={scale}
-            position={position}
+            {...FireKeeper}
         />
     )
 }

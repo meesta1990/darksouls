@@ -13,6 +13,19 @@
     margin-bottom: 12px;
     margin-top: 12px;
 }
+.info-panel .panel .rules {
+    text-align: center;
+    margin: 0;
+}
+.info-panel .panel .rules a{
+    color: var(--secondary-color) !important;
+    text-decoration: unset;
+}
+
+.info-panel .panel .rules a span{
+    margin-left: 12px;
+    vertical-align: top;
+}
 
 .info-panel .panel.soul-panel {
     height: 100px;

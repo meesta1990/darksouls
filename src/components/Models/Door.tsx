@@ -5,23 +5,13 @@ import {ITile} from "../../entities/Tile";
 interface IDoor extends IBaseModel {
     onDoorClicked:(nextTile: ITile) => void;
 }
-const Door = ({
-    scale,
-    rotation,
-    position,
-    onDoorClicked,
-    texture = require("../../assets/textures/texture_wood.jpg")
-}: IDoor) => {
+const Door = (props: IDoor) => {
     const model = require("../../assets/models/door.obj");
 
     return (
         <BaseModel
             model={model}
-            scale={scale}
-            rotation={rotation}
-            position={position}
-            onClick={onDoorClicked}
-            texture={texture}
+            {...props}
         />
     )
 }

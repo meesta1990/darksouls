@@ -5,21 +5,14 @@ interface IHollowMelee extends IBaseModel {
 
 }
 
-const HollowMelee = ({
-    scale = [0.12, 0.12, 0.12],
-    position,
-    rotation = [0, 9.5, 0],
-    rotateToTarget
-}: IHollowMelee) => {
+const HollowMelee = ( props: IHollowMelee ) => {
     const model = require("../../assets/models/hollow_melee.obj");
 
     return (
         <BaseModel
+            scale={[0.12, 0.12, 0.12]}
             model={model}
-            scale={scale}
-            position={position}
-            rotation={rotation}
-            rotateToTarget={rotateToTarget}
+            {...props}
         />
     )
 }

@@ -10,7 +10,6 @@ interface INormalEnemiesBoard extends ITileBoard {
     mobs?: Mob[];
 }
 const NormalEnemiesBoard = ({
-    tile,
     session,
     onDoorClicked,
     mobs,
@@ -18,6 +17,8 @@ const NormalEnemiesBoard = ({
     user,
     dynamicContainerDivRef
 }: INormalEnemiesBoard) => {
+    const tile = session.currentTile;
+
     useEffect(() => {
     }, [mobs])
 
@@ -35,8 +36,8 @@ const NormalEnemiesBoard = ({
                     onDoorClicked={() => !session.started ? onDoorClicked(door, session.tiles.find((_t) => _t.id === door.idNextTile)): null}
                 />
             )}
-            <EncountersInTheTile classes={classes} tile={tile} session={session} mobs={mobs} />
-            <PlayerPosition tile={tile} session={session} user={user} dynamicContainerDivRef={dynamicContainerDivRef} />
+            <EncountersInTheTile classes={classes} session={session} mobs={mobs} />
+            <PlayerPosition session={session} user={user} dynamicContainerDivRef={dynamicContainerDivRef} />
         </>
     );
 }

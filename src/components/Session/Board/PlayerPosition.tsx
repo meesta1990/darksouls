@@ -14,26 +14,21 @@ import {Class} from "../../../entities/Class";
 import './PlayerPosition.css'
 import {Button, ThemeProvider} from "@mui/material";
 import {theme} from "../../../utils/Constants";
+import CircleGlowing from "../../CircleGlowing/CircleGlowing";
 
 interface IPlayerPosition {
-    tile: ITile;
     session: Session;
     user?: User;
     dynamicContainerDivRef: any;
 }
 const PlayerPosition = ({
-    tile,
     session,
     user,
     dynamicContainerDivRef
 }: IPlayerPosition) => {
+    const tile = session.currentTile;
     const [playerPossibleStartPositions, setPlayerPossibleStartPositions] = useState<NodeGraph[]>([]);
-    const [hovered, setHovered] = useState(false)
     const meshRefs = useRef<any[]>([]);
-
-    useEffect(() => {
-        document.body.style.cursor = hovered ? 'pointer' : 'auto'
-    }, [hovered])
 
     const handleStartFight = () => {
         session.started = true;
@@ -126,14 +121,6 @@ const PlayerPosition = ({
         }
     }, [tile.nodes]);
 
-    useFrame(() => {
-        meshRefs.current.forEach((meshRef, index) => {
-            if(meshRef && meshRef.material) {
-                meshRef.material.emissiveIntensity = Math.sin(Date.now() * 0.003) * 0.9 + 0.5;
-            }
-        });
-    });
-
     const handlePlayerPositioning = (node: NodeGraph) => {
         const myPlayer = session.players.players.find((player) => player.owner.uid === user?.uid);
 
@@ -162,19 +149,11 @@ const PlayerPosition = ({
     return (
         <>
             {!session.started && playerPossibleStartPositions.map((playerPossibleStartPosition, index)=>
-                <mesh
+                <CircleGlowing
                     key={index}
-                    ref={el => meshRefs.current[index] = el}
-                    scale={[0.3, 0.3, 0.3]}
                     position={[playerPossibleStartPosition.coordinates[0], 0.16, playerPossibleStartPosition.coordinates[2]]}
-                    geometry={ new CircleGeometry(1, 32)}
-                    rotation={[-Math.PI / 2, 0, 0]}
                     onClick={() => handlePlayerPositioning(playerPossibleStartPosition)}
-                    onPointerOver={() => setHovered(true)}
-                    onPointerOut={() => setHovered(false)}
-                >
-                    <meshStandardMaterial transparent opacity={0.5} color={'#31b100'} emissive={'#31b100'} emissiveIntensity={0} />
-                </mesh>
+                />
             )}
         </>
     );

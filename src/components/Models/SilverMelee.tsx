@@ -5,21 +5,14 @@ interface ISilverMelee extends IBaseModel {
 
 }
 
-const SilverMelee = ({
-    scale = [0.15, 0.15, 0.15],
-    position,
-    rotation = [0, 9.5, 0],
-    rotateToTarget
-}: IBaseModel) => {
+const SilverMelee = (props: ISilverMelee) => {
     const model = require("../../assets/models/silver_melee.obj");
 
     return (
         <BaseModel
             model={model}
-            scale={scale}
-            position={position}
-            rotation={rotation}
-            rotateToTarget={rotateToTarget}
+            scale={[0.15, 0.15, 0.15]}
+            {...props}
         />
     )
 }

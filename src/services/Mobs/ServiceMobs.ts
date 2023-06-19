@@ -40,7 +40,7 @@ export const getMobsInTheTile = (tile: ITile): Mob[] => {
             if(node.entitiesInTheNode) {
                 node.entitiesInTheNode.map((entity) => {
                     if((entity as Mob).type === 'Monster' && entity.level > 0){
-                        mobs.push((entity as Mob))
+                        mobs.push(new Mob(entity))
                     }
                 })
             }

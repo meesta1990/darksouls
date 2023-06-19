@@ -7,10 +7,11 @@ import { ITileBoard } from "../../../entities/TileBoard";
 import { getDoorPosition } from "../../../utils/Functions";
 
 const BoardBonefire = ({
-    tile,
     session,
     onDoorClicked
 }: ITileBoard) => {
+    const tile = session.currentTile;
+
     return (
         <>
             <FireKeeper

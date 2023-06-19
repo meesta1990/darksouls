@@ -5,21 +5,14 @@ interface IKnight extends IBaseModel {
 
 }
 
-const Knight = ({
-    scale = [0.15, 0.15, 0.15],
-    position,
-    rotation = [0, 9.5, 0],
-    rotateToTarget
-}: IKnight) => {
+const Knight = (props: IKnight) => {
     const model = require("../../assets/models/knight.obj");
 
     return (
         <BaseModel
             model={model}
-            scale={scale}
-            position={position}
-            rotation={rotation}
-            rotateToTarget={rotateToTarget}
+            scale={[0.15, 0.15, 0.15]}
+            {...props}
         />
     )
 }

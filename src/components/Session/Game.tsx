@@ -50,7 +50,6 @@ const Game = ({
             mobs={mobs}
             classes={classes}
             user={user}
-            tile={session?.currentTile}
             onTileClick={handleGameFocus}
             focussed={focused}
         /> : null

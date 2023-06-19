@@ -5,21 +5,14 @@ interface ISentinel extends IBaseModel {
 
 }
 
-const Sentinel = ({
-    scale = [0.15, 0.15, 0.15],
-    position,
-    rotation,
-    rotateToTarget
-}: ISentinel) => {
+const Sentinel = (props: ISentinel) => {
     const model = require("../../assets/models/sentinel.obj");
 
     return (
         <BaseModel
             model={model}
-            scale={scale}
-            position={position}
-            rotation={rotation}
-            rotateToTarget={rotateToTarget}
+            scale={[0.15, 0.15, 0.15]}
+            {...props}
         />
     )
 }

@@ -4,7 +4,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js';
 import React, {useEffect, useMemo, useRef, useState} from "react";
 import {Mesh, MeshBasicMaterial, MeshStandardMaterial, Object3D, Texture, TextureLoader, Vector3} from "three";
-import {IPosition, VectorizedPosition} from "../../entities/Node";
+import {IPosition, NodeGraph, VectorizedPosition} from "../../entities/Node";
 
 export interface IBaseModel {
     model?: string;
@@ -16,6 +16,8 @@ export interface IBaseModel {
     format?: 'obj' | 'gltf' | 'fbx';
     onClick?(args: any): void;
     rotateToTarget?: VectorizedPosition;
+    focused?: boolean;
+    moveToDestination?: NodeGraph;
 }
 const BaseModel = ({
     model = '',
@@ -27,6 +29,8 @@ const BaseModel = ({
     format,
     onClick,
     rotateToTarget,
+    focused = false,
+    moveToDestination
 }: IBaseModel) => {
     const [hovered, setHovered] = useState(false)
     let loader: any = OBJLoader;
@@ -36,6 +40,12 @@ const BaseModel = ({
     useEffect(() => {
         document.body.style.cursor = hovered ? 'pointer' : 'auto';
     }, [hovered]);
+
+    useEffect(() => {
+        if(moveToDestination){
+            console.log('asd')
+        }
+    }, [moveToDestination]);
 
     if(format === 'gltf') {
         loader = GLTFLoader;
@@ -49,6 +59,9 @@ const BaseModel = ({
     const material = new MeshStandardMaterial({ map: (t as Texture) });
     material.roughness = 0.5;
     material.metalness = metalness;
+    if(focused){
+        material.color.set('red')
+    }
 
     copiedScene.traverse((child: any) => {
         if (child instanceof Mesh) {
@@ -57,15 +70,56 @@ const BaseModel = ({
     });
 
     useFrame((state, delta) => {
-        if(rotateToTarget){
-            const direction = new Vector3();
-            dummyRotateToTargetRef.current.getWorldPosition(direction);
-            direction.sub(meshRef.current.position);
-
-            const targetRotationY = Math.atan2(direction.x, direction.z);
+        if(rotateToTarget && meshRef && moveToDestination){
+            const faceDirection = new Vector3();
+            dummyRotateToTargetRef.current.getWorldPosition(faceDirection);
+            faceDirection.sub(meshRef.current.position);
+            const targetRotationY = Math.atan2(faceDirection.x, faceDirection.z);
             const currentRotationY = meshRef.current.rotation.y;
             const diffRotationY = targetRotationY - currentRotationY;
             meshRef.current.rotation.y += diffRotationY * delta * 5;
+
+
+
+
+
+
+
+            const { x: currentX, y: currentY, z: currentZ } = meshRef.current.position;
+            const [targetX, targetY, targetZ] = moveToDestination?.coordinates;
+
+            const speed = 0.01; // Velocità di movimento
+
+            // Calcola la direzione verso la destinazione
+            const direction = [
+                targetX - currentX,
+                targetY - currentY,
+                targetZ - currentZ,
+            ];
+
+            // Calcola la distanza tra il modello e la destinazione
+            const distance = Math.sqrt(
+                direction[0] ** 2 + direction[1] ** 2 + direction[2] ** 2
+            );
+
+            // Normalizza la direzione
+            const normalizedDirection = [
+                direction[0] / distance,
+                direction[1] / distance,
+                direction[2] / distance,
+            ];
+
+            // Calcola l'incremento di movimento
+            const movement = [
+                normalizedDirection[0] * speed,
+                normalizedDirection[1] * speed,
+                normalizedDirection[2] * speed,
+            ];
+
+            // Aggiorna la posizione del modello
+            meshRef.current.position.x += movement[0];
+            meshRef.current.position.y += movement[1];
+            meshRef.current.position.z += movement[2];
         }
     });
 
