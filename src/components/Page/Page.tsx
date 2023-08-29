@@ -29,7 +29,7 @@ const Page = ({
 
                 <div className={classNames('content', className)}>
                     <div className="wrapper-loading-background">
-                        {loading && <Loader loading={loading} />}
+                        {loading && <Loader className="content-loader" loading={loading} />}
                         {children}
                     </div>
 

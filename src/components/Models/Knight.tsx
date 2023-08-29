@@ -1,11 +1,11 @@
-import React from 'react'
+import React, {forwardRef} from 'react'
 import BaseModel, {IBaseModel} from "./BaseModel";
 
 interface IKnight extends IBaseModel {
 
 }
 
-const Knight = (props: IKnight) => {
+const Knight = forwardRef((props: IKnight, ref) => {
     const model = require("../../assets/models/knight.obj");
 
     return (
@@ -13,8 +13,9 @@ const Knight = (props: IKnight) => {
             model={model}
             scale={[0.15, 0.15, 0.15]}
             {...props}
+            ref={ref}
         />
     )
-}
+});
 
 export default Knight;

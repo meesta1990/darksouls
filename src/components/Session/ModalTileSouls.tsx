@@ -131,6 +131,9 @@ const ModalTileSouls = ({
             onClose={handleClose}
             aria-labelledby="modal-modal-title"
             aria-describedby="modal-modal-description"
+            sx={{
+                backdropFilter: "blur(5px)",
+            }}
         >
             <div className="wrapper-map-tiles">
                 <div className="map-tiles-encounter">

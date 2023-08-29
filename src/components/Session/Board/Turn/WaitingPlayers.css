@@ -1,0 +1,13 @@
+.wrapper-modal-waiting_players {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    padding: 44px;
+    height: 100vh;
+}
+
+.wrapper-modal-waiting_players .title {
+    text-align: center;
+    color: var(--secondary-color);
+    user-select: none;
+}

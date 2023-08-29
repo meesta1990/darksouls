@@ -1,7 +1,14 @@
-import React, {ReactElement, useEffect, useState} from "react";
+import React, { createRef, ReactElement, useEffect, useRef, useState } from "react";
+import useDynamicRefs from 'use-dynamic-refs';
 import { v4 as uuidv4 } from 'uuid';
 import {IEncounterSoulsLevel, ITile} from "../../../entities/Tile";
-import {calculatePaths, compareVectorizedPosition, getDoorPosition, getNodePosition} from "../../../utils/Functions";
+import {
+    calculatePaths,
+    compareVectorizedPosition,
+    deepCopy,
+    getDoorPosition, getEntityInTheTile,
+    getNodePosition
+} from "../../../utils/Functions";
 import HollowRanged from "../../Models/HollowRanged";
 import HollowMelee from "../../Models/HollowMelee";
 import SilverRanged from "../../Models/SilverRanged";
@@ -21,29 +28,34 @@ import Herald from "../../Models/Herald";
 import Warrior from "../../Models/Warrior";
 import Assassin from "../../Models/Assassin";
 import EnemyPossiblePath from "./EnemyPossiblePath";
-import {getMobsInTheTile} from "../../../services/Mobs/ServiceMobs";
-import {NodeGraph, VectorizedPosition} from "../../../entities/Node";
+import { getMobsInTheTile } from "../../../services/Mobs/ServiceMobs";
+import { NodeGraph, VectorizedPosition } from "../../../entities/Node";
+import {Vector3} from "three";
+import ReactDOM from "react-dom";
+import {Button, ThemeProvider} from "@mui/material";
+import {theme} from "../../../utils/Constants";
+import {updateCurrentTile} from "../../../services/Tile/TileSession";
+import {moveToNextEntity} from "../../../utils/TileFunctions";
 
 interface IEnemiesInTheTile {
     session: Session;
     mobs?: Mob[];
     classes?: Class[]
 }
+
 const EncountersInTheTile = ({
     session,
     mobs,
     classes
 }: IEnemiesInTheTile) => {
+    const tile = session.currentTile;
     const [encountersInTheTile, setEncountersInTheTile] = useState<ReactElement[]>([]);
     const [queueMonsters, setQueueMonsters] = useState<Mob[]>([]);
-    const [monsterTurn, setMonsterTurn] = useState<number>(0);
     const [monsterRoutes, setMonsterRoutes] = useState<any[]>([]);
-    const tile = session.currentTile;
+    const [modelsRef, setModelRef] = useDynamicRefs();
 
     const initFirstEncounters = () => {
-        const sessionTile = session.tiles.find((_tile) => _tile.id === tile.id);
-
-        if(sessionTile && (!sessionTile.init || !tile.nodes)) {
+        if(session.currentTile && (!session.currentTile.init || !tile.nodes)) {
             const bossStatus = session.miniboss_defeated ? 'bossSoulsLevel' : 'minibossSoulsLevel';
             const encounterSoulsLevel = (tile[bossStatus] as IEncounterSoulsLevel);
             const nodeMap = new NodeMap().getNodeMap();
@@ -53,20 +65,19 @@ const EncountersInTheTile = ({
                     if(key === 'red_sword' || key === 'red_cross' || key === 'purple_star' || key === 'purple_tree') {
                         for(let i=0;i<encounterSoulsLevel.encounter[key].length;i++) {
                             const idMob = Number((encounterSoulsLevel.encounter[key][i] as any).id_mob);
-                            const encounter = mobs?.find((mob) => mob.id === idMob);
+                            const encounter = deepCopy(mobs?.find((mob) => mob.mob_type === idMob));
                             const rawPosition = tile.special_nodes.find((specialNode) => specialNode.id === key);
                             if(rawPosition && encounter) {
                                 encounter.type = 'Monster';
-                                encounter.unique_id = uuidv4();
+                                encounter.id = uuidv4();
                                 nodeMap[rawPosition.position].entitiesInTheNode?.push(encounter);
                             }
                         }
                     }
                 }
             }
-            sessionTile.init = true;
-            sessionTile.turn = 'Monster';
-            setEncountersInTheNode(session, sessionTile, nodeMap);
+            session.currentTile.init = true;
+            setEncountersInTheNode(session, session.currentTile, nodeMap);
         }
     }
 
@@ -75,7 +86,9 @@ const EncountersInTheTile = ({
     }, []);
 
     useEffect(() => {
-        if(session.started && tile.turn === 'Monster') {
+        setMonsterRoutes([]);
+
+        if(session.started && tile.turn && tile.turn.type === 'Monster') {
             // find the node of the first monster
             const mobsInTheTile = getMobsInTheTile(session.currentTile);
             if (mobsInTheTile) {
@@ -87,13 +100,11 @@ const EncountersInTheTile = ({
                 setQueueMonsters(mobsInTheTile);
             }
 
-            const mob_test = mobsInTheTile[monsterTurn];
-
-            if(mob_test) {
+            if(tile.turn) {
                 const nextMonsterToFight = tile.nodes.find((node)=>{
                     return node.entitiesInTheNode?.find((entity)=> {
-                        let encounter: Mob|Class|undefined = mobsInTheTile?.find((mob) => mob.id === entity.id);
-                        if(encounter && (encounter as Mob).unique_id === mob_test.unique_id) {
+                        let encounter: Mob|Class|undefined = deepCopy(mobsInTheTile?.find((mob) => mob.id === entity.id));
+                        if(encounter && (encounter as Mob).id === tile.turn.entity.id) {
                             return true;
                         }
                     });
@@ -119,10 +130,6 @@ const EncountersInTheTile = ({
         }
     }, [session.started, tile.turn]);
 
-    const createEncounter = (Component: React.FunctionComponent<any>, position: VectorizedPosition, id?: string, rotateToTarget?: VectorizedPosition) => {
-        return <Component position={position} rotateToTarget={rotateToTarget} id={id} />;
-    };
-
     useEffect(() => {
         const entities: ReactElement[] = [];
         const nodeMap = tile.nodes;
@@ -131,46 +138,85 @@ const EncountersInTheTile = ({
             nodeMap.map((node) => {
                 if (node && node.entitiesInTheNode) {
                     node.entitiesInTheNode.map((entity, i) => {
-                        let encounter: Mob|Class|undefined = mobs?.find((mob) => mob.id === entity.id);
-                        const offsetX = i / 3.5;
-                        const position = getNodePosition(node.id, offsetX);
+                        let encounter: Mob|Class|undefined = node.entitiesInTheNode?.find((mob) => (mob as Mob).id === (entity as Mob).id);
 
-                        // if I can't find it, ill search if it's a class:
-                        if(!encounter) {
-                            encounter = classes?.find((_class) => _class.id === entity.id);
-                        }
+                        if(encounter){
+                            const offsetX = i / 3.5;
+                            const position = getNodePosition(encounter.position ?? node.id, offsetX);
 
-                        if (!position) {
-                            return;
+                            // if I can't find it, ill search if it's a class:
+                            if(!encounter) {
+                                encounter = classes?.find((_class) => _class.id === entity.id);
+                            }
+
+                            if (!position) {
+                                return;
+                            }
+                            let rotateTo = undefined;
+                            if (tile.lastDoor && tile.lastDoor.position) {
+                                rotateTo = getDoorPosition(tile.lastDoor.position, true)?.position;
+                            }
+                            const encounterComponents = {
+                                "-1": Chest,
+                                "-2": Tomb,
+                                "-3": Barrel,
+                                "1": HollowRanged,
+                                "2": HollowMelee,
+                                "3": SilverRanged,
+                                "4": Sentinel,
+                                "5": LargeHollow,
+                                "6": SilverMelee,
+                                "class_1126830451": Knight,
+                                "class_376907387": Assassin,
+                                "class_1220767132": Herald,
+                                "class_1124565314": Warrior,
+                            };
+
+                            if(encounter) {
+                                if(encounter.type === 'Monster') {
+                                    entities.push(createEncounter(encounterComponents[(encounter as Mob).mob_type ?? 0], position, encounter.id , rotateTo));
+                                } else {
+                                    entities.push(createEncounter(encounterComponents[encounter.id], position, encounter.id, rotateTo));
+                                }
+                            }
                         }
-                        let rotateTo = undefined;
-                        if (tile.lastDoor && tile.lastDoor.position) {
-                            rotateTo = getDoorPosition(tile.lastDoor.position, true)?.position;
-                        }
-                        const encounterComponents = {
-                            "-1": Chest,
-                            "-2": Tomb,
-                            "-3": Barrel,
-                            "1": HollowRanged,
-                            "2": HollowMelee,
-                            "3": SilverRanged,
-                            "4": Sentinel,
-                            "5": LargeHollow,
-                            "6": SilverMelee,
-                            "1126830451": Knight,
-                            "376907387": Assassin,
-                            "1220767132": Herald,
-                            "1124565314": Warrior,
-                        };
-                        entities.push(
-                            createEncounter(encounterComponents[encounter?.id ?? 0], position, (encounter as Mob).unique_id ?? encounter?.id, rotateTo)
-                        );
                     })
                 }
             });
         }
         setEncountersInTheTile(entities);
     }, [tile]);
+
+    const createEncounter = (Component: React.FunctionComponent<any>, position: VectorizedPosition, id: string, rotateToTarget?: VectorizedPosition) => {
+        let focus = false;
+        if(tile.turn && tile.turn.entity && tile.turn.entity.id === id) {
+            focus = true;
+        }
+
+        return (
+            <Component
+                ref={setModelRef(id)}
+                position={position}
+                rotateToTarget={rotateToTarget}
+                focused={focus}
+                id={id}
+            />
+        );
+    };
+
+    const handleEncounterPathClick = (destination: NodeGraph) => {
+        const modelRef: any = modelsRef(tile.turn.entity.id);
+        const newPosition: VectorizedPosition = destination.coordinates;
+        modelRef.current.moveToDestination(newPosition);
+
+        // move:
+        const entity = getEntityInTheTile(tile, tile.turn.entity.id);
+        if(entity){
+            entity.position = destination.id;
+            moveToNextEntity(tile);
+            updateCurrentTile(session.id, tile);
+        }
+    }
 
     return (
         <>
@@ -179,7 +225,7 @@ const EncountersInTheTile = ({
             )}
             <EnemyPossiblePath
                 session={session}
-                onClick={(d)=>console.log(d)}
+                onClick={handleEncounterPathClick}
                 monsterRoutes={monsterRoutes}
             />
         </>

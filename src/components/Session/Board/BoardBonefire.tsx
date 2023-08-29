@@ -35,7 +35,7 @@ const BoardBonefire = ({
                     key={door.position}
                     scale={[0.2, 0.15, 0.1]}
                     {...getDoorPosition(door.position)}
-                    onDoorClicked={() => onDoorClicked(door, session.tiles.find((_t) => _t.id === door.idNextTile))}
+                    onClick={() => onDoorClicked(door, session.tiles.find((_t) => _t.id === door.idNextTile))}
                 />
             )}
         </>

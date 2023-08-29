@@ -5,6 +5,7 @@ import {getDoorPosition, getNodePosition, getStrOppositeDoor} from "../../../uti
 import {Mob} from "../../../entities/Monster";
 import EncountersInTheTile from "./EncountersInTheTile";
 import PlayerPosition from "./PlayerPosition";
+import {Modal} from "@mui/material";
 
 interface INormalEnemiesBoard extends ITileBoard {
     mobs?: Mob[];
@@ -22,7 +23,6 @@ const NormalEnemiesBoard = ({
     useEffect(() => {
     }, [mobs])
 
-
     return (
         <>
             {onDoorClicked && tile.doors?.map((door) =>
@@ -33,7 +33,7 @@ const NormalEnemiesBoard = ({
                     key={door.position}
                     scale={[0.2, 0.15, 0.1]}
                     {...getDoorPosition(door.position)}
-                    onDoorClicked={() => !session.started ? onDoorClicked(door, session.tiles.find((_t) => _t.id === door.idNextTile)): null}
+                    onClick={() => !session.started ? onDoorClicked(door, session.tiles.find((_t) => _t.id === door.idNextTile)): null}
                 />
             )}
             <EncountersInTheTile classes={classes} session={session} mobs={mobs} />

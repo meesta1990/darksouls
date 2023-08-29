@@ -1,8 +1,10 @@
-import {IDoorPosition} from "../entities/Tile";
+import {IDoorPosition, ITile} from "../entities/Tile";
 import {NodeGraph, SpecialNodes, VectorizedPosition} from "../entities/Node";
 import {NodeMap} from "../components/Session/Board/MapNodeGraph";
 import {Scene} from "three";
 import PriorityQueue from "./PriorityQueue";
+import { Class } from "../entities/Class";
+import { Mob } from "../entities/Monster";
 
 export const cleanUndefinedField = (obj: any) => {
     if (obj) {
@@ -278,3 +280,45 @@ const calculateShortestDistance = (startNodeId: number, endNodeId: number, nodes
 
     return Infinity; // Nessun percorso trovato
 };
+
+export const isAMonster = (entity: Mob) => {
+    if(entity.mob_type >= 1 && entity.mob_type <= 6) return true;
+    return false;
+}
+
+export const getMonstersInTile = (tile: ITile) => {
+    const nodeMap = tile.nodes;
+    const result: Mob[] = [];
+
+    if (nodeMap) {
+        nodeMap.map((node) => {
+            if (node && node.entitiesInTheNode) {
+                node.entitiesInTheNode.map((entity) => {
+                    if(entity.type === 'Monster' && isAMonster(entity)) {
+                        result.push((entity as Mob))
+                    }
+                });
+            }
+        });
+    }
+
+    return result;
+}
+
+export const getEntityInTheTile = (tile: ITile, entityID: string ): Mob | Class | undefined => {
+    const nodeMap = tile.nodes;
+    let result = undefined;
+
+    if (nodeMap) {
+        nodeMap.map((node) => {
+            if (node && node.entitiesInTheNode) {
+                const entity = node.entitiesInTheNode.find((entity) => entity.id === entityID);
+                if(entity) {
+                    result = entity;
+                };
+            }
+        });
+    }
+
+    return result;
+}

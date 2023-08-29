@@ -45,6 +45,7 @@ const Chat = ({
     }
 
     const handleKeyDown = (e: any) => {
+        console.log('asdasdasdas')
         if (e.key === 'Enter') {
             sendMessage();
             e.stopPropagation();

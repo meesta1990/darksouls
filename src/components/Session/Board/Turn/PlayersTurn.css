@@ -1,0 +1,57 @@
+.wrapper-modal-turn {
+    padding: 44px;
+    height: 100vh;
+    text-align: center;
+}
+
+.wrapper-modal-turn button {
+    margin-top: 40px;
+}
+
+.wrapper-modal-turn .title {
+    text-align: center;
+    margin: 0;
+    color: var(--secondary-color);
+    text-transform: capitalize;
+}
+
+.wrapper-modal-turn .subtitle {
+    text-align: center;
+    margin-top: 0;
+    color: var(--secondary-color);
+}
+
+.wrapper-modal-turn .players {
+    text-align: center;
+    margin-top: 50px;
+}
+
+.wrapper-modal-turn .players .player {
+    display: inline-block;
+    width: 400px;
+    height: 300px;
+    background: white;
+    margin: 6px;
+}
+
+.wrapper-modal-turn .players .player img{
+    width: 100%;
+    height: 100%;
+}
+
+.wrapper-modal-turn .players .player p {
+    text-align: center;
+    margin: 0;
+}
+
+.wrapper-modal-turn .players .player .player_class {
+    font-size: 25px;
+    color: var(--secondary-color);
+    font-weight: 900;
+}
+
+.wrapper-modal-turn .players .player .player_name {
+    font-size: 20px;
+    color: var(--secondary-color);
+    font-style: italic;
+}

@@ -1,17 +1,15 @@
 import { Button, ThemeProvider } from '@mui/material';
+import { useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import Page from '../Page/Page';
 import './Home.css'
 import { ROUTER_CREATE_SESSION, ROUTER_SESSIONS, theme } from '../../utils/Constants';
 import { logout } from "../../services/User/ServiceUser";
-import { User } from "../../entities/User";
+import { useAppSelector } from "../../store/hooks";
 
-interface IHome {
-    user: User;
-}
-
-const Home = ({ user }: IHome) => {
+const Home = () => {
     const navigate = useNavigate();
+    const user = useAppSelector((state) => state.userReducer.user);
 
     return (
         <Page className="homepage">

@@ -7,12 +7,11 @@ import { getEncounters, createEncounter } from "../../services/admin/ServiceCrea
 import { Encounter } from "../../entities/Encounter";
 import { Button, Checkbox, FormControlLabel, TextField } from "@mui/material";
 import {cleanUndefinedField} from "../../utils/Functions";
+import {useAppSelector} from "../../store/hooks";
 
-interface IHome {
-    user: User;
-}
+const CreatingStuff = () => {
+    const user = useAppSelector((state) => state.userReducer.user);
 
-const CreatingStuff = ({ user }: IHome) => {
     const [encounters_t1, setEncounters_t1] = useState<Encounter[]>();
     const [encounters_t2, setEncounters_t2] = useState<Encounter[]>();
     const [encounters_t3, setEncounters_t3] = useState<Encounter[]>();

@@ -72,9 +72,8 @@ const PlayerPosition = ({
                         nearestNodesCoordsDoTheDoor.map((nearestCoords) => {
                             const temp = nodeMap.find((node) => compareVectorizedPosition(node.coordinates, nearestCoords));
 
-                            // check where the play can be positioned
+                            // check where the player can be positioned
                             if(temp &&
-                                !temp.entitiesInTheNode?.find((mob) => mob.id === -2) &&
                                 (!temp.entitiesInTheNode || temp.entitiesInTheNode && temp.entitiesInTheNode.length < 3)) {
                                 nearestNodesDoTheDoor.push(temp)
                             }

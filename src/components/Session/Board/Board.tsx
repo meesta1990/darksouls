@@ -15,6 +15,10 @@ import ReactAudioPlayer from "react-audio-player";
 import MapNode from "./Node";
 import {NodeMap} from "./MapNodeGraph";
 import {Class} from "../../../entities/Class";
+import GameTurns from "./Turn/GameTurns";
+import { PlayersTurn } from "./Turn/PlayersTurn";
+import { WaitingPlayers } from "./Turn/WaitingPlayers";
+import { getMonstersInTile } from "../../../utils/Functions";
 
 interface IBoard {
     user?: User;
@@ -42,6 +46,7 @@ const BoardInternal = ({
     const texture = useLoader(TextureLoader, require("../../../assets/images/tiles/" + tile.id + ".jpg"));
     const { gl } = useThree();
     const nodeMap = tile.nodes ? tile.nodes : new NodeMap().getNodeMap();
+
     const handleDoorClick = (doorClicked: IDoor, nextTile?: ITile) => {
         const test = nextTile?.id !== 1 && nextTile?.id !== 2; // todo: remove!
 
@@ -107,7 +112,37 @@ const BoardInternal = ({
 const Board = (props: IBoard) => {
     const sceneRef = useRef<any>();
     const dynamicContainerDivRef = useRef<any>();
-    const testing = true; //todo:test
+    const testing = false; //todo:test
+    const [turnPopupOpened, setTurnPopupOpened] = useState<boolean>(false);
+
+    useEffect(() => {
+        const currentTile: ITile = props.session.currentTile;
+        if(!currentTile.playersOrder && currentTile.id !== 0) {
+            setTurnPopupOpened(true);
+        }
+    }, [props.session.currentTile]);
+
+    //decide the entire order turn (players and mobs)
+    const handlePlayerOrderSave = () => {
+        setTurnPopupOpened(false);
+        let entities = getMonstersInTile(props.session.currentTile).sort((a, b) => b.level - a.level);
+        entities = entities.filter((entity) => entity.type === 'Monster');
+        let turns: any[] = [];
+
+        if(props.session.currentTile.playersOrder){
+            for(let i = 0; i < props.session.currentTile.playersOrder.length; i++){
+                turns = turns.concat(entities);
+                turns.push(props.session.currentTile.playersOrder[i])
+            }
+
+            props.session.currentTile.queueOrder = turns;
+            props.session.currentTile.turn = {
+                type: 'Monster',
+                entity: turns[0]
+            };
+            updateSession(props.session)
+        }
+    }
 
     return (
         <div className="board-container">
@@ -119,7 +154,15 @@ const Board = (props: IBoard) => {
                 loop
             />
             <div id="dynamicContainer" ref={dynamicContainerDivRef} />
+            <GameTurns currentTile={props.session.currentTile} />
+            <PlayersTurn
+                players={props.session.players.players}
+                open={turnPopupOpened}
+                session={props.session}
+                onSave={handlePlayerOrderSave}
+            />
 
+            <WaitingPlayers session={props.session} />
             <Suspense fallback={<h1></h1>}>
                 <Canvas camera={{ fov: 90, position: [4, 4, -0.5] }} ref={sceneRef}>
                     <pointLight position={[10, 10, 10]} />

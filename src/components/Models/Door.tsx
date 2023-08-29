@@ -3,7 +3,7 @@ import BaseModel, { IBaseModel } from "./BaseModel";
 import {ITile} from "../../entities/Tile";
 
 interface IDoor extends IBaseModel {
-    onDoorClicked:(nextTile: ITile) => void;
+    onClick:(nextTile: ITile) => void;
 }
 const Door = (props: IDoor) => {
     const model = require("../../assets/models/door.obj");

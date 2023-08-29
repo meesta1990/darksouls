@@ -1,6 +1,7 @@
 import { IStats } from './Stats';
 import { IItem, Item } from './Item';
 import { User } from "./User";
+import {idNodeGraph} from "./Node";
 
 export interface IClassSkill {
     id: number;
@@ -17,12 +18,15 @@ interface ChoosedStats {
 
 export interface IClass {
     name: string;
+    id: string;
     stats: IStats;
     choosed_stats: ChoosedStats;
     equip: Equip;
     level: number;
     class_skill: IClassSkill;
     profile_photo: string;
+    src_board: string;
+    type: 'Player'
 }
 
 export interface Equip {
@@ -34,7 +38,7 @@ export interface Equip {
 
 export class Class implements IClass {
     name: string;
-    id: number; // it's the hascode of the classname
+    id: string; // it's the hashcode of the classname
     stats: IStats;
     choosed_stats: ChoosedStats;
     equip: Equip;
@@ -42,6 +46,9 @@ export class Class implements IClass {
     owner: User;
     class_skill: IClassSkill;
     profile_photo: string;
+    src_board: string;
+    type: 'Player';
+    position: idNodeGraph;
 
     constructor(snap: any) {
         this.owner = snap?.owner;
@@ -71,5 +78,8 @@ export class Class implements IClass {
         this.level = snap?.level;
         this.class_skill = snap?.class_skill;
         this.profile_photo = snap?.profile_photo;
+        this.src_board = snap?.src_board;
+        this.type = 'Player'
+        this.position = snap?.position;
     }
 }

@@ -1,10 +1,16 @@
+import classNames from "classnames";
 import loader from '../../assets/images/loader.gif';
 import './Loader.css'
 
-const Loader = ({loading= false}) => {
+interface ILoader {
+    loading: boolean;
+    className?: string;
+}
+
+const Loader = ({ loading= false, className }: ILoader) => {
     if(!loading) return null;
     return (
-        <span className="loader">
+        <span className={classNames("loader", className)}>
             <img src={loader} />
         </span>
     )

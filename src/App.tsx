@@ -28,10 +28,13 @@ import { User } from "./entities/User";
 import { getUser } from "./services/User/ServiceUser";
 import Sessions from "./components/Home/Sessions";
 import CreatingStuff from "./components/Home/CreatingStuff";
+import { useAppDispatch } from "./store/hooks";
+import { setUser } from "./store/slices/User";
 
 function App() {
     const [loggedUser, setLoggedUser] = useState<any>(undefined);
     const [firebaseUser, setFirebaseUser] = useState<any>(undefined);
+    const dispatch = useAppDispatch();
 
     auth.onAuthStateChanged((user) => {
         setFirebaseUser(user);
@@ -41,6 +44,7 @@ function App() {
         if (firebaseUser) {
             getUser(firebaseUser.uid).then((customUser) => {
                 setLoggedUser(customUser as User);
+                dispatch(setUser(customUser as User));
             })
         } else if(firebaseUser === null) {
             setLoggedUser(null);
@@ -55,7 +59,7 @@ function App() {
                     path={ROUTER_HOME}
                     element={
                         <ProtectedRoute user={loggedUser}>
-                            <Home user={loggedUser} />
+                            <Home/>
                         </ProtectedRoute>
                     }
                 />
@@ -63,7 +67,7 @@ function App() {
                     path={ROUTER_SESSIONS}
                     element={
                         <ProtectedRoute user={loggedUser}>
-                            <Sessions user={loggedUser} />
+                            <Sessions />
                         </ProtectedRoute>
                     }
                 />
@@ -71,7 +75,7 @@ function App() {
                     path={ROUTER_CREATE_SESSION}
                     element={
                         <ProtectedRoute user={loggedUser}>
-                            <CreateSession user={loggedUser} />
+                            <CreateSession />
                         </ProtectedRoute>
                     }
                 />
@@ -79,7 +83,7 @@ function App() {
                     path={ROUTER_SESSION + '/:sessionID'}
                     element={
                         <ProtectedRoute user={loggedUser}>
-                            <SessionView user={loggedUser} />
+                            <SessionView />
                         </ProtectedRoute>
                     }
                 />
@@ -87,7 +91,7 @@ function App() {
                     path={ROUTER_LINK_USERNAME}
                     element={
                         <ProtectedRoute user={loggedUser}>
-                            <LinkUsername user={loggedUser} />
+                            <LinkUsername />
                         </ProtectedRoute>
                     }
                 />
@@ -96,7 +100,7 @@ function App() {
                     path={ROUTER_CREATING_STUFF}
                     element={
                         <ProtectedRoute user={loggedUser}>
-                            <CreatingStuff user={loggedUser} />
+                            <CreatingStuff />
                         </ProtectedRoute>
                     }
                 />

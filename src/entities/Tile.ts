@@ -1,6 +1,7 @@
 import {Node, NodeGraph} from "./Node";
 import { Mob } from "./Monster";
 import { Encounter } from "./Encounter";
+import { Class } from "./Class";
 
 export type IDoorPosition = 'left' | 'right' | 'top' | 'bottom';
 
@@ -15,6 +16,11 @@ export interface IEncounterSoulsLevel {
     monster?: Mob;
 }
 
+interface ITurn {
+    entity: Mob | Class;
+    type: 'Monster' | 'Player';
+}
+
 export interface ITile {
     id: number;
     name: string;
@@ -27,7 +33,9 @@ export interface ITile {
     bossSoulsLevel?: IEncounterSoulsLevel;
     soundtrack?: string;
     init: boolean; //if the mobs as been placed in the special nodes the first time
-    turn: 'Monster' | 'Player';
+    turn: ITurn;
+    playersOrder?: Class[];
+    queueOrder?: Class[] | Mob [];
 }
 
 export class Tile implements ITile {
@@ -42,7 +50,9 @@ export class Tile implements ITile {
     bossSoulsLevel?: IEncounterSoulsLevel;
     soundtrack?: string;
     init: boolean;
-    turn: 'Monster' | 'Player';
+    turn: ITurn;
+    playersOrder?: Class[]
+    queueOrder?: Class[] | Mob []
 
     constructor(snap: any) {
         this.id = snap?.id;
@@ -57,5 +67,7 @@ export class Tile implements ITile {
         this.soundtrack = snap?.soundtrack;
         this.init = snap?.init;
         this.turn = snap?.turn;
+        this.playersOrder = snap?.playersOrder;
+        this.queueOrder = snap?.queueOrder;
     }
 }

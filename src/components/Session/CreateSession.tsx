@@ -33,13 +33,10 @@ import ClassButtons from "./ClassButtons";
 import CharacterStats from "../Character/CharacterStats";
 import { ITile, Tile } from "../../entities/Tile";
 import ModalTileSouls from "./ModalTileSouls";
-import {deepCopy, hashCode} from "../../utils/Functions";
+import { hashCode } from "../../utils/Functions";
+import { useAppSelector } from "../../store/hooks";
 
-interface ICreateSession {
-    user: User;
-}
-
-const CreateSession = ({ user }: ICreateSession) => {
+const CreateSession = () => {
     const navigate = useNavigate();
     const [gameName, setGameName] = useState<string>();
     const [numberOfPLayers, setNumberOfPlayers] = useState<number>(1);
@@ -51,6 +48,7 @@ const CreateSession = ({ user }: ICreateSession) => {
     const [choosedMainBoss, setChoosedMainBoss] = useState<Boss>();
     const [loading, setLoading] = useState<boolean>(false);
     const [modalTileSoulsOpened, setModalTileSoulsOpened] = useState<boolean>(false);
+    const user = useAppSelector((state) => state.userReducer.user);
 
     useEffect(()=> {
         getTiles().then((result: any) => {
@@ -144,9 +142,10 @@ const CreateSession = ({ user }: ICreateSession) => {
         }
 
         if (choosedClass) {
+            console.log('asd',choosedClass)
             const players = new Array(numberOfPLayers);
             choosedClass.owner = user;
-            choosedClass.id = hashCode(choosedClass.name);
+            choosedClass.id = 'class_' + hashCode(choosedClass.name);
             players[0] = choosedClass;
 
             session.players = {
@@ -188,7 +187,6 @@ const CreateSession = ({ user }: ICreateSession) => {
 
     return (
         <Page className="create-session" loading={loading}>
-
             {
                 choosedMiniBoss && choosedMainBoss &&
                     <ModalTileSouls

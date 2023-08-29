@@ -1,4 +1,4 @@
-import {NodeGraph} from "./Node";
+import {idNodeGraph, NodeGraph} from "./Node";
 
 export interface ISoulsCards {
     tier_1?: number;
@@ -7,8 +7,8 @@ export interface ISoulsCards {
 }
 
 export class Mob {
-    id: number;
-    unique_id: string;
+    id: string;
+    mob_type: number;
     name: string;
     hp: number;
     activation_order: ['mov', 'atk'];
@@ -31,11 +31,12 @@ export class Mob {
     src_back: string;
     src_icon: string;
     level: number;
-    type: 'Monster' | 'Player';
+    type: 'Monster';
+    position: idNodeGraph;
 
     constructor(snap: any) {
+        this.mob_type = snap?.mob_type;
         this.id = snap?.id;
-        this.unique_id = snap?.unique_id;
         this.name = snap?.name;
         this.hp = snap?.hp;
         this.activation_order = snap?.activation_order;
@@ -47,6 +48,7 @@ export class Mob {
         this.src_icon = snap?.src_icon;
         this.level = snap?.level;
         this.type = snap?.type;
+        this.position = snap?.position;
     }
 }
 

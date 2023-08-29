@@ -1,11 +1,11 @@
-import React from 'react'
+import React, {forwardRef} from 'react'
 import BaseModel, {IBaseModel} from "./BaseModel";
 
 interface IWarrior extends IBaseModel {
 
 }
 
-const Warrior = (props: IWarrior) => {
+const Warrior = forwardRef((props: IWarrior, ref) => {
     const model = require("../../assets/models/warrior.obj");
 
     return (
@@ -13,8 +13,9 @@ const Warrior = (props: IWarrior) => {
             model={model}
             scale={[0.15, 0.15, 0.15]}
             {...props}
+            ref={ref}
         />
     )
-}
+});
 
 export default Warrior;

@@ -20,12 +20,9 @@ import { useNavigate } from "react-router-dom";
 import { User } from "../../entities/User";
 import {logout} from "../../services/User/ServiceUser";
 import Page from "../Page/Page";
+import {useAppSelector} from "../../store/hooks";
 
-interface ISessions {
-    user: User;
-}
-
-const Sessions = ({user}: ISessions) => {
+const Sessions = () => {
     const [loading, setLoading] = useState<boolean>(false);
     const [modalPasswordOpen, setModalPasswordOpen] = useState<boolean>(false);
     const [insertedPasswordSession, setInsertedPasswordSession] = useState<string>('');
@@ -33,6 +30,7 @@ const Sessions = ({user}: ISessions) => {
     const [errorPasswordSession, setErrorPasswordSession] = useState<string>('');
     const [sessions, setSessions] = useState<[]>([]);
     const navigate = useNavigate();
+    const user = useAppSelector((state) => state.userReducer.user);
 
     useEffect(() => {
        loadSessions();
@@ -86,7 +84,7 @@ const Sessions = ({user}: ISessions) => {
                     </ThemeProvider>
 
                     {sessions.length > 0 ? sessions.map((session: Session) =>
-                            <SessionCreated user={user} key={session.id} session={session} onClick={session.password ? () => checkPasswordSession(session) : goToSession} />
+                            <SessionCreated key={session.id} session={session} onClick={session.password ? () => checkPasswordSession(session) : goToSession} />
                         )
                         :
                         <p>

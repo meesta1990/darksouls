@@ -1,10 +1,10 @@
-import {useFrame, useLoader} from "@react-three/fiber";
+import { useFrame, useLoader } from "@react-three/fiber";
 import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader";
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js';
-import React, {useEffect, useMemo, useRef, useState} from "react";
-import {Mesh, MeshBasicMaterial, MeshStandardMaterial, Object3D, Texture, TextureLoader, Vector3} from "three";
-import {IPosition, NodeGraph, VectorizedPosition} from "../../entities/Node";
+import React, {forwardRef, useEffect, useMemo, useRef, useState, useImperativeHandle} from "react";
+import { Mesh, MeshBasicMaterial, MeshStandardMaterial, Object3D, Texture, TextureLoader, Vector3 } from "three";
+import { IPosition, NodeGraph, VectorizedPosition } from "../../entities/Node";
 
 export interface IBaseModel {
     model?: string;
@@ -17,9 +17,9 @@ export interface IBaseModel {
     onClick?(args: any): void;
     rotateToTarget?: VectorizedPosition;
     focused?: boolean;
-    moveToDestination?: NodeGraph;
 }
-const BaseModel = ({
+
+const BaseModel = forwardRef(({
     model = '',
     scale = [0.3, 0.3, 0.3],
     position = [0, 0.2, 0],
@@ -30,22 +30,16 @@ const BaseModel = ({
     onClick,
     rotateToTarget,
     focused = false,
-    moveToDestination
-}: IBaseModel) => {
+}: IBaseModel, ref: any) => {
     const [hovered, setHovered] = useState(false)
     let loader: any = OBJLoader;
-    const meshRef = useRef<any>()
     const dummyRotateToTargetRef = useRef<any>(null);
+    const [destination, setDestination] = useState<VectorizedPosition | null>(null);
+    const meshRef: any = useRef();
 
     useEffect(() => {
         document.body.style.cursor = hovered ? 'pointer' : 'auto';
     }, [hovered]);
-
-    useEffect(() => {
-        if(moveToDestination){
-            console.log('asd')
-        }
-    }, [moveToDestination]);
 
     if(format === 'gltf') {
         loader = GLTFLoader;
@@ -60,7 +54,7 @@ const BaseModel = ({
     material.roughness = 0.5;
     material.metalness = metalness;
     if(focused){
-        material.color.set('red')
+        material.color.set('#e16410')
     }
 
     copiedScene.traverse((child: any) => {
@@ -70,7 +64,7 @@ const BaseModel = ({
     });
 
     useFrame((state, delta) => {
-        if(rotateToTarget && meshRef && moveToDestination){
+        if(rotateToTarget && ref && meshRef.current && meshRef.current.position){
             const faceDirection = new Vector3();
             dummyRotateToTargetRef.current.getWorldPosition(faceDirection);
             faceDirection.sub(meshRef.current.position);
@@ -78,50 +72,49 @@ const BaseModel = ({
             const currentRotationY = meshRef.current.rotation.y;
             const diffRotationY = targetRotationY - currentRotationY;
             meshRef.current.rotation.y += diffRotationY * delta * 5;
+        }
 
+        if (destination ) {
+            const speed = 0.02;
 
-
-
-
-
-
-            const { x: currentX, y: currentY, z: currentZ } = meshRef.current.position;
-            const [targetX, targetY, targetZ] = moveToDestination?.coordinates;
-
-            const speed = 0.01; // Velocità di movimento
-
-            // Calcola la direzione verso la destinazione
             const direction = [
-                targetX - currentX,
-                targetY - currentY,
-                targetZ - currentZ,
+                destination[0] - meshRef.current.position.x,
+                destination[1] - meshRef.current.position.y,
+                destination[2] - meshRef.current.position.z,
             ];
 
-            // Calcola la distanza tra il modello e la destinazione
             const distance = Math.sqrt(
                 direction[0] ** 2 + direction[1] ** 2 + direction[2] ** 2
             );
 
-            // Normalizza la direzione
-            const normalizedDirection = [
-                direction[0] / distance,
-                direction[1] / distance,
-                direction[2] / distance,
-            ];
+            if(distance >= 0.01) {
+                const normalizedDirection = [
+                    direction[0] / distance,
+                    direction[1] / distance,
+                    direction[2] / distance,
+                ];
 
-            // Calcola l'incremento di movimento
-            const movement = [
-                normalizedDirection[0] * speed,
-                normalizedDirection[1] * speed,
-                normalizedDirection[2] * speed,
-            ];
+                const movement = [
+                    normalizedDirection[0] * speed,
+                    normalizedDirection[1] * speed,
+                    normalizedDirection[2] * speed,
+                ];
 
-            // Aggiorna la posizione del modello
-            meshRef.current.position.x += movement[0];
-            meshRef.current.position.y += movement[1];
-            meshRef.current.position.z += movement[2];
+                meshRef.current.position.x += movement[0];
+                meshRef.current.position.y += movement[1];
+                meshRef.current.position.z += movement[2];
+            }
         }
     });
+
+    const moveToDestination = (newPosition: VectorizedPosition) => {
+        setDestination(newPosition);
+    };
+
+    useImperativeHandle(ref, () => ({
+        ...ref.current,
+        moveToDestination,
+    }));
 
     return (
         <>
@@ -134,7 +127,7 @@ const BaseModel = ({
                 rotation={rotation}
             >
                 <meshStandardMaterial roughness={0.1} metalness={0.7} color={'yellow'} />
-                <primitive object={copiedScene} onClick={onClick}/>
+                <primitive object={copiedScene} onClick={onClick} />
             </mesh>
             {rotateToTarget &&
                 <mesh ref={dummyRotateToTargetRef} position={rotateToTarget}>
@@ -143,6 +136,6 @@ const BaseModel = ({
             }
         </>
     );
-};
+});
 
 export default BaseModel;

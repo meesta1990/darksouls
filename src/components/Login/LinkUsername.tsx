@@ -10,20 +10,15 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import { ROUTER_HOME } from "../../utils/Constants";
 import {User} from "../../entities/User";
+import {useAppSelector} from "../../store/hooks";
 
-interface ILinkUsername {
-    user: any;
-}
-
-const LinkUsername = ({
-    user
-}: ILinkUsername) => {
+const LinkUsername = () => {
     const navigate = useNavigate();
-
     const [username, setUsername] = useState('');
     const [usernameError, setUsernameError] = useState(false);
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
+    const user = useAppSelector((state) => state.userReducer.user);
 
     const handleLinkUsername = () => {
         setUsernameError(false);

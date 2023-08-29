@@ -16,12 +16,10 @@ import Game from "./Game";
 import InfoPanel from "./InfoPanel/InfoPanel";
 import InfoPanelSouls from "./InfoPanel/InfoPanelSouls";
 import ReactAudioPlayer from "react-audio-player";
+import {useAppSelector} from "../../store/hooks";
 
-interface ISessionView {
-    user: User;
-}
 
-const SessionView = ({ user }: ISessionView) => {
+const SessionView = () => {
     const { sessionID } = useParams();
     const [session, setSession] = useState<Session>();
     const [choosedClass, setChoosedClass] = useState<Class | null | undefined>(undefined);
@@ -31,9 +29,10 @@ const SessionView = ({ user }: ISessionView) => {
     const [excludedClasses, setExcludedClasses] = useState<string[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
     const [focusedElement, setFocusedElement] = useState<string>();
+    const user = useAppSelector((state) => state.userReducer.user);
 
     useEffect(() => {
-        if (sessionID) {
+        if (sessionID && user.uid) {
             setLoading(true);
 
             getSession(sessionID, (session: Session) => {
@@ -59,7 +58,7 @@ const SessionView = ({ user }: ISessionView) => {
                 setLoading(false);
             });
         }
-    }, []);
+    }, [sessionID, user.uid]);
 
     useEffect(() => {
         if (choosedClass === null) {
@@ -72,7 +71,7 @@ const SessionView = ({ user }: ISessionView) => {
     }, [session?.currentTile]);
 
     const handleJoinGame = () => {
-        if (session && newPlayerChoosedClass) {
+        if (session && newPlayerChoosedClass && user) {
             setLoading(true);
 
             joinSession(session, user, newPlayerChoosedClass).then(() => {

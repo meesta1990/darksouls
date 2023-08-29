@@ -1,11 +1,11 @@
-import React from 'react'
+import React, {forwardRef} from 'react'
 import BaseModel, {IBaseModel} from "./BaseModel";
 
-interface IHollowMelee extends IBaseModel {
+interface IHollowRanged extends IBaseModel {
 
 }
 
-const HollowMelee = (props: IBaseModel) => {
+const HollowRanged = forwardRef((props: IHollowRanged, ref) => {
     const model = require("../../assets/models/hollow_ranged.obj");
 
     return (
@@ -13,8 +13,9 @@ const HollowMelee = (props: IBaseModel) => {
             model={model}
             scale={[0.12, 0.12, 0.12]}
             {...props}
+            ref={ref}
         />
     )
-}
+});
 
-export default HollowMelee;
+export default HollowRanged;

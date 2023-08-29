@@ -37,7 +37,7 @@
     perspective: 2000px;
 }
 
-.page-container .wrapper-loading-background .MuiCircularProgress-root {
+.page-container .content-loader .wrapper-loading-background .MuiCircularProgress-root {
     position: absolute;
     top: calc(50% - 40px);
     left: calc(50% - 40px);
